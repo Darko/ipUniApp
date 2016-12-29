@@ -1,5 +1,6 @@
 var app = angular.module('MusicApp', [
-
+    'ngMaterial',
+    'ui.router'
 ]);
 
 app.component('navbar', {

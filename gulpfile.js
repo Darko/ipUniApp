@@ -28,8 +28,9 @@ gulp.task('watch', function() {
 });
 
 gulp.task('browser-sync', function() {
-  browserSync.init(["src/css/*.css", "src/scripts/*.js", '*.html', "views/**/*.html"], {
-    proxy: 'localhost:8888/ipUniApp/'
+  browserSync.init(["src/css/*.css", "src/scripts/*.js", '*.html', "views/**/*.html", "components/**/*.html"], {
+    proxy: 'http://localhost:8888/ipUniApp',
+    notify: false
   });
 });
 

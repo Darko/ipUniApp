@@ -1,0 +1,32 @@
+@import '../theme/_theme.sass'
+
+navbar
+  width: 100%
+  height: 70px
+  background-color: $primary
+  position: relative
+  display: block
+  .main-navbar
+    position: absolute
+    width: 100%
+    height: 100%
+    padding: 0 16px 0 0
+  
+  .logo
+    width: 90px
+    height: 70px
+    text-align: center
+    color: $accent
+    background-color: #fff
+    text-transform: uppercase
+    font-weight: bold
+    line-height: 1
+    text-decoration: none
+    margin-right: 48px
+
+  .md-button
+    color: rgba(white, 0.37)
+    text-decoration: none
+    transition: .2s ease-out
+    &:hover
+      color: rgba(lighten($accent, 12%), 0.87)

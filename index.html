@@ -2,17 +2,30 @@
 <html lang="en" ng-app="MusicApp">
 <head>
     <meta charset="UTF-8">
+    <base href="ipUniApp">
     <title>Donger</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.css">
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
-
     <navbar></navbar>
-    
+    <div class="ui-view"></div>
 
-    <script src="src/scripts/angular.min.js"></script>
-    <script src="src/scripts/angular-material.min.js"></script>
+
+    <script type="text/javascript">
+        document.origin += '/ipUniApp';
+    </script>
+    
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.min.js"></script>
+    <script src="bower_components/angular-material/angular-material.min.js"></script>
+
     <script src="src/scripts/app.js"></script>
+    <script src="src/scripts/controllers.js"></script>
+    <script src="src/scripts/routes.js"></script>
 </body>
 </html>
