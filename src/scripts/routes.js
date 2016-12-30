@@ -7,22 +7,22 @@ app.config(function($stateProvider, $locationProvider) {
     templateUrl: './index.html',
     controller: 'HomePageController as vm'
   })
-  .state('home.main', {
+  .state('main', {
     url: '/',
     templateUrl: './views/main/main.html',
     controller: 'MainController as vm'
   })
-  .state('home.main.popularLists', {
+  .state('main.popularLists', {
     url: 'popular',
     templateUrl: './views/main/main.html',
     controller: 'MainController as vm'
   })
-  .state('home.main.newLists', {
+  .state('main.newLists', {
     url: 'new',
     templateUrl: './views/main/main.html',
     controller: 'MainController as vm'
   })
-  .state('home.main.createList', {
+  .state('main.createList', {
     url: 'create',
     templateUrl: './views/main/main.html',
     controller: 'MainController as vm'
