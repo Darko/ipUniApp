@@ -1,14 +1,16 @@
-app.config(function($stateProvider, $locationProvider) {
-  $locationProvider.html5Mode(true);
-  
+app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+  // $locationProvider.html5Mode(true);
+  $urlMatcherFactoryProvider.strictMode(false);
+
   $stateProvider
   .state('home', {
-    url: '',
+    url: '/',
     templateUrl: './index.html',
     controller: 'HomePageController as vm'
   })
   .state('main', {
-    url: '/',
+    url: '',
+    abstract: true,
     templateUrl: './views/main/main.html',
     controller: 'MainController as vm'
   })
@@ -29,7 +31,8 @@ app.config(function($stateProvider, $locationProvider) {
   })
   .state('login', {
     url: 'login',
-    templateUrl: './views/main/main.html',
-    controller: 'MainController as vm'
+    templateUrl: './views/auth/login.html',
+    controller: 'LoginController as vm'
   })
+  // $urlRouterProvider.otherwise('/');
 });

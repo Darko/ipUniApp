@@ -1,3 +1,9 @@
 // Place your settings in this file to overwrite default and user settings.
 {
+    "window.zoomLevel": 0,
+    "editor.tabSize": 2,
+    "css.lint.important": "warning",
+    "css.lint.float": "warning",
+    "css.lint.vendorPrefix": "warning",
+    "editor.wordWrap": true
 }

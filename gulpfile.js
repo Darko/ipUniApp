@@ -16,11 +16,11 @@ gulp.task('stop', function(cb){
 gulp.task('mamp', ['start']);
 
 gulp.task('sass', function () {
-  gulp.src('sass/**/*')
+  gulp.src('sass/**/*.sass')
   // .pipe(sass({includePaths: ['sass'], outputStyle: 'compressed'}))
   .pipe(sass())
   .pipe(gulp.dest('src/css'))
-  .pipe(browserSync.stream());
+  .pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('watch', function() {
@@ -28,7 +28,7 @@ gulp.task('watch', function() {
 });
 
 gulp.task('browser-sync', function() {
-  browserSync.init(["src/css/*.css", "src/scripts/*.js", '*.html', "views/**/*.html", "components/**/*.html"], {
+  browserSync.init(["src/scripts/*.js", '*.html', "views/**/*.html", "components/**/*.html"], {
     proxy: 'http://localhost:8888',
     notify: false
   });

@@ -25,8 +25,7 @@ navbar {
     text-decoration: none;
     margin-right: 48px; }
   navbar .md-button {
-    color: rgba(255, 255, 255, 0.37);
     text-decoration: none;
     transition: .2s ease-out; }
-    navbar .md-button:hover {
+    navbar .md-button:hover.md-button.md-hue-1.md-primary {
       color: rgba(242, 95, 135, 0.87); }
