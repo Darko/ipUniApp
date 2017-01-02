@@ -1,7 +1,5 @@
 app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
   $locationProvider.html5Mode(true);
-
-  $urlRouterProvider.otherwise('/');
   $urlMatcherFactoryProvider.strictMode(false);
 
   $stateProvider
@@ -9,7 +7,10 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     url: '/',
     controller: 'HomePageController as vm'
   })
+  
+  // Public routes
   .state('main', {
+    url: '',
     abstract: true,
     templateUrl: './views/main/main.html',
   })
@@ -23,11 +24,15 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     templateUrl: './views/main/newLists.html',
     controller: 'NewListsController as vm'
   })
+
+  // User routes
   .state('main.createList', {
     url: '/create',
     templateUrl: './views/user/createList.html',
     controller: 'CreateListController as vm'
   })
+
+  // Auth routes
   .state('login', {
     url: '/login',
     templateUrl: './views/auth/login.html',
@@ -42,4 +47,6 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
       })
     }
   })
+
+  $urlRouterProvider.otherwise('/');
 });

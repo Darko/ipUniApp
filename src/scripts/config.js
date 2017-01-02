@@ -1,6 +1,7 @@
 app
 .run(function($state, $stateParams) {})
-.config(function($mdThemingProvider) {
+.config(function($mdThemingProvider, $sceDelegateProvider) {
+
   $mdThemingProvider.definePalette('dank', {
     '50': '1d1e32', // primary
     '100': '4d5096', // primary hue-1
@@ -33,6 +34,7 @@ app
     'hue-1': 'A200',
     'hue-2': 'A400'
   })
+  .dark();
 })
 .config(function($authProvider) {
   $authProvider.facebook({

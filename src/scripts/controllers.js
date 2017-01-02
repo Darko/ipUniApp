@@ -1,5 +1,13 @@
 app
 // Public controllers
+.controller('IndexController', function($sce) {
+  var vm = this;
+
+  vm.featured = {
+    'background-image': 'https://i.ytimg.com/vi/b8m9zhNAgKs/maxresdefault.jpg',
+    'background-size': 'cover'
+  }
+})
 
 .controller('HomePageController', function($state, $timeout) {
   var vm = this;

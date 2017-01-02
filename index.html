@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="MusicApp">
+<html lang="en" ng-app="MusicApp" ng-controller="IndexController as vm">
 <head>
     <meta charset="UTF-8">
     <base href="/">
@@ -9,23 +9,26 @@
     <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
+  <navbar></navbar>
 
-    <navbar></navbar>
-    <div ui-view></div>
+  <section class="hero" style="background-image: url({{ vm.featured['background-image'] }})">
+          
+  </section>
         
-    <script src="bower_components/angular/angular.min.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
-    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
-    <script src="bower_components/angular-messages/angular-messages.min.js"></script>
-    <script src="bower_components/angular-material/angular-material.min.js"></script>
-    <script src="bower_components/satellizer/dist/satellizer.min.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+  <script src="bower_components/angular-messages/angular-messages.min.js"></script>
+  <script src="bower_components/angular-material/angular-material.min.js"></script>
+  <script src="bower_components/satellizer/dist/satellizer.min.js"></script>
 
-    <script src="src/scripts/app.js"></script>
-    <script src="src/scripts/config.js"></script>
-    <script src="src/scripts/routes.js"></script>
-    <script src="src/scripts/services.js"></script>
-    <script src="src/scripts/controllers.js"></script>
-    <script src="src/scripts/components.js"></script>
+  <script src="src/scripts/app.js"></script>
+  <script src="src/scripts/config.js"></script>
+  <script src="src/scripts/routes.js"></script>
+  <script src="src/scripts/services.js"></script>
+  <!-- <script src="src/scripts/directives.js"></script> -->
+  <script src="src/scripts/controllers.js"></script>
+  <script src="src/scripts/components.js"></script>
 </body>
 </html>
