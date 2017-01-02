@@ -1,5 +1,16 @@
 var app = angular.module('MusicApp', [
-    'ngMaterial',
-    'ui.router',
-    'satellizer'
-]);
+  'ngMaterial',
+  'ui.router',
+  'satellizer'
+])
+.run(function(Auth, $rootScope) {
+  $rootScope.isLoggedIn = Auth.isAuthenticated();
+
+  $rootScope.$on('user:login', function() {
+    $rootScope.isLoggedIn = true;
+  });
+  
+  $rootScope.$on('user:logout', function() {
+    $rootScope.isLoggedIn = false;
+  });
+})

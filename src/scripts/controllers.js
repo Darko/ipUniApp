@@ -16,11 +16,14 @@ app
 
 // Auth controllers
 
-.controller('LoginController', function($auth, $state) {
+.controller('LoginController', function($rootScope, $state, Auth) {
   var vm = this;
 
-  vm.authenticate = function(provider) {
-    $auth.authenticate(provider);
+  vm.login = function(provider) {
+    Auth.authenticate(provider)
+    .then(function() {
+      $state.go('home');
+    })
   };
 })
 

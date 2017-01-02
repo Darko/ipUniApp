@@ -33,4 +33,13 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     templateUrl: './views/auth/login.html',
     controller: 'LoginController as vm'
   })
+  .state('logout', {
+    url: '/logout',
+    controller: function(Auth, $state) {
+      Auth.logout()
+      .then(function() {
+        $state.go('home');
+      })
+    }
+  })
 });
