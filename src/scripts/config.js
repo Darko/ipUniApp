@@ -1,4 +1,6 @@
-app.config(function($mdThemingProvider) {
+app
+.run(function($state, $stateParams) {})
+.config(function($mdThemingProvider) {
   $mdThemingProvider.definePalette('dank', {
     '50': '1d1e32', // primary
     '100': '4d5096', // primary hue-1
@@ -32,4 +34,13 @@ app.config(function($mdThemingProvider) {
     'hue-2': 'A400'
   })
 })
-.run(function($state, $stateParams) {})
+.config(function($authProvider) {
+  $authProvider.facebook({
+      clientId: 'SUPER SECRET',
+      responseType: 'token'
+  });
+
+  $authProvider.google({
+    clientId: 'SUPER SECRET'
+  });
+})
