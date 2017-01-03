@@ -1,0 +1,6 @@
+<?php
+$mysqli=new mysqli('localhost', 'root', '397165!', 'ip_app');
+if ($mysqli->connect_errno) {
+    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+}
+?>
