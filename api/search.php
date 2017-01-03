@@ -21,6 +21,7 @@
 <?php
 if (isset($_GET['q']) && $_GET['maxResults']){
 	$q=$_GET['q'];
+  $q= preg_replace('/\s+/', '%20', $q);
 	$maxResults=$_GET['maxResults'];
 	// $DEVELOPER_KEY = 'AIzaSyDOkg-u9jnhP-WnzX5WPJyV1sc5QQrtuyc';
     $DEVELOPER_KEY = 'AIzaSyBv_P2KGXgnz1S14bgfrIiNHT4tQC8DQbg'; // kluc
