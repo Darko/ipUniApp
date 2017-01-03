@@ -5,7 +5,8 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   $stateProvider
   .state('home', {
     url: '/',
-    controller: 'HomePageController as vm'
+    controller: 'HomePageController as vm',
+    templateUrl: './views/main/index.html',
   })
   
   // Public routes
@@ -40,6 +41,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   })
   .state('logout', {
     url: '/logout',
+    templateUrl: './views/auth/login.html',
     controller: function(Auth, $state) {
       Auth.logout()
       .then(function() {

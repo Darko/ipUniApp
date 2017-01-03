@@ -1,14 +1,14 @@
 <div ng-cloak class="main-navbar layout-row layout-align-space-between-center md-whiteframe-10dp">
     <a class="logo layout-row layout-align-center-center" ui-sref="home">Donger Music</a>
     <nav class="layout-row layout-align-start-center flex">
-        <md-button class="md-primary md-hue-2" ui-sref="main.popularLists">Популарни</md-button>
-        <md-button class="md-primary md-hue-2" ui-sref="main.newLists">Нови</md-button>
+        <md-button class="md-accent md-hue-1" ui-sref="main.popularLists">Популарни</md-button>
+        <md-button class="md-accent md-hue-1" ui-sref="main.newLists">Нови</md-button>
         <span class="flex"></span>
-        <md-button class="md-primary md-icon-button md-hue-2" class="md-icon-button">
+        <md-button class="md-accent md-icon-button md-hue-1" class="md-icon-button">
             <md-icon>search</md-icon>
         </md-button>
-        <md-button class="md-primary md-hue-2" ui-sref="main.createList">Креирај листа</md-button>
-        <md-button ng-if="!$ctrl.isLoggedIn" ng-cloak class="md-primary md-hue-2" ui-sref="login">Најави се</md-button>
-        <md-button ng-if="$ctrl.isLoggedIn" ng-cloak class="md-primary md-hue-2" ui-sref="logout">Одјави се</md-button>
+        <md-button class="md-accent md-hue-1" ui-sref="main.createList">Креирај листа</md-button>
+        <md-button ng-if="!$ctrl.isLoggedIn" ng-cloak class="md-accent md-hue-1" ui-sref="login">Најави се</md-button>
+        <md-button ng-if="$ctrl.isLoggedIn" ng-cloak class="md-accent md-hue-1" ui-sref="logout">Одјави се</md-button>
     </nav>
 </div>

@@ -2,15 +2,14 @@ app
 // Public controllers
 .controller('IndexController', function($sce) {
   var vm = this;
-
-  vm.featured = {
-    'background-image': 'https://i.ytimg.com/vi/b8m9zhNAgKs/maxresdefault.jpg',
-    'background-size': 'cover'
-  }
 })
-
 .controller('HomePageController', function($state, $timeout) {
   var vm = this;
+  
+  vm.featured = {
+    'background-image': 'https://i1.imgiz.com/rshots/9489/rae-sremmurd-black-beatles-audio-ft-gucci-mane_9489108-31120_1920x1080.jpg',
+    'background-size': 'cover'
+  }
 })
 .controller('MainController', function() {
   var vm = this;

@@ -5,6 +5,7 @@
     size: cover
     repeat: no-repeat
   position: relative
+  border-bottom: 4px $accent solid
   &:before
     content: ''
     width: 100%
@@ -13,3 +14,31 @@
     top: 0
     left: 0
     background: rgba($primary, 0.6)
+
+.hero-text
+  max-width: 720px
+  padding-bottom: 60px
+  margin: 0 auto
+  text-align: center
+  position: relative
+  height: 65vh
+  z-index: 1
+  h1, h2
+    color: #fff
+    margin: 0
+  h1
+    margin: 16px 0 40px
+    font-size: 56px
+    line-height: 1.2
+  h2
+    opacity: 0.5
+    text-transform: uppercase
+    font-size: 21px
+    font-weight: 400
+  
+  .recommended-stats
+    margin-top: 12px
+    p
+      padding: 0 16px
+      &:first-child
+        border-right: 1px rgba(white, 0.3) solid
