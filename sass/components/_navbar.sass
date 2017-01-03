@@ -6,6 +6,7 @@ navbar
   background-color: $primary
   position: relative
   display: block
+  z-index: 1
   .main-navbar
     position: absolute
     width: 100%
@@ -19,14 +20,14 @@ navbar
     color: $accent
     background-color: #fff
     text-transform: uppercase
-    font-weight: bold
+    font-weight: 700
     line-height: 1
     text-decoration: none
     margin-right: 48px
 
   .md-button
-    color: rgba(white, 0.37)
     text-decoration: none
     transition: .2s ease-out
     &:hover
-      color: rgba(lighten($accent, 12%), 0.87)
+      &.md-button.md-hue-1.md-primary
+        color: rgba(lighten($accent, 12%), 0.87)
