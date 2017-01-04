@@ -13,4 +13,20 @@
     return json_encode($result);
   }
 
+  function success($method) {
+    $result = array(
+      "method" => $method,
+      "status" => 201,
+      "message" => "OK"
+    );
+    return json_encode($result);
+  }
+
+  function emptyResponse() {
+    $result = array(
+      "status" => 200
+    );
+    return json_encode($result);
+  }
+
 ?>

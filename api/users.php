@@ -3,6 +3,8 @@
   // ini_set('display_errors', 1);
   // error_reporting(-1);
 
+  header('Content-Type: application/json');
+
   include 'components/connect.php';
   include 'components/errors.php';
 
@@ -19,17 +21,19 @@
     $query = "SELECT * FROM users WHERE id = " . $userId;
 
     $result = $conn->query($query);
+    $row = $result->fetch_assoc();
 
-    if ($result) {
-      return print_r($result);
-    } else {
-      echo notFound();
+    if ($row) {
+      echo json_encode($row);
       return;
     }
+
+    echo notFound();
+    return;
   }
 
   function create() {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $data = json_decode(file_get_contents('php://input'), true) || null;
 
     if (!$data) {
       echo badRequest();
@@ -45,18 +49,39 @@
 
     $result = $conn->query($query);
 
-    var_dump($result);
+    echo success("Create user");
+    return;
   }
 
-  switch($endpoint) {
-    case 'showOne':
-      showOne();
-      break;
-    case 'create':
-      create();
-      break;
-    default:
-      echo 'xd';
-      break;
+  function update() {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $userId = $data["id"];
+
+    if(!$userId) {
+      echo badRequest();
+      return;
+    }
+
+    // To be continued
   }
-// ?>
+
+  if (!empty($endpoint)) {
+    switch($endpoint) {
+      case 'showOne':
+        showOne();
+        break;
+      case 'create':
+        create();
+        break;
+      case 'update':
+        update();
+      break;
+      default:
+        echo 'xd';
+        break;
+    }
+  } else {
+    echo emptyResponse();
+    return;
+  }
+?>
