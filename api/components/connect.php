@@ -1,6 +1,4 @@
 <?php
-  // include 'dbvars.php';
-
   $host = 'localhost';
   $db = 'ip_app';
   $dbuser = 'root';
