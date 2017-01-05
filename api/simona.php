@@ -40,12 +40,18 @@
     }
 
     global $conn;
+    $out = array();
     $id=$_GET['id'];
-    $query = "SELECT * FROM playlists WHERE id='$id'";
-
+    
+    $query = "SELECT * FROM songs JOIN playlist_contents ON songs.id =  playlist_contents.songId
+              AND playlist_contents.playlistId = $id";
     $result = $conn->query($query);
+
     if($result){
-      echo json_encode($result->fetch_object());
+      while($object=$result->fetch_object()){
+        $out[]=$object;
+      }
+      echo json_encode($out);
     }
     else{
       echo notFound();
