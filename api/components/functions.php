@@ -3,6 +3,6 @@
 
   function array_sanitaze(&$item){
     global $conn;
-    $item=htmlentities(strip_tags($conn->real_escape_string($item)));
+    $item = htmlentities(strip_tags($conn->real_escape_string($item)));
   }
  ?>

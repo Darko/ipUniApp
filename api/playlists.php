@@ -20,10 +20,16 @@
     global $conn;
     $title = $data['title'];
     $public = $data['public'];
+    $userId = $data['id'];
 
     $query = "INSERT INTO playlists (title, public) VALUES ('$title', '$public')";
     $result = $conn->query($query);
-    if($result){
+    $playlistId = $conn->insert_id;
+
+    $query = "INSERT INTO playlist_identity (playlistId, userId) VALUES ('$playlistId', '$userId')";
+    $resultIdentity = $conn->query($query);
+
+    if($result && $resultIdentity){
       echo success("Create playlist");
       return;
     }
@@ -41,17 +47,31 @@
 
     global $conn;
     $out = array();
-    $id=$_GET['id'];
-    
-    $query = "SELECT * FROM songs JOIN playlist_contents ON songs.id =  playlist_contents.songId
+    $id = $_GET['id'];
+
+    // prvo da se izvlecat podatoci za playlistata
+    $query = "SELECT * FROM playlists WHERE id=$id";
+    $result = $conn->query($query);
+
+    if($result){
+      while($row = $result->fetch_assoc()){
+        echo json_encode($row);
+      }
+    }
+    else{
+      echo notFound();
+      return;
+    }
+
+    // posle se vlecat podatoci za pesnite od taa playlista
+    $query = "SELECT * FROM songs INNER JOIN playlist_contents ON songs.id =  playlist_contents.songId
               AND playlist_contents.playlistId = $id";
     $result = $conn->query($query);
 
     if($result){
-      while($object=$result->fetch_object()){
-        $out[]=$object;
+      while($row = $result->fetch_assoc()){
+        echo json_encode($row);
       }
-      echo json_encode($out);
     }
     else{
       echo notFound();
@@ -67,13 +87,15 @@
     }
 
     global $conn;
-    $update=array();
+    $playlistId = $data['id'];
+
+    $update = array();
     array_walk($data, 'array_sanitaze');
     foreach ($data as $field => $data) {
-      $update[]=$field."='$data'";
+      $update[] = $field."='$data'";
     }
 
-    $query = "UPDATE playlists SET ".implode(', ',$update).  " WHERE id=7";//treba id-to da se zima
+    $query = "UPDATE playlists SET ".implode(', ',$update).  " WHERE id = $playlistId"; //treba id-to da se zima
     $result = $conn->query($query);
     if($result){
       echo success("Update playlist");
@@ -93,9 +115,9 @@
     }
 
     global $conn;
-    $id=$data['id'];
+    $id = $data['id'];
 
-    $query = "DELETE FROM playlists WHERE id=$id";
+    $query = "DELETE FROM playlists WHERE playlists.id = $id";
     $result = $conn->query($query);
     if($result){
       echo success("Delete playlist");
