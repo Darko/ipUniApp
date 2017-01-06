@@ -24,22 +24,29 @@
 
     $query = "INSERT INTO playlists (title, public) VALUES ('$title', '$public')";
     $result = $conn->query($query);
-    $playlistId = $conn->insert_id;
 
-    $query = "INSERT INTO playlist_identity (playlistId, userId) VALUES ('$playlistId', '$userId')";
-    $resultIdentity = $conn->query($query);
+    if ($result) {
+      $playlistId = $conn->insert_id;
 
-    if($result && $resultIdentity){
-      echo success("Create playlist");
-      return;
+      $query = "INSERT INTO playlist_identity (playlistId, userId) VALUES ('$playlistId', '$userId')";
+      $resultIdentity = $conn->query($query);
+
+      if ($resultIdentity) {
+        echo success("Create playlist");
+        return;
+      }
+      else {
+        echo notFound();
+        return;
+      }
     }
-    else{
+    else {
       echo notFound();
       return;
     }
   }
 
-  function read(){
+  function read() {
     if (!$_GET['id']) {
       echo badRequest();
       return;
@@ -48,17 +55,18 @@
     global $conn;
     $out = array();
     $id = $_GET['id'];
+    $output = array();
 
     // prvo da se izvlecat podatoci za playlistata
-    $query = "SELECT * FROM playlists WHERE id=$id";
+    $query = "SELECT * FROM playlists WHERE id = $id";
     $result = $conn->query($query);
 
-    if($result){
-      while($row = $result->fetch_assoc()){
-        echo json_encode($row);
+    if ($result->num_rows != 0) {
+      while ($row = $result->fetch_assoc()) {
+        $output[] = $row;
       }
     }
-    else{
+    else {
       echo notFound();
       return;
     }
@@ -68,12 +76,13 @@
               AND playlist_contents.playlistId = $id";
     $result = $conn->query($query);
 
-    if($result){
-      while($row = $result->fetch_assoc()){
-        echo json_encode($row);
+    if ($result) {
+      while ($row = $result->fetch_assoc()) {
+        $output[] = $row;
       }
+      echo json_encode($output);
     }
-    else{
+    else {
       echo notFound();
       return;
     }
@@ -92,22 +101,22 @@
     $update = array();
     array_walk($data, 'array_sanitaze');
     foreach ($data as $field => $data) {
-      $update[] = $field."='$data'";
+      $update[] = $field." = '$data' ";
     }
 
-    $query = "UPDATE playlists SET ".implode(', ',$update).  " WHERE id = $playlistId"; //treba id-to da se zima
+    $query = "UPDATE playlists SET ".implode(', ',$update).  " WHERE id = $playlistId";
     $result = $conn->query($query);
-    if($result){
+    if ($result) {
       echo success("Update playlist");
       return;
     }
-    else{
+    else {
       echo noContent();
       return;
     }
   }
 
-  function deleteP(){
+  function deleteP() {
     $data = json_decode(file_get_contents('php://input'), true);
     if (!$data) {
       echo badRequest();
@@ -119,11 +128,11 @@
 
     $query = "DELETE FROM playlists WHERE playlists.id = $id";
     $result = $conn->query($query);
-    if($result){
+    if ($result) {
       echo success("Delete playlist");
       return;
     }
-    else{
+    else {
       echo notFound();
       return;
     }
