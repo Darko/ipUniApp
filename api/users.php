@@ -1,7 +1,7 @@
 <?php
-  // ini_set('display_startup_errors', 1);
-  // ini_set('display_errors', 1);
-  // error_reporting(-1);
+  ini_set('display_startup_errors', 1);
+  ini_set('display_errors', 1);
+  error_reporting(-1);
 
   header('Content-Type: application/json');
 
@@ -32,8 +32,8 @@
     return;
   }
 
-  function create() {
-    $data = json_decode(file_get_contents('php://input'), true) || null;
+  function authenticate() {
+    $data = json_decode(file_get_contents('php://input'), true);
 
     if (!$data) {
       echo badRequest();
@@ -41,16 +41,24 @@
     }
 
     global $conn;
-    $username = $data['username'];
-    $email = $data['email'];
-    $avatar = $data['avatar'];
+    $username = $data["username"];
+    $email = $data["email"];
+    $avatar = $data["avatar"];
 
-    $query = "INSERT INTO users (username, email, avatar, role) VALUES ('$username', '$email', '$avatar' , 'user')";
+    // Check if email exists
+    $query = "SELECT email, id FROM users WHERE email = '$email'";
+    $response = $conn->query($query);
+    $response = $response->fetch_assoc();
 
-    $result = $conn->query($query);
-
-    echo success("Create user");
-    return;
+    if ($response["email"]) { // User with email exists
+      login($response["id"]);
+      return;
+    } else {
+      $query = "INSERT INTO users (username, email, avatar, role) VALUES ('$username', '$email', '$avatar' , 'user')";
+      $result = $conn->query($query);
+      echo success("Created user");
+      return;
+    }
   }
 
   function update() {
@@ -65,13 +73,20 @@
     // To be continued
   }
 
+  function login($id) {
+    // Write to tokens
+    $query = "";
+    echo success("User logged in");
+    return;
+  }
+
   if (!empty($endpoint)) {
     switch($endpoint) {
       case 'showOne':
         showOne();
         break;
-      case 'create':
-        create();
+      case 'authenticate':
+        authenticate();
         break;
       case 'update':
         update();

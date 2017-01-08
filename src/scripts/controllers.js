@@ -23,13 +23,13 @@ app
 
 // Auth controllers
 
-.controller('LoginController', function($rootScope, $state, Auth) {
+.controller('LoginController', function($rootScope, $state, Auth, $http, $auth) {
   var vm = this;
 
   vm.login = function(provider) {
     Auth.authenticate(provider)
     .then(function() {
-      $state.go('home');
+      console.log($auth.getPayload());
     })
   };
 })
