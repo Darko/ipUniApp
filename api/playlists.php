@@ -1,7 +1,4 @@
 <?php
-  // ini_set('display_startup_errors', 1);
-  // ini_set('display_errors', 1);
-  // error_reporting(-1);
 
   header('Content-Type: application/json');
 
@@ -11,12 +8,8 @@
   $endpoint = $_REQUEST['endpoint'];
 
   function create() {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $data = getContents();
 
-    if (!$data) {
-      echo badRequest();
-      return;
-    }
     global $conn;
     $title = $data['title'];
     $public = $data['public'];
@@ -65,6 +58,7 @@
       while ($row = $result->fetch_assoc()) {
         $output[] = $row;
       }
+      $result->close();
     }
     else {
       echo notFound();
@@ -80,6 +74,7 @@
       while ($row = $result->fetch_assoc()) {
         $output[] = $row;
       }
+      $result->close();
       echo json_encode($output);
     }
     else {
@@ -89,11 +84,7 @@
   }
 
   function update() {
-    $data = json_decode(file_get_contents('php://input'), true);
-    if (!$data) {
-      echo badRequest();
-      return;
-    }
+    $data = getContents();
 
     global $conn;
     $playlistId = $data['id'];
@@ -104,7 +95,7 @@
       $update[] = $field." = '$data' ";
     }
 
-    $query = "UPDATE playlists SET ".implode(', ',$update).  " WHERE id = $playlistId";
+    $query = "UPDATE playlists SET ". implode(', ',$update) .  " WHERE id = $playlistId";
     $result = $conn->query($query);
     if ($result) {
       echo success("Update playlist");
@@ -117,11 +108,7 @@
   }
 
   function deleteP() {
-    $data = json_decode(file_get_contents('php://input'), true);
-    if (!$data) {
-      echo badRequest();
-      return;
-    }
+    $data = getContents();
 
     global $conn;
     $id = $data['id'];
@@ -138,27 +125,5 @@
     }
   }
 
-  if (!empty($endpoint)) {
-    switch($endpoint) {
-      case 'create':
-        create();
-        break;
-      case 'read':
-        read();
-        break;
-      case 'update':
-        update();
-        break;
-      case 'delete':
-        deleteP();
-        break;
-      default:
-        echo 'xd';
-        break;
-    }
-  }
-  else {
-    echo emptyResponse();
-    return;
-  }
+  endpoint($endpoint);
 // ?>

@@ -24,6 +24,7 @@
       while ($row = $result->fetch_assoc()) {
         $output[] = $row;
       }
+      $result->close();
       echo json_encode($output);
     }
     else {
@@ -35,18 +36,16 @@
       echo $data;
     }
   }
+
   function insert() {
-    $data = json_decode(file_get_contents('php://input'), true);
-    if (!$data) {
-      echo badRequest();
-      return;
-    }
+    $data = getContents();
 
     global $conn;
     $playlistId = $data['playlistId'];
-    $title = str_replace('\'', '', $data['title']);
 
-    if ($data['kind']) { //ako ja nema pesnata vo nasata baza, dodaj ja
+    if (isset($data['kind'])) {
+      //ako ja nema pesnata vo nasata baza, dodaj ja
+      $title = str_replace('\'', '', $data['title']);
       $channelTitle = $data['channelTitle'];
       $url = $data['url'];
 
@@ -68,8 +67,43 @@
     $resultContent = $conn->query($query);
 
     if ($resultContent) {
-      echo success("Insert song");
+      $query = "UPDATE playlists SET songsCount = songsCount + 1 WHERE id = $playlistId";
+      $result = $conn->query($query);
+      if ($result) {
+        echo success("Insert song");
+        return;
+      }
+      else {
+        echo notFound();
+        return;
+      }
+    }
+    else {
+      echo notFound();
       return;
+    }
+  }
+
+  function deleteItem() {
+    $data = getContents();
+
+    global $conn;
+    $playlistId = $data['playlistId'];
+    $songId = $data['id'];
+
+    $query = "DELETE FROM playlist_contents WHERE playlistId = $playlistId AND songId = $songId";
+    $resultContent = $conn->query($query);
+    if ($resultContent) {
+      $query = "UPDATE playlists SET songsCount = songsCount - 1 WHERE id = $playlistId";
+      $result = $conn->query($query);
+      if ($result) {
+        echo success("Delete item");
+        return;
+      }
+      else {
+        echo notFound();
+        return;
+      }
     }
     else {
       echo notFound();
@@ -78,6 +112,5 @@
   }
 
 endpoint($endpoint);
-
 
  ?>
