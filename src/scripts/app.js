@@ -1,7 +1,8 @@
 var app = angular.module('MusicApp', [
   'ngMaterial',
   'ui.router',
-  'satellizer'
+  'satellizer',
+  'md.data.table'
 ])
 .run(function(Auth, $rootScope) {
   $rootScope.isLoggedIn = Auth.isAuthenticated();

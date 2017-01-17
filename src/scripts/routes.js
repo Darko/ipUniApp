@@ -34,6 +34,12 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     controller: 'CreateListController as vm'
   })
 
+  .state('playlist', {
+    url: '/playlist/:userId/:playlistId',
+    templateUrl: './views/playlists/playlist.html',
+    controller: 'PlayListController as vm'
+  })
+
   // Auth routes
   .state('login', {
     url: '/login',

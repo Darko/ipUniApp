@@ -27,3 +27,28 @@ app
     var $ctrl = this;
   }
 })
+.component('currentSong', {
+  templateUrl: './components/playlists/current-song/current.song.template.html',
+  controllerAs: '$ctrl',
+  bindings: {
+    song: '=',
+    playlist: '<'
+  },
+  controller: function($sce) {
+    var $ctrl = this;
+
+  }
+})
+.component('playlistSongs', {
+  templateUrl: './components/playlists/playlist-songs/playlist.songs.template.html',
+  controllerAs: '$ctrl',
+  bindings: {
+    songs: '='
+  },
+  controller: function($sce) {
+    var $ctrl = this;
+
+    console.log($ctrl.songs);
+    
+  }
+})

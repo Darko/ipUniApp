@@ -29,6 +29,31 @@ app
   var vm = this;
 })
 
+// Playlist controllers
+
+.controller('PlayListController', function() {
+  var vm = this;
+
+  vm.playlist = {
+    author: 'Darko'
+  }
+
+  vm.songs = {
+    _current: {
+      name: "'The Journey' (2 Hour Drum & Bass Mix)",
+      uploader: "SuicideSheeep",
+      preview: 'https://cdn-images-1.medium.com/max/1600/1*KGphCPfYHW0Sd5L4CXZTgA.jpeg'
+    },
+    list: [
+      {
+        name: "'The Journey' (2 Hour Drum & Bass Mix)",
+        uploader: "SuicideSheeep"
+      }
+    ]
+  }
+
+})
+
 // Auth controllers
 
 .controller('LoginController', function($rootScope, $state, Auth, $http, $auth) {

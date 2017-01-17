@@ -2,9 +2,15 @@ body, html {
   background-color: #1d1e32;
   color: white; }
 
+*.dark-theme {
+  color: rgba(255, 255, 255, 0.87); }
+
 body, html {
   background-color: #1d1e32;
   color: white; }
+
+*.dark-theme {
+  color: rgba(255, 255, 255, 0.87); }
 
 navbar {
   width: 100%;
@@ -39,6 +45,9 @@ body, html {
   background-color: #1d1e32;
   color: white; }
 
+*.dark-theme {
+  color: rgba(255, 255, 255, 0.87); }
+
 playlist-card {
   display: inline-block;
   width: 276px;
@@ -53,6 +62,39 @@ playlist-card {
     position: relative;
     overflow: hidden;
     background-size: 100%; }
+
+table.md-table.dark-theme th.md-column, table.md-table.dark-theme td.md-cell {
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 16px; }
+  table.md-table.dark-theme th.md-column.actions, table.md-table.dark-theme td.md-cell.actions {
+    text-align: right; }
+    table.md-table.dark-theme th.md-column.actions .md-button, table.md-table.dark-theme td.md-cell.actions .md-button {
+      margin: 0; }
+
+table.md-table.songs-list-table th.md-column.songName, table.md-table.songs-list-table td.md-cell.songName {
+  text-align: left; }
+
+.current-song-template {
+  color: rgba(255, 255, 255, 0.87);
+  margin: 36px 0 56px; }
+
+.current-song-preview {
+  width: 260px;
+  height: 156px;
+  background: #262842;
+  margin-right: 24px;
+  position: relative;
+  overflow: hidden; }
+  .current-song-preview img {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    border: none; }
+
+.current-song-data .front-section-title {
+  margin: 0;
+  font-weight: 600;
+  max-width: 350px; }
 
 html, body {
   height: auto; }
@@ -120,7 +162,7 @@ ui-view {
 .front-section-title {
   text-transform: uppercase;
   margin: 32px 0 16px 18px;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
   position: relative; }
   .front-section-title:after {
     content: '';
@@ -137,6 +179,9 @@ ui-view {
 body, html {
   background-color: #1d1e32;
   color: white; }
+
+*.dark-theme {
+  color: rgba(255, 255, 255, 0.87); }
 
 .login-options-form {
   width: 100%;
