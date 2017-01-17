@@ -18,7 +18,8 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   .state('main.popularLists', {
     url: '/popular',
     templateUrl: './views/main/popularLists.html',
-    controller: 'PopularListsController as vm'
+    controller: 'PopularListsController',
+    controllerAs: 'vm'
   })
   .state('main.newLists', {
     url: '/new',
