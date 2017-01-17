@@ -38,11 +38,11 @@ app
 })
 .config(function($authProvider) {
   $authProvider.facebook({
-      clientId: 'SUPER SECRET',
+      clientId: '1338493676223052',
       responseType: 'token'
   });
 
   $authProvider.google({
-    clientId: 'SUPER SECRET'
+    clientId: '328045038175-c139tridrhk65rjdn6p0685eqn32tuje.apps.googleusercontent.com'
   });
 })

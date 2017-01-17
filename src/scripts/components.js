@@ -17,3 +17,13 @@ app
 
   }
 })
+.component('playlistCard', {
+  templateUrl: './components/playlists/playlist-card/playlist.card.template.html',
+  controllerAs: '$ctrl',
+  bindings: {
+    playlist: '='
+  },
+  controller: function($sce) {
+    var $ctrl = this;
+  }
+})
