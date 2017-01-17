@@ -40,5 +40,22 @@
     margin-top: 12px
     p
       padding: 0 16px
-      &:first-child
-        border-right: 1px rgba(white, 0.3) solid
+      // &:first-child
+      //   border-right: 1px rgba(white, 0.3) solid
+
+.front-section-title
+  text-transform: uppercase
+  margin: 32px 0 16px 18px
+  padding-bottom: 8px
+  position: relative
+  &:after
+    content: ''
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 30px
+    height: 5px
+    background-color: $accent
+
+.popular-playlists
+  margin-bottom: 24px
