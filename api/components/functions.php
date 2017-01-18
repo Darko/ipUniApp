@@ -1,12 +1,12 @@
 <?php
   include 'components/connect.php';
 
-  function array_sanitaze(&$item){
+  function array_sanitaze(&$item) {
     global $conn;
     $item = htmlentities(strip_tags($conn->real_escape_string($item)));
   }
 
-  function getContents(){
+  function getContents() {
     $data = json_decode(file_get_contents('php://input'), true);
     if (!$data) {
       echo badRequest();
@@ -15,7 +15,7 @@
     else return $data;
   }
 
-  function endpoint($endpoint){
+  function endpoint($endpoint) {
     if (!empty($endpoint)) {
       switch($endpoint) {
         case 'create':
@@ -38,6 +38,9 @@
           break;
         case 'delete':
           deleteP();
+          break;
+        case 'likePlaylist':
+          likePlaylist();
           break;
         default:
           echo 'xd';

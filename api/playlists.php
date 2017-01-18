@@ -15,7 +15,7 @@
     $public = $data['public'];
     $userId = $data['id'];
 
-    $query = "INSERT INTO playlists (title, public) VALUES ('$title', '$public')";
+    $query = "INSERT INTO playlists (title, isPublic, songsCount, likes, dislikes) VALUES ('$title', '$public', 0, 0, 0)";
     $result = $conn->query($query);
 
     if ($result) {
@@ -117,6 +117,29 @@
     $result = $conn->query($query);
     if ($result) {
       echo success("Delete playlist");
+      return;
+    }
+    else {
+      echo notFound();
+      return;
+    }
+  }
+
+  function likePlaylist() {
+    $data = getContents();
+
+    global $conn;
+    $playlistId = $data['id'];
+    if (isset($data['like'])) {
+      $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $playlistId";
+      $result = $conn->query($query);
+    }
+    else if (isset($data['dislike'])) {
+      $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $playlistId";
+      $result = $conn->query($query);
+    }
+    if ($result) {
+      echo success("Dis/Liked playlist");
       return;
     }
     else {
