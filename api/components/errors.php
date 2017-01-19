@@ -13,14 +13,11 @@
     return json_encode($result);
   }
 
-<<<<<<< HEAD
   function noContent() {
     $result = array('status' => 204, 'message' => 'No content');
     return json_encode($result);
   }
 
-=======
->>>>>>> master
   function success($method) {
     $result = array(
       "method" => $method,
@@ -37,8 +34,4 @@
     return json_encode($result);
   }
 
-<<<<<<< HEAD
 ?>
-=======
-?>
->>>>>>> master
