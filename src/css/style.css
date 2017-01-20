@@ -2,12 +2,18 @@ body, html {
   background-color: #1d1e32;
   color: white; }
 
+.text-center {
+  text-align: center; }
+
 *.dark-theme {
   color: rgba(255, 255, 255, 0.87); }
 
 body, html {
   background-color: #1d1e32;
   color: white; }
+
+.text-center {
+  text-align: center; }
 
 *.dark-theme {
   color: rgba(255, 255, 255, 0.87); }
@@ -44,6 +50,9 @@ navbar {
 body, html {
   background-color: #1d1e32;
   color: white; }
+
+.text-center {
+  text-align: center; }
 
 *.dark-theme {
   color: rgba(255, 255, 255, 0.87); }
@@ -96,6 +105,14 @@ table.md-table.songs-list-table th.md-column.songName, table.md-table.songs-list
   font-weight: 600;
   max-width: 350px; }
 
+#play-song-widget {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  background-color: #ed265d; }
+  #play-song-widget .md-button md-icon {
+    color: rgba(255, 255, 255, 0.9); }
+
 html, body {
   height: auto; }
 
@@ -113,10 +130,15 @@ ui-view {
 .element-100pw {
   width: 100%; }
 
-.spacer-1 {
+[class^="spacer-"] {
   display: block;
-  width: 100%;
+  width: 100%; }
+
+.spacer-1 {
   height: 40px; }
+
+.spacer-2 {
+  height: 80px; }
 
 .hero {
   width: 100%;
@@ -180,6 +202,9 @@ body, html {
   background-color: #1d1e32;
   color: white; }
 
+.text-center {
+  text-align: center; }
+
 *.dark-theme {
   color: rgba(255, 255, 255, 0.87); }
 
@@ -196,6 +221,14 @@ body, html {
   .md-button.authenticate.google {
     background-color: #3b78e7;
     color: #fff; }
+
+.no-personal-lists h2 {
+  margin-bottom: 0px; }
+
+.no-personal-lists p {
+  margin-bottom: 32px;
+  max-width: 360px;
+  width: 100%; }
 
 .global-view {
   padding-bottom: 48px; }

@@ -1,7 +1,19 @@
 app
 // Public controllers
-.controller('IndexController', function($sce) {
+.controller('IndexController', function($scope) {
   var vm = this;
+
+  var elementWrapper = document.querySelector('#play-song-widget');
+
+  vm.player = {
+    isPlaying: true,
+    isPaused: false
+  }
+  
+  
+  $scope.$on('playlist:play', function(event, data) {
+
+  });
 })
 .controller('HomePageController', function($state, $timeout) {
   var vm = this;
@@ -30,7 +42,6 @@ app
 })
 
 // Playlist controllers
-
 .controller('PlayListController', function() {
   var vm = this;
 
@@ -51,6 +62,19 @@ app
       }
     ]
   }
+})
+.controller('YourListsController', function() {
+  var vm = this;
+
+  vm.playlist = {
+    preview: 'https://cdn-images-1.medium.com/max/1600/1*KGphCPfYHW0Sd5L4CXZTgA.jpeg',
+    author: 'Darko',
+    title: 'DankMeiMeis',
+    likes: 420,
+    songsCount: 69
+  }
+
+  vm.playlists = [];
 
 })
 

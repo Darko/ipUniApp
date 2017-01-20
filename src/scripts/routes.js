@@ -34,7 +34,19 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     controller: 'CreateListController as vm'
   })
 
-  .state('playlist', {
+  // Playlists
+  .state('playlists', {
+    abstract: true,
+    templateUrl: './views/playlists/playlists.html',
+  })
+
+  .state('playlists.yourLists', {
+    url: '/yourlists',
+    templateUrl: './views/playlists/yourLists.html',
+    controller: 'YourListsController as vm'
+  })
+
+  .state('playlists.playlist', {
     url: '/playlist/:userId/:playlistId',
     templateUrl: './views/playlists/playlist.html',
     controller: 'PlayListController as vm'

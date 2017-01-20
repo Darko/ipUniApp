@@ -34,7 +34,7 @@ app
     song: '=',
     playlist: '<'
   },
-  controller: function($sce) {
+  controller: function() {
     var $ctrl = this;
 
   }
@@ -45,10 +45,18 @@ app
   bindings: {
     songs: '='
   },
-  controller: function($sce) {
+  controller: function() {
     var $ctrl = this;
 
-    console.log($ctrl.songs);
-    
   }
 })
+.component('playSongWidget', {
+  templateUrl: './components/playlists/play-song-widget/play-song-widget.template.html',
+  controllerAs: '$ctrl',
+  controller: playSongWidgetController
+});
+
+
+function playSongWidgetController() {
+  var $ctrl = this;
+}
