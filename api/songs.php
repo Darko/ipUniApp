@@ -32,60 +32,70 @@
       $DEVELOPER_KEY = 'AIzaSyBv_P2KGXgnz1S14bgfrIiNHT4tQC8DQbg'; // kluc
       $url='https://www.googleapis.com/youtube/v3/search?q='.$q.'&maxResults='.$maxResults.'&part=snippet&key='.$DEVELOPER_KEY;
 
-      $data = file_get_contents($url);
-      echo $data;
+      $data = json_decode(file_get_contents($url), true);
+      echo json_encode($data['items']);
     }
   }
 
   function insert() {
-    $data = getContents();
-
-    global $conn;
-    $playlistId = $data['playlistId'];
-
-    if (isset($data['kind'])) {
-      //ako ja nema pesnata vo nasata baza, dodaj ja
-      $title = str_replace('\'', '', $data['title']);
-      $channelTitle = $data['channelTitle'];
-      $url = $data['url'];
-
-      $query = "INSERT INTO songs (title, channelTitle, url) VALUES ('$title', '$channelTitle', '$url')";
-      $result = $conn->query($query);
-      if ($result) {
-        $songId = $conn->insert_id;
-      }
-      else {
-        echo notFound();
-        return;
-      }
-    }
-    else {
-      $songId = $data['id'];
-    }
-
-    $query = "INSERT INTO playlist_contents (playlistId, songId) VALUES ('$playlistId', '$songId')";
-    $resultContent = $conn->query($query);
-
-    if ($resultContent) {
-      $query = "UPDATE playlists SET songsCount = songsCount + 1 WHERE id = $playlistId";
-      $result = $conn->query($query);
-      if ($result) {
-        echo success("Insert song");
-        return;
-      }
-      else {
-        echo notFound();
-        return;
-      }
-    }
-    else {
-      echo notFound();
+    $bigData = getContents();
+    if (!$bigData) {
+      echo badRequest();
       return;
     }
+
+    global $conn;
+    $good = true;
+    //$playlistId = $bigData["playlistId"];
+
+    foreach ($bigData as $data) {
+
+      $playlistId = $data["playlistId"];
+
+      if (!isset($data['id'])) {
+        //ako ja nema pesnata vo nasata baza, dodaj ja
+        $title = str_replace('\'', '', $data['title']);
+        $channelTitle = $data['channelTitle'];
+        $url = $data['url'];
+
+        $query = "INSERT INTO songs (title, channelTitle, url) VALUES ('$title', '$channelTitle', '$url')";
+        $result = $conn->query($query);
+        if ($result) {
+          $songId = $conn->insert_id;
+        }
+        else {
+          echo notFound();
+          return;
+        }
+      }
+      else {
+        $songId = $data['id'];
+      }
+
+      $query = "INSERT INTO playlist_contents (playlistId, songId) VALUES ('$playlistId', '$songId')";
+      $resultContent = $conn->query($query);
+
+      if ($resultContent) {
+        $query = "UPDATE playlists SET songsCount = songsCount + 1 WHERE id = $playlistId";
+        $result = $conn->query($query);
+        if ($result) {
+          echo success("Insert song");
+        }
+      }
+      else  {
+        echo notFound();
+        return;
+      }
+    } // end of foreach
+    return;
   }
 
-  function deleteItem() {
+  function deleteSong() {
     $data = getContents();
+    if (!$data) {
+      echo badRequest();
+      return;
+    }
 
     global $conn;
     $playlistId = $data['playlistId'];
@@ -100,15 +110,9 @@
         echo success("Delete item");
         return;
       }
-      else {
-        echo notFound();
-        return;
-      }
     }
-    else {
-      echo notFound();
-      return;
-    }
+    echo notFound();
+    return;
   }
 
 endpoint($endpoint);

@@ -9,13 +9,17 @@
 
   function create() {
     $data = getContents();
+    if (!$data) {
+      echo badRequest();
+      return;
+    }
 
     global $conn;
     $title = $data['title'];
-    $public = $data['public'];
+    $isPublic = $data['isPublic'];
     $userId = $data['id'];
 
-    $query = "INSERT INTO playlists (title, isPublic, songsCount, likes, dislikes) VALUES ('$title', '$public', 0, 0, 0)";
+    $query = "INSERT INTO playlists (title, isPublic, songsCount, likes, dislikes) VALUES ('$title', '$isPublic', 0, 0, 0)";
     $result = $conn->query($query);
 
     if ($result) {
@@ -28,15 +32,9 @@
         echo success("Create playlist");
         return;
       }
-      else {
-        echo notFound();
-        return;
-      }
     }
-    else {
-      echo notFound();
-      return;
-    }
+    echo notFound();
+    return;
   }
 
   function read() {
@@ -68,23 +66,26 @@
     // posle se vlecat podatoci za pesnite od taa playlista
     $query = "SELECT * FROM songs INNER JOIN playlist_contents ON songs.id =  playlist_contents.songId
               AND playlist_contents.playlistId = $id";
-    $result = $conn->query($query);
+    $resultContent = $conn->query($query);
 
-    if ($result) {
-      while ($row = $result->fetch_assoc()) {
+    if ($resultContent) {
+      while ($row = $resultContent->fetch_assoc()) {
         $output[] = $row;
       }
-      $result->close();
+      $resultContent->close();
       echo json_encode($output);
-    }
-    else {
-      echo notFound();
       return;
     }
+    echo notFound();
+    return;
   }
 
   function update() {
     $data = getContents();
+    if (!$data) {
+      echo badRequest();
+      return;
+    }
 
     global $conn;
     $playlistId = $data['id'];
@@ -95,20 +96,22 @@
       $update[] = $field." = '$data' ";
     }
 
-    $query = "UPDATE playlists SET ". implode(', ',$update) .  " WHERE id = $playlistId";
+    $query = "UPDATE playlists SET ". implode(', ', $update) .  " WHERE id = $playlistId";
     $result = $conn->query($query);
     if ($result) {
       echo success("Update playlist");
       return;
     }
-    else {
-      echo noContent();
-      return;
-    }
+    echo notFound();
+    return;
   }
 
-  function deleteP() {
+  function deletePlayist() {
     $data = getContents();
+    if (!$data) {
+      echo badRequest();
+      return;
+    }
 
     global $conn;
     $id = $data['id'];
@@ -119,17 +122,20 @@
       echo success("Delete playlist");
       return;
     }
-    else {
-      echo notFound();
-      return;
-    }
+    echo notFound();
+    return;
   }
 
   function likePlaylist() {
     $data = getContents();
+    if (!$data) {
+      echo badRequest();
+      return;
+    }
 
     global $conn;
     $playlistId = $data['id'];
+
     if (isset($data['like'])) {
       $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $playlistId";
       $result = $conn->query($query);
@@ -142,10 +148,8 @@
       echo success("Dis/Liked playlist");
       return;
     }
-    else {
-      echo notFound();
-      return;
-    }
+    echo notFound();
+    return;
   }
 
   endpoint($endpoint);

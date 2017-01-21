@@ -13,11 +13,6 @@
     return json_encode($result);
   }
 
-  function noContent() {
-    $result = array('status' => 204, 'message' => 'No content');
-    return json_encode($result);
-  }
-
   function success($method) {
     $result = array(
       "method" => $method,

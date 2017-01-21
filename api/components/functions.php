@@ -8,11 +8,7 @@
 
   function getContents() {
     $data = json_decode(file_get_contents('php://input'), true);
-    if (!$data) {
-      echo badRequest();
-      return;
-    }
-    else return $data;
+    return $data;
   }
 
   function endpoint($endpoint) {
@@ -30,14 +26,14 @@
         case 'insert':
           insert();
           break;
-        case 'deleteItem':
-          deleteItem();
+        case 'deleteSong':
+          deleteSong();
           break;
         case 'update':
           update();
           break;
-        case 'delete':
-          deleteP();
+        case 'deletePlayist':
+          deletePlayist();
           break;
         case 'likePlaylist':
           likePlaylist();
@@ -48,7 +44,7 @@
       }
     }
     else {
-      echo emptyResponse();
+      echo badRequest();
       return;
     }
   }
