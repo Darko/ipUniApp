@@ -15,6 +15,7 @@
     }
 
     global $conn;
+    array_walk($data, 'array_sanitaze');
     $title = $data['title'];
     $isPublic = $data['isPublic'];
     $userId = $data['id'];
@@ -46,6 +47,7 @@
     global $conn;
     $out = array();
     $id = $_GET['id'];
+    $id = htmlentities(strip_tags($conn->real_escape_string($id)));
     $output = array();
 
     // prvo da se izvlecat podatoci za playlistata
@@ -88,10 +90,10 @@
     }
 
     global $conn;
-    $playlistId = $data['id'];
-
-    $update = array();
     array_walk($data, 'array_sanitaze');
+    $playlistId = $data['id'];
+    $update = array();
+
     foreach ($data as $field => $data) {
       $update[] = $field." = '$data' ";
     }
@@ -114,7 +116,7 @@
     }
 
     global $conn;
-    $id = $data['id'];
+    $id = htmlentities(strip_tags($conn->real_escape_string($data['id'])));
 
     $query = "DELETE FROM playlists WHERE playlists.id = $id";
     $result = $conn->query($query);
@@ -134,6 +136,7 @@
     }
 
     global $conn;
+    array_walk($data, 'array_sanitaze');
     $playlistId = $data['id'];
 
     if (isset($data['like'])) {

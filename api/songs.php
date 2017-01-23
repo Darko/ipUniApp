@@ -8,14 +8,15 @@
   $endpoint = $_REQUEST['endpoint'];
 
   function search() {
-    if (!$_GET['q'] || !$_GET['maxResults']) {
+    if (!$_GET['q']) {
       echo badRequest();
       return;
     }
 
     global $conn;
     $q = preg_replace('/\s+/', '%20', $_GET['q']);
-    $maxResults = $_GET['maxResults'];
+    $q =  htmlentities(strip_tags($conn->real_escape_string($q)));
+    $maxResults = 5;
     $output = array();
 
     $query = "SELECT * FROM songs WHERE title LIKE '%$q%' OR channelTitle LIKE '%$q%' LIMIT $maxResults";
@@ -26,15 +27,23 @@
       }
       $result->close();
       echo json_encode($output);
+      return;
     }
     else {
       // $DEVELOPER_KEY = 'AIzaSyDOkg-u9jnhP-WnzX5WPJyV1sc5QQrtuyc';
       $DEVELOPER_KEY = 'AIzaSyBv_P2KGXgnz1S14bgfrIiNHT4tQC8DQbg'; // kluc
-      $url='https://www.googleapis.com/youtube/v3/search?q='.$q.'&maxResults='.$maxResults.'&part=snippet&key='.$DEVELOPER_KEY;
+      $url='https://www.googleapis.com/youtube/v3/search?q='.$q.'&maxResults='.$maxResults.
+            '&part=snippet&type=video&key='.$DEVELOPER_KEY;
 
       $data = json_decode(file_get_contents($url), true);
-      echo json_encode($data['items']);
+      if ($data && $data['items']) {
+        $data = $data['items'];
+      }
+      echo json_encode($data);
+      return;
     }
+    echo notFound();
+    return;
   }
 
   function insert() {
@@ -45,16 +54,14 @@
     }
 
     global $conn;
-    $good = true;
-    //$playlistId = $bigData["playlistId"];
+    $playlistId = htmlentities(strip_tags($conn->real_escape_string($bigData['playlistId'])));
 
-    foreach ($bigData as $data) {
-
-      $playlistId = $data["playlistId"];
+    foreach ($bigData['items'] as $data) {
+      array_walk($data, 'array_sanitaze');
 
       if (!isset($data['id'])) {
         //ako ja nema pesnata vo nasata baza, dodaj ja
-        $title = str_replace('\'', '', $data['title']);
+        $title = str_replace('\'', '', htmlentities($data['title']));
         $channelTitle = $data['channelTitle'];
         $url = $data['url'];
 
@@ -98,6 +105,7 @@
     }
 
     global $conn;
+    array_walk($data, 'array_sanitaze');
     $playlistId = $data['playlistId'];
     $songId = $data['id'];
 
