@@ -8,12 +8,13 @@ app
   vm.player = {
     isPlaying: true,
     isPaused: false
-  }
-  
+  }  
   
   $scope.$on('playlist:play', function(event, data) {
 
   });
+
+  vm.startPlaying = function() {}
 })
 .controller('HomePageController', function($state, $timeout) {
   var vm = this;
