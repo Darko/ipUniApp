@@ -7,6 +7,7 @@
 
   include 'components/connect.php';
   include 'components/errors.php';
+  include 'components/auth.php';
 
   $endpoint = $_REQUEST['endpoint'];
 
@@ -76,7 +77,8 @@
   function login($id) {
     // Write to tokens
     $query = "";
-    echo success("User logged in");
+    doLogin();
+    // echo success("User logged in");
     return;
   }
 

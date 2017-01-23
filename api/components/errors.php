@@ -8,8 +8,9 @@
     return json_encode($result);
   }
 
-  function badRequest() {
-    $result = array('status' => 400, 'message' => 'Bad request');
+  function badRequest($message) {
+    $message = isset($message) ? $message : 'Bad request';
+    $result = array('status' => 400, 'message' => $message);
     return json_encode($result);
   }
 

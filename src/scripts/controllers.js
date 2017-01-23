@@ -6,7 +6,7 @@ app
   var elementWrapper = document.querySelector('#play-song-widget');
 
   vm.player = {
-    isPlaying: true,
+    isPlaying: false,
     isPaused: false
   }  
   
