@@ -1,7 +1,8 @@
 <?php
-  ini_set('display_startup_errors', 1);
-  ini_set('display_errors', 1);
-  error_reporting(-1);
+
+  // ini_set('display_startup_errors', 1);
+  // ini_set('display_errors', 1);
+  // error_reporting(-1);
 
   header('Content-Type: application/json');
 
@@ -31,6 +32,7 @@
     echo notFound();
     return;
   }
+
 
   function authenticate() {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -79,24 +81,6 @@
     echo success("User logged in");
     return;
   }
-
-  if (!empty($endpoint)) {
-    switch($endpoint) {
-      case 'showOne':
-        showOne();
-        break;
-      case 'authenticate':
-        authenticate();
-        break;
-      case 'update':
-        update();
-      break;
-      default:
-        echo 'xd';
-        break;
-    }
-  } else {
-    echo emptyResponse();
-    return;
-  }
+  
+endpoint($endpoint)
 ?>
