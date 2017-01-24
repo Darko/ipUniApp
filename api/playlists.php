@@ -56,7 +56,7 @@
 
     if ($result->num_rows != 0) {
       while ($row = $result->fetch_assoc()) {
-        $output[] = $row;
+        $output = $row;
       }
       $result->close();
     }
@@ -72,7 +72,7 @@
 
     if ($resultContent) {
       while ($row = $resultContent->fetch_assoc()) {
-        $output[] = $row;
+        $output['items'][] = $row;
       }
       $resultContent->close();
       echo json_encode($output);
@@ -108,7 +108,7 @@
     return;
   }
 
-  function deletePlayist() {
+  function deleteList() {
     $data = getContents();
     if (!$data) {
       echo badRequest();
@@ -128,7 +128,7 @@
     return;
   }
 
-  function likePlaylist() {
+  function like() {
     $data = getContents();
     if (!$data) {
       echo badRequest();
@@ -155,5 +155,31 @@
     return;
   }
 
-  endpoint($endpoint);
+  if (!empty($endpoint)) {
+    switch($endpoint) {
+      case 'create':
+        create();
+        break;
+      case 'read':
+        read();
+        break;
+      case 'update':
+        update();
+        break;
+      case 'deleteList':
+        deleteList();
+        break;
+      case 'like':
+        like();
+        break;
+      default:
+        echo 'xd';
+        break;
+    }
+  }
+  else {
+    echo badRequest();
+    return;
+  }
+
 // ?>

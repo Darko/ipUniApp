@@ -123,6 +123,25 @@
     return;
   }
 
-endpoint($endpoint);
+  if (!empty($endpoint)) {
+    switch($endpoint) {
+      case 'search':
+        search();
+        break;
+      case 'insert':
+        insert();
+        break;
+      case 'deleteSong':
+        deleteSong();
+        break;
+      default:
+        echo 'xd';
+        break;
+    }
+  }
+  else {
+    echo badRequest();
+    return;
+  }
 
  ?>
