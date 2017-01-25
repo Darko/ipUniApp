@@ -166,7 +166,7 @@
       case 'update':
         update();
         break;
-      case 'deleteList':
+      case 'delete':
         deleteList();
         break;
       case 'like':
@@ -181,5 +181,4 @@
     echo badRequest();
     return;
   }
-
-// ?>
+?>

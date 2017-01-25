@@ -102,8 +102,12 @@ app
 
   vm.login = function(provider) {
     Auth.authenticate(provider)
-    .then(function() {
-      $state.go('home')
+    .then(function(data_) {
+      return $http.get(`/api/users.php?endpoint=authenticate&provider=facebook&access_token=${data_.access_token}&expires_in=${data_.expires_in}`)
+    })
+    .then(function(response) {
+      Auth.userData = response.data;
+      $rootScope.$emit('user:login');
     })
   };
 })
