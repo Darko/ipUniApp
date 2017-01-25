@@ -27,17 +27,16 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     controller: 'NewListsController as vm'
   })
 
-  // User routes
-  .state('main.createList', {
-    url: '/create',
-    templateUrl: './views/user/createList.html',
-    controller: 'CreateListController as vm'
-  })
-
   // Playlists
   .state('playlists', {
     abstract: true,
     templateUrl: './views/playlists/playlists.html',
+  })
+
+  .state('playlists.createList', {
+    url: '/create',
+    templateUrl: './views/playlists/create.html',
+    controller: 'CreateListController as vm'
   })
 
   .state('playlists.yourLists', {

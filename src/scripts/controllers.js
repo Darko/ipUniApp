@@ -37,9 +37,25 @@ app
 })
 .controller('PopularListsController', function() {
   var vm = this;
+
+  vm.playlist = {
+    preview: 'https://cdn-images-1.medium.com/max/1600/1*KGphCPfYHW0Sd5L4CXZTgA.jpeg',
+    author: 'Darko',
+    title: 'DankMeiMeis',
+    likes: 420,
+    songsCount: 69
+  }
 })
 .controller('NewListsController', function() {
   var vm = this;
+
+  vm.playlist = {
+    preview: 'https://cdn-images-1.medium.com/max/1600/1*KGphCPfYHW0Sd5L4CXZTgA.jpeg',
+    author: 'Darko',
+    title: 'DankMeiMeis',
+    likes: 420,
+    songsCount: 69
+  }
 })
 
 // Playlist controllers

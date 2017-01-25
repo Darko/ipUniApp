@@ -22,7 +22,7 @@
       }
 
       if ($jwt) {
-        $config = Factory::fromFile('config/config.php', true);
+        $config = Factory::fromFile('../config/config.php', true);
 
         $secret = base64_decode($config->get('jwtKey'));
         $token = JWT::decode($jwt, $secret, array('HS512'));

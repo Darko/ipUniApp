@@ -7,7 +7,7 @@
         <md-button class="md-accent md-icon-button md-hue-1" class="md-icon-button">
             <md-icon>search</md-icon>
         </md-button>
-        <md-button class="md-accent md-hue-1" ui-sref="main.createList">Креирај листа</md-button>
+        <md-button class="md-accent md-hue-1" ui-sref="playlists.createList">Креирај листа</md-button>
         <md-button ng-if="$ctrl.isLoggedIn" ng-cloak class="md-accent md-hue-1" ui-sref="playlists.yourLists">Твои листи</md-button>
         <md-button ng-if="!$ctrl.isLoggedIn" ng-cloak class="md-accent md-hue-1" ui-sref="login">Најави се</md-button>
         <md-button ng-if="$ctrl.isLoggedIn" ng-cloak class="md-accent md-hue-1" ui-sref="logout">Одјави се</md-button>

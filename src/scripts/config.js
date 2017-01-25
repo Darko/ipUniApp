@@ -38,7 +38,7 @@ app
 })
 .config(function($authProvider) {
   $authProvider.facebook({
-      clientId: 'SUPER SECRET',
+      clientId: '1338493676223052',
       responseType: 'token'
   });
 

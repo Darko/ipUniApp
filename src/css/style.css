@@ -194,6 +194,9 @@ ui-view {
     width: 30px;
     height: 5px;
     background-color: #ed265d; }
+  .front-section-title.text-center:after {
+    left: 50%;
+    transform: translateX(-50%); }
 
 .popular-playlists {
   margin-bottom: 24px; }
@@ -229,6 +232,9 @@ body, html {
   margin-bottom: 32px;
   max-width: 360px;
   width: 100%; }
+
+.create-list-wrapper {
+  margin: 0 auto; }
 
 .global-view {
   padding-bottom: 48px; }
