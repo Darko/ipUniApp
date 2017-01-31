@@ -15,12 +15,13 @@
     }
 
     global $conn;
-    array_walk($data, 'array_sanitaze');
     $title = $data['title'];
     $isPublic = $data['isPublic'];
     $userId = $data['id'];
+    $date = date("Y-m-d", time());
 
-    $query = "INSERT INTO playlists (title, isPublic, songsCount, likes, dislikes) VALUES ('$title', '$isPublic', 0, 0, 0)";
+    $query = "INSERT INTO playlists (title, createdAt, isPublic, songsCount, likes, dislikes)
+              VALUES ('$title', '$date', '$isPublic', 0, 0, 0)";
     $result = $conn->query($query);
 
     if ($result) {
@@ -31,8 +32,18 @@
 
       if ($resultIdentity) {
         echo success("Create playlist");
+      }
+
+      else {
+        echo notFound();
         return;
       }
+
+      if (insertSongs($data, $playlistId)) {
+        echo success("Songs insert");
+        return;
+      }
+
     }
     echo notFound();
     return;
