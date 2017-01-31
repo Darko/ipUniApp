@@ -114,6 +114,25 @@ app
 
 // User controllers
 
-.controller('CreateListController', function() {
+.controller('CreateListController', function($http) {
   var vm = this;
+
+  vm.songs = [];
+
+  vm.lookupSongs = function(text) {
+    var uri = `/api/songs.php?endpoint=search&q=${text}`;
+    return $http.get(uri)
+    .then(function(result) {
+      return result.data || [];
+    })
+    .catch(function(error) {
+      // handle properly
+    })
+  }
+
+  vm.addToSongs = function(snippet) {
+    vm.songs.push(snippet);
+    vm.searchText = '';
+  }
+
 })

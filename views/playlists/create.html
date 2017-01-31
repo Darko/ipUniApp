@@ -1,3 +1,46 @@
-<div class="create-list-wrapper flex-30 layout-row layout-align-center-start">
+<div class="create-list-wrapper layout-wrap flex-30 layout-row layout-align-center-start">
   <h1 class="front-section-title md-title text-center">Креирај листа</h1>
+
+  <form autocomplete="off" ng-submit="vm.submit()" name="CreatePlaylistForm" class="CreatePlaylistForm flex-100 layout-row layout-align-center-start layout-wrap">
+    <div class="layout-row layout-align-start-start flex-60 layout-wrap">
+      <md-input-container class="flex-100">
+        <label>Име</label>
+        <input type="text" ng-model="vm.playlist.title" name="title" ng-minlength="3" ng-maxlength="30" required>
+        <div ng-messages="CreatePlaylistForm.title.$error" ng-show="CreatePlaylistForm.title.$dirty">
+          <div ng-message="required">Име за плејлиста е задолжително.</div>
+          <div ng-message="minlength">Името мора да биде 3 или повеќе карактери</div>
+          <div ng-message="maxlength">Името мора да биде помалку од 30 карактери</div>
+        </div>
+      </md-input-container>
+
+      <div class="flex-100 autocomplete-wrapper">
+        <label>Песни</label>
+        <md-autocomplete
+          required
+          md-autofocus
+          class="flex"
+          md-delay="500"
+          md-search-text="vm.searchText"
+          md-selected-item="vm.song"
+          md-items="song in vm.lookupSongs(vm.searchText)"
+          placeholder="Внеси име на песна"
+          md-item-text="song.snippet.title">
+          <md-item-template>
+            <span ng-click="vm.addToSongs(song.snippet)" md-highlight-text="vm.searchText" md-highlight-flags="^i">{{ song.snippet.title }}</span>
+          </md-item-template>
+        </md-autocomplete>
+        <md-list class="flex-100">
+          <md-list-item ng-repeat="song in vm.songs">
+            {{ song.title }}
+          </md-list-item>
+        </md-list>
+      </div>
+
+      <div class="layout-row layout-align-end-end flex-100 button-actions-wrapper">
+        <md-button class="md-accent md-hue-2 md-raised" type="submit">Креирај листа</md-button>
+      </div>
+
+    </div>
+  </form>
+
 </div>

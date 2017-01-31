@@ -72,6 +72,26 @@ playlist-card {
     overflow: hidden;
     background-size: 100%; }
 
+.autocomplete-wrapper {
+  padding: 0 3px; }
+  .autocomplete-wrapper label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 5px; }
+  .autocomplete-wrapper md-autocomplete {
+    margin-top: 5px; }
+
+.button-actions-wrapper {
+  padding: 24px 0; }
+  .button-actions-wrapper .md-button:last-of-type {
+    margin-right: 0; }
+
+.CreatePlaylistForm .button-actions-wrapper {
+  padding: 24px 3px; }
+
+.CreatePlaylistForm > div:first-child {
+  min-width: 320px; }
+
 table.md-table.dark-theme th.md-column, table.md-table.dark-theme td.md-cell {
   color: rgba(255, 255, 255, 0.87);
   font-size: 16px; }
@@ -235,6 +255,22 @@ body, html {
 
 .create-list-wrapper {
   margin: 0 auto; }
+  .create-list-wrapper .front-section-title {
+    margin-left: 0;
+    margin-bottom: 48px; }
+  .create-list-wrapper md-input-container:not(.md-input-invalid).md-input-focused label {
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 1; }
 
 .global-view {
   padding-bottom: 48px; }
+
+md-input-container.md-input-invalid .md-input-message-animation {
+  color: #ed265d;
+  font-size: 12px; }
+
+md-input-container.md-input-invalid .md-input-message-animation,
+md-input-container.md-input-invalid .md-input,
+md-input-container.md-input-invalid label {
+  color: #ed265d;
+  border-color: #ed265d; }

@@ -8,8 +8,10 @@
 
   include 'components/connect.php';
   include 'components/errors.php';
+  include 'components/loginApis.php';
 
   $endpoint = $_REQUEST['endpoint'];
+  $headers = getallheaders();
 
   function showOne() {
     if (!$_GET['userId']) {
@@ -35,7 +37,9 @@
 
 
   function authenticate() {
-    $access_token = $_GET['access_token'];
+    global $headers;
+    
+    $access_token = explode(" ", $headers['authorization'])[1];
     $provider = $_GET['provider'];
     $expiresIn = $_GET['expires_in'];
     
@@ -51,8 +55,11 @@
     }
 
     global $conn;
+    global $loginApis;
 
-    $uri = "https://graph.facebook.com/v2.6/me?fields=email,picture,name&access_token=". $access_token;
+    $uri = $loginApis[$provider]. $access_token;
+
+    return;
 
     $res = json_decode(file_get_contents($uri, false));
     
@@ -102,18 +109,6 @@
     }
   }
 
-  function update() {
-    $data = json_decode(file_get_contents('php://input'), true);
-    $userId = $data["id"];
-
-    if(!$userId) {
-      echo badRequest();
-      return;
-    }
-
-    // To be continued
-  }
-
   function setTokens($userobj, $loggingIn) {
     global $conn;
   
@@ -130,9 +125,6 @@
         break;
       case 'authenticate':
         authenticate();
-        break;
-      case 'update':
-        update();
         break;
       default:
         echo 'xd';
