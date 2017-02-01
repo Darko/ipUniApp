@@ -16,12 +16,12 @@
 
     global $conn;
     $title = $data['title'];
-    $isPublic = $data['isPublic'];
-    $userId = $data['id'];
+    $private = (isset($data['private']) && $data['private']) ? 1 : 0;
+    $userId = $data['userId'];
     $date = date("Y-m-d", time());
 
-    $query = "INSERT INTO playlists (title, createdAt, isPublic, songsCount, likes, dislikes)
-              VALUES ('$title', '$date', '$isPublic', 0, 0, 0)";
+    $query = "INSERT INTO playlists (title, createdAt, private, songsCount, likes, dislikes)
+              VALUES ('$title', '$date', '$private', 0, 0, 0)";
     $result = $conn->query($query);
 
     if ($result) {
@@ -102,14 +102,14 @@
 
     global $conn;
     array_walk($data, 'array_sanitaze');
-    $playlistId = $data['id'];
+    $playlistId = $data['playlistId'];
     $update = array();
 
     foreach ($data as $field => $data) {
       $update[] = $field." = '$data' ";
     }
 
-    $query = "UPDATE playlists SET ". implode(', ', $update) .  " WHERE id = $playlistId";
+    $query = "UPDATE playlists SET ". implode(', ', $update) . " WHERE id = $playlistId";
     $result = $conn->query($query);
     if ($result) {
       echo success("Update playlist");
@@ -127,7 +127,7 @@
     }
 
     global $conn;
-    $id = htmlentities(strip_tags($conn->real_escape_string($data['id'])));
+    $id = htmlentities(strip_tags($conn->real_escape_string($data['playlistId'])));
 
     $query = "DELETE FROM playlists WHERE playlists.id = $id";
     $result = $conn->query($query);
@@ -148,16 +148,15 @@
 
     global $conn;
     array_walk($data, 'array_sanitaze');
-    $playlistId = $data['id'];
+    $playlistId = $data['playlistId'];
 
     if (isset($data['like'])) {
       $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $playlistId";
-      $result = $conn->query($query);
     }
     else if (isset($data['dislike'])) {
       $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $playlistId";
-      $result = $conn->query($query);
     }
+    $result = $conn->query($query);
     if ($result) {
       echo success("Dis/Liked playlist");
       return;

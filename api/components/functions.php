@@ -18,10 +18,12 @@
 
       if (!isset($song['id'])) {
         $title = str_replace('\'', '', htmlentities($song['title']));
+        $thumbnail = $song['thumbnail'];
         $channelTitle = $song['channelTitle'];
-        $url = $song['url'];
+        $videoId = $song['videoId'];
 
-        $query = "INSERT INTO songs (title, channelTitle, url) VALUES ('$title', '$channelTitle', '$url')";
+        $query = "INSERT INTO songs (title, thumbnail, channelTitle, videoId)
+                  VALUES ('$title', '$thumbnail', '$channelTitle', '$videoId')";
         $result = $conn->query($query);
         if ($result) {
           $songId = $conn->insert_id;
