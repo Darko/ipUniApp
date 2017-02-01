@@ -114,10 +114,16 @@ app
 
 // User controllers
 
-.controller('CreateListController', function($http) {
+.controller('CreateListController', function($http, Auth, $rootScope, $mdDialog) {
   var vm = this;
 
-  vm.songs = [];
+  vm.loggedIn = Auth.isAuthenticated();
+
+  vm.list = {
+    private: false,
+    userId: 1,
+    items: []
+  }
 
   vm.lookupSongs = function(text) {
     var uri = `/api/songs.php?endpoint=search&q=${text}`;
@@ -130,9 +136,66 @@ app
     })
   }
 
-  vm.addToSongs = function(snippet) {
-    vm.songs.push(snippet);
+  vm.addToSongs = function(song) {
+    var newSong = undefined;
+    if (song.snippet) {
+      newSong = {
+        videoId: song.id.videoId,
+        title: song.snippet.title,
+        channelTitle: song.snippet.channelTitle,
+        thumbnail: song.snippet.thumbnails.high.url
+      }
+    } else {
+      newSong = song;
+    }
+    vm.list.items.push(newSong);
     vm.searchText = '';
   }
 
+  vm.removeSong = function(song) {
+    _.remove(vm.list.items, song);
+  }
+
+  vm.save = function($event) {
+    $http.post('api/playlists.php?endpoint=create', vm.list)
+    .then(function() {
+      $mdDialog.show({
+        parent: angular.element(document.body),
+        targetEvent: $event,
+        templateUrl: '../../components/dialogs/success/success.dialog.html',
+        controllerAs: 'vm',
+        bindToController: true,
+        clickOutsideToClose: true,
+        escapeToClose: true,
+        controller: function($scope) {
+          var vm = this;
+          vm.message = 'Успешно креирана листа!';
+
+          vm.close = function() {
+            return $mdDialog.hide();
+          }
+        }
+      })
+    })
+    .then(function() {
+      vm.list = {
+        private: false,
+        title: '',
+        userId: 1,
+        items: []
+      }
+    })    
+  }
+
+  vm.login = function(provider) {
+    Auth.authenticate(provider)
+    .then(function(data_) {
+      return $http.get(`/api/users.php?endpoint=authenticate&provider=facebook&access_token=${data_.access_token}&expires_in=${data_.expires_in}`)
+    })
+    .then(function(response) {
+      Auth.userData = response.data;
+      $rootScope.$emit('user:login');
+      vm.loggedIn = true;
+    })
+  };
 })

@@ -92,6 +92,24 @@ playlist-card {
 .CreatePlaylistForm > div:first-child {
   min-width: 320px; }
 
+.created-songs-list md-list-item {
+  padding: 0;
+  font-size: 14px; }
+  .created-songs-list md-list-item span.title {
+    display: inline-block;
+    width: 100%;
+    padding-left: 16px;
+    max-width: calc(100% - 36px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden; }
+  .created-songs-list md-list-item .md-button {
+    margin-right: 3px; }
+
+.autocomplete-item-template {
+  width: 100%;
+  display: block; }
+
 table.md-table.dark-theme th.md-column, table.md-table.dark-theme td.md-cell {
   color: rgba(255, 255, 255, 0.87);
   font-size: 16px; }
@@ -132,6 +150,15 @@ table.md-table.songs-list-table th.md-column.songName, table.md-table.songs-list
   background-color: #ed265d; }
   #play-song-widget .md-button md-icon {
     color: rgba(255, 255, 255, 0.9); }
+
+.success-dialog {
+  background-color: #46b450;
+  color: rgba(0, 0, 0, 0.87);
+  perspective: 500px;
+  padding: 16px; }
+  .success-dialog md-dialog-content {
+    padding: 16px;
+    text-align: center; }
 
 html, body {
   height: auto; }
@@ -265,12 +292,15 @@ body, html {
 .global-view {
   padding-bottom: 48px; }
 
-md-input-container.md-input-invalid .md-input-message-animation {
-  color: #ed265d;
-  font-size: 12px; }
+*.md-input-invalid .md-input-message-animation,
+*[ng-messages] {
+  color: #ed265d !important;
+  font-size: 12px !important;
+  margin-top: 5px; }
 
-md-input-container.md-input-invalid .md-input-message-animation,
-md-input-container.md-input-invalid .md-input,
-md-input-container.md-input-invalid label {
-  color: #ed265d;
-  border-color: #ed265d; }
+*.md-input-invalid .md-input-message-animation,
+*.md-input-invalid .md-input,
+*.md-input-invalid label,
+*[ng-messages] {
+  color: #ed265d !important;
+  border-color: #ed265d !important; }

@@ -59,8 +59,6 @@
 
     $uri = $loginApis[$provider]. $access_token;
 
-    return;
-
     $res = json_decode(file_get_contents($uri, false));
     
     $email = $res->email;
