@@ -24,29 +24,23 @@
               VALUES ('$title', '$date', '$private', 0, 0, 0)";
     $result = $conn->query($query);
 
-    if ($result) {
-      $playlistId = $conn->insert_id;
-
-      $query = "INSERT INTO playlist_identity (playlistId, userId) VALUES ('$playlistId', '$userId')";
-      $resultIdentity = $conn->query($query);
-
-      if ($resultIdentity) {
-        echo success("Create playlist");
-      }
-
-      else {
-        echo notFound();
-        return;
-      }
-
-      if (insertSongs($data, $playlistId)) {
-        echo success("Songs insert");
-        return;
-      }
-
+    if (!$result) {
+      echo notFound();
+      return;
     }
-    echo notFound();
-    return;
+
+    $playlistId = $conn->insert_id;
+
+    $query = "INSERT INTO playlist_identity (playlistId, userId) VALUES ('$playlistId', '$userId')";
+    $resultIdentity = $conn->query($query);
+
+    if ($resultIdentity && insertSongs($data, $playlistId)) {
+      $res = array(
+        "id" => $playlistId
+      );
+      echo json_encode($res);
+      return;
+    }
   }
 
   function read() {
@@ -81,15 +75,28 @@
               AND playlist_contents.playlistId = $id";
     $resultContent = $conn->query($query);
 
-    if ($resultContent) {
-      while ($row = $resultContent->fetch_assoc()) {
-        $output['items'][] = $row;
-      }
-      $resultContent->close();
-      echo json_encode($output);
+    if (!$resultContent) {
+      echo notFound();
       return;
     }
-    echo notFound();
+
+    // $row = $resultContent->fetch_assoc();
+
+    // echo json_encode($row);
+    // return;
+
+    while ($row = $resultContent->fetch_assoc()) {
+      $output['items'][] = array(
+          "id" => $row["id"],
+          "snippet" => array(
+            "title" => $row['title'],
+            "channelTitle" => $row['channelTitle'],
+            "thumbnail" => $row['thumbnail'], 
+          )
+        );
+    }
+    $resultContent->close();
+    echo json_encode($output);
     return;
   }
 

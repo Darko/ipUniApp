@@ -4,15 +4,15 @@
       <tr md-row>
         <th md-column>#</th>
         <th md-column class="songName">Песна</th>
-        <th md-column>Прикачил</th>
+        <th md-column>Автор</th>
         <th md-column class="actions">Опции</th>        
       </tr>
     </thead>
     <tbody md-body>
       <tr md-row md-select="dessert" md-select-id="name" md-auto-select ng-repeat="song in $ctrl.songs track by $index">
         <td md-cell>{{ $index + 1 }}</td>
-        <td md-cell class="songName">{{ song.name }}</td>
-        <td md-cell>{{ song.uploader }}</td>
+        <td md-cell class="songName">{{ song.snippet.title }}</td>
+        <td md-cell>{{ song.snippet.channelTitle }}</td>
         <td md-cell class="actions">
           <md-button class="md-icon-button">
             <md-icon>delete</md-icon>

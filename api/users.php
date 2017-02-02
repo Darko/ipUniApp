@@ -41,16 +41,13 @@
     
     $access_token = explode(" ", $headers['authorization'])[1];
     $provider = $_GET['provider'];
-    $expiresIn = $_GET['expires_in'];
+    $expiresIn = $_GET['expires_in'] || 10000;
     
     if (!$access_token) {
-      echo badRequest('Missing parameter: access_token');
+      echo badRequest('Missing auth parameter: access_token');
       return;
     } else if (!$provider) {
       echo badRequest('Missing auth parameter: provider');
-      return;
-    } else if (!$expiresIn) {
-      echo badRequest('Missing parameter: expires_in');
       return;
     }
 

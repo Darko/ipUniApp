@@ -27,6 +27,11 @@ app
     })
   };
 
+  this.setUser = function(data) {
+    this.userData = data;
+    $rootScope.user = data;
+  }
+
   this.getCurrentUser = function () {
     return _this.userData;
   };

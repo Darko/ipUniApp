@@ -59,26 +59,13 @@ app
 })
 
 // Playlist controllers
-.controller('PlayListController', function() {
+.controller('PlayListController', function(List) {
   var vm = this;
 
-  vm.playlist = {
-    author: 'Darko'
-  }
+  vm.list = List.data;
 
-  vm.songs = {
-    _current: {
-      name: "'The Journey' (2 Hour Drum & Bass Mix)",
-      uploader: "SuicideSheeep",
-      preview: 'https://cdn-images-1.medium.com/max/1600/1*KGphCPfYHW0Sd5L4CXZTgA.jpeg'
-    },
-    list: [
-      {
-        name: "'The Journey' (2 Hour Drum & Bass Mix)",
-        uploader: "SuicideSheeep"
-      }
-    ]
-  }
+  vm.currentSong = vm.list.items[0] ? vm.list.items[0] : null;
+
 })
 .controller('YourListsController', function() {
   var vm = this;
@@ -100,28 +87,43 @@ app
 .controller('LoginController', function($rootScope, $state, Auth, $http, $auth) {
   var vm = this;
 
+  var returnState = $rootScope.returnState || 'home';
+  $rootScope.returnState = null;
+
   vm.login = function(provider) {
     Auth.authenticate(provider)
     .then(function(data_) {
       return $http.get(`/api/users.php?endpoint=authenticate&provider=facebook&access_token=${data_.access_token}&expires_in=${data_.expires_in}`)
     })
     .then(function(response) {
-      Auth.userData = response.data;
-      $rootScope.$emit('user:login');
+      $rootScope.$emit('user:login', response.data);
+      var user = response.data;
+      localStorage.setItem('user', JSON.stringify(user));
+
+      if (returnState) {
+        $state.go(returnState);
+      }
     })
   };
 })
 
 // User controllers
 
-.controller('CreateListController', function($http, Auth, $rootScope, $mdDialog) {
+.controller('CreateListController', function($http, Auth, $rootScope, $mdDialog, $state) {
   var vm = this;
 
   vm.loggedIn = Auth.isAuthenticated();
 
+  if (!vm.loggedIn) {
+    $rootScope.returnState = 'playlists.createList';
+    $state.go('login');
+  }
+
+  vm.user = Auth.getCurrentUser();
+
   vm.list = {
     private: false,
-    userId: 1,
+    userId: parseInt(vm.user.id),
     items: []
   }
 
@@ -138,7 +140,7 @@ app
 
   vm.addToSongs = function(song) {
     var newSong = undefined;
-    if (song.snippet) {
+    if (!parseInt(song.id)) {
       newSong = {
         videoId: song.id.videoId,
         title: song.snippet.title,
@@ -157,8 +159,12 @@ app
   }
 
   vm.save = function($event) {
+    console.log(vm.list);
     $http.post('api/playlists.php?endpoint=create', vm.list)
-    .then(function() {
+    .then(function(response) {
+
+      console.log(response);
+
       $mdDialog.show({
         parent: angular.element(document.body),
         targetEvent: $event,
@@ -178,24 +184,8 @@ app
       })
     })
     .then(function() {
-      vm.list = {
-        private: false,
-        title: '',
-        userId: 1,
-        items: []
-      }
+
     })    
   }
 
-  vm.login = function(provider) {
-    Auth.authenticate(provider)
-    .then(function(data_) {
-      return $http.get(`/api/users.php?endpoint=authenticate&provider=facebook&access_token=${data_.access_token}&expires_in=${data_.expires_in}`)
-    })
-    .then(function(response) {
-      Auth.userData = response.data;
-      $rootScope.$emit('user:login');
-      vm.loggedIn = true;
-    })
-  };
 })

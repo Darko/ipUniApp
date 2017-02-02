@@ -46,9 +46,15 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   })
 
   .state('playlists.playlist', {
-    url: '/playlist/:userId/:playlistId',
+    url: '/playlist/:playlistId',
     templateUrl: './views/playlists/playlist.html',
-    controller: 'PlayListController as vm'
+    controller: 'PlayListController as vm',
+    resolve: {
+      List: function($http, $stateParams) {
+        var id = $stateParams.playlistId
+        return $http.get(`/api/playlists.php?endpoint=read&id=${id}`);
+      }
+    }
   })
 
   // Auth routes
