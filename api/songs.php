@@ -56,44 +56,12 @@
     global $conn;
     $playlistId = htmlentities(strip_tags($conn->real_escape_string($bigData['playlistId'])));
 
-    foreach ($bigData['items'] as $data) {
-      array_walk($data, 'array_sanitaze');
+    if (insertSongs($bigData, $playlistId)) {
+      echo success("Songs insert");
+      return;
+    }
 
-      if (!isset($data['id'])) {
-        //ako ja nema pesnata vo nasata baza, dodaj ja
-        $title = str_replace('\'', '', htmlentities($data['title']));
-        $channelTitle = $data['channelTitle'];
-        $url = $data['url'];
-
-        $query = "INSERT INTO songs (title, channelTitle, url) VALUES ('$title', '$channelTitle', '$url')";
-        $result = $conn->query($query);
-        if ($result) {
-          $songId = $conn->insert_id;
-        }
-        else {
-          echo notFound();
-          return;
-        }
-      }
-      else {
-        $songId = $data['id'];
-      }
-
-      $query = "INSERT INTO playlist_contents (playlistId, songId) VALUES ('$playlistId', '$songId')";
-      $resultContent = $conn->query($query);
-
-      if ($resultContent) {
-        $query = "UPDATE playlists SET songsCount = songsCount + 1 WHERE id = $playlistId";
-        $result = $conn->query($query);
-        if ($result) {
-          echo success("Insert song");
-        }
-      }
-      else  {
-        echo notFound();
-        return;
-      }
-    } // end of foreach
+    echo badRequest();
     return;
   }
 
