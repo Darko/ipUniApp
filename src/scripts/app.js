@@ -22,7 +22,9 @@ var app = angular.module('MusicApp', [
     var user = userData ? JSON.parse(userData) : undefined;
 
     if (user) {
-      Auth.setUser(user);
+      return Auth.setUser(user);
+    } else {
+      return Auth.logout();
     }
   }
 

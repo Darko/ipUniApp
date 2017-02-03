@@ -1,5 +1,4 @@
 <?php
-
   header('Content-Type: application/json');
 
   include 'components/errors.php';
@@ -19,9 +18,10 @@
     $private = (isset($data['private']) && $data['private']) ? 1 : 0;
     $userId = $data['userId'];
     $date = date("Y-m-d", time());
+    $thumbnail = $data['items'][0]['thumbnail'];
 
-    $query = "INSERT INTO playlists (title, createdAt, private, songsCount, likes, dislikes)
-              VALUES ('$title', '$date', '$private', 0, 0, 0)";
+    $query = "INSERT INTO playlists (title, createdAt, thumbnail, private, songsCount, likes, dislikes)
+              VALUES ('$title', '$date', '$thumbnail', '$private', 0, 0, 0)";
     $result = $conn->query($query);
 
     if (!$result) {
@@ -43,7 +43,7 @@
     }
   }
 
-  function read() {
+  function show() {
     if (!$_GET['id']) {
       echo badRequest();
       return;
@@ -80,11 +80,6 @@
       return;
     }
 
-    // $row = $resultContent->fetch_assoc();
-
-    // echo json_encode($row);
-    // return;
-
     while ($row = $resultContent->fetch_assoc()) {
       $output['items'][] = array(
           "id" => $row["id"],
@@ -97,6 +92,31 @@
     }
     $resultContent->close();
     echo json_encode($output);
+    return;
+  }
+
+  function index() {
+    if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+      echo badRequest('To get user playlists for user you must create a GET request');
+      return;
+    };
+
+    global $conn;
+
+    $userId = htmlentities(strip_tags($conn->real_escape_string($_GET["userId"])));
+    $res = array();
+
+    // 
+
+    // $query = "SELECT * FROM playlists INNER JOIN playlist_identity WHERE userId = $userId";
+    $query = "SELECT * FROM playlists INNER JOIN playlist_identity ON playlist_identity.playlistId = playlists.id and playlist_identity.userId = $userId";
+    $result = $conn->query($query);
+
+    while ($row = $result->fetch_assoc()) {
+      $res[] = $row;
+    }
+
+    echo json_encode($res);
     return;
   }
 
@@ -177,8 +197,11 @@
       case 'create':
         create();
         break;
-      case 'read':
-        read();
+      case 'show':
+        show();
+        break;
+      case 'index':
+        index();
         break;
       case 'update':
         update();

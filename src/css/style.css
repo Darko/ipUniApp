@@ -60,17 +60,42 @@ body, html {
 playlist-card {
   display: inline-block;
   width: 276px;
-  margin: 8px; }
+  margin: 8px;
+  perspective: 500; }
   playlist-card md-card {
     background-color: #2c2d4c;
     color: rgba(255, 255, 255, 0.87);
-    overflow: hidden; }
+    overflow: hidden;
+    position: relative; }
+    playlist-card md-card md-card-content {
+      cursor: default; }
   playlist-card .image-wrapper {
     width: 100%;
     height: 220px;
     position: relative;
-    overflow: hidden;
-    background-size: 100%; }
+    overflow: hidden; }
+    playlist-card .image-wrapper img {
+      transition: transform 0.4s;
+      height: 100%;
+      width: auto;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0); }
+  playlist-card .slide-out-play-button {
+    position: absolute;
+    width: 100%;
+    height: 140px;
+    bottom: 0;
+    left: 0;
+    background-color: #ed265d;
+    transition: transform 0.35s;
+    transform: translate3D(0, 140px, 0); }
+    playlist-card .slide-out-play-button .md-button {
+      margin: -10px 0 0; }
+  playlist-card:hover .image-wrapper img {
+    transform: translate3D(0, -10%, 0) translateX(-50%); }
+  playlist-card:hover .slide-out-play-button {
+    transform: translate3D(0, 20px, 0); }
 
 .autocomplete-wrapper {
   padding: 0 3px; }
@@ -127,13 +152,16 @@ table.md-table.songs-list-table th.md-column.songName, table.md-table.songs-list
 
 .current-song-preview {
   width: 260px;
-  height: 156px;
+  height: 145px;
   background: #262842;
   margin-right: 24px;
   position: relative;
   overflow: hidden; }
   .current-song-preview img {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
     height: auto;
     border: none; }

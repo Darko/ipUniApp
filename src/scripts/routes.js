@@ -42,7 +42,13 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   .state('playlists.yourLists', {
     url: '/yourlists',
     templateUrl: './views/playlists/yourLists.html',
-    controller: 'YourListsController as vm'
+    controller: 'YourListsController as vm',
+    resolve: {
+      Lists: function($http, Auth) {
+        var id = Auth.getCurrentUser().id;
+        return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+      }
+    }
   })
 
   .state('playlists.playlist', {
@@ -52,7 +58,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     resolve: {
       List: function($http, $stateParams) {
         var id = $stateParams.playlistId
-        return $http.get(`/api/playlists.php?endpoint=read&id=${id}`);
+        return $http.get(`/api/playlists.php?endpoint=show&id=${id}`);
       }
     }
   })

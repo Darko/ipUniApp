@@ -5,16 +5,47 @@ playlist-card
   display: inline-block
   width: 276px
   margin: 8px
+  perspective: 500
   md-card
     background-color: $primaryHue3
     color: rgba(white, 0.87)
     overflow: hidden
+    position: relative
+    
+    md-card-content
+      cursor: default
+
   .image-wrapper
     width: 100%
     height: 220px
     position: relative
-    overflow: hidden
-    background-size: 100%
+    overflow: hidden    
+    img
+      transition: transform 0.4s
+      height: 100%
+      width: auto
+      position: absolute
+      left: 50%
+      transform: translate(-50%, 0)
+
+  .slide-out-play-button
+    position: absolute
+    width: 100%
+    height: 140px
+    bottom: 0
+    left: 0
+    background-color: $accent
+    transition: transform 0.35s
+    transform: translate3D(0,140px,0)
+    .md-button
+      margin: -10px 0 0
+
+  &:hover
+    .image-wrapper img
+      transform: translate3D(0,-10%,0) translateX(-50%)
+    .slide-out-play-button
+      transform: translate3D(0, 20px, 0) 
+
 
 .autocomplete-wrapper
   padding: 0 3px

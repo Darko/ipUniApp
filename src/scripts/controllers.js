@@ -62,24 +62,15 @@ app
 .controller('PlayListController', function(List) {
   var vm = this;
 
-  vm.list = List.data;
+  vm.list = List.data || {};
 
-  vm.currentSong = vm.list.items[0] ? vm.list.items[0] : null;
+  vm.currentSong = vm.list.items && vm.list.items[0] ? vm.list.items[0] : null;
 
 })
-.controller('YourListsController', function() {
+.controller('YourListsController', function(Lists) {
   var vm = this;
 
-  vm.playlist = {
-    preview: 'https://cdn-images-1.medium.com/max/1600/1*KGphCPfYHW0Sd5L4CXZTgA.jpeg',
-    author: 'Darko',
-    title: 'DankMeiMeis',
-    likes: 420,
-    songsCount: 69
-  }
-
-  vm.playlists = [];
-
+  vm.lists = Lists.data;
 })
 
 // Auth controllers
@@ -96,11 +87,11 @@ app
       return $http.get(`/api/users.php?endpoint=authenticate&provider=facebook&access_token=${data_.access_token}&expires_in=${data_.expires_in}`)
     })
     .then(function(response) {
-      $rootScope.$emit('user:login', response.data);
       var user = response.data;
       localStorage.setItem('user', JSON.stringify(user));
 
       if (returnState) {
+        $rootScope.$emit('user:login', response.data);
         $state.go(returnState);
       }
     })
