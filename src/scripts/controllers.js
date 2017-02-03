@@ -16,46 +16,35 @@ app
 
   vm.startPlaying = function() {}
 })
-.controller('HomePageController', function($state, $timeout) {
+.controller('HomePageController', function($state, $timeout, Your, New, Popular) {
   var vm = this;
   
   vm.featured = {
     'background-image': 'https://i1.imgiz.com/rshots/9489/rae-sremmurd-black-beatles-audio-ft-gucci-mane_9489108-31120_1920x1080.jpg',
-    'background-size': 'cover'
   }
 
-  vm.playlist = {
-    preview: 'https://cdn-images-1.medium.com/max/1600/1*KGphCPfYHW0Sd5L4CXZTgA.jpeg',
-    author: 'Darko',
-    title: 'DankMeiMeis',
-    likes: 420,
-    songsCount: 69
+  vm.your = Your.data;
+  vm.new = New.data;
+  vm.popular = Popular.data;
+  
+  vm.featured = {
+    id: 1,
+    'background-image': 'https://i1.imgiz.com/rshots/9489/rae-sremmurd-black-beatles-audio-ft-gucci-mane_9489108-31120_1920x1080.jpg',
   }
+
 })
 .controller('MainController', function() {
   var vm = this;
 })
-.controller('PopularListsController', function() {
+.controller('PopularListsController', function(Popular) {
   var vm = this;
 
-  vm.playlist = {
-    preview: 'https://cdn-images-1.medium.com/max/1600/1*KGphCPfYHW0Sd5L4CXZTgA.jpeg',
-    author: 'Darko',
-    title: 'DankMeiMeis',
-    likes: 420,
-    songsCount: 69
-  }
+  vm.popular = Popular.data;
 })
-.controller('NewListsController', function() {
+.controller('NewListsController', function(New) {
   var vm = this;
 
-  vm.playlist = {
-    preview: 'https://cdn-images-1.medium.com/max/1600/1*KGphCPfYHW0Sd5L4CXZTgA.jpeg',
-    author: 'Darko',
-    title: 'DankMeiMeis',
-    likes: 420,
-    songsCount: 69
-  }
+  vm.new = New.data;
 })
 
 // Playlist controllers
