@@ -13,13 +13,13 @@
 
   function insertSongs ($data, $playlistId) {
     global $conn;
+
     foreach ($data['items'] as $song) {
-      array_walk($song, 'array_sanitaze');
 
       if (!isset($song['id'])) {
-        $title = str_replace('\'', '', htmlentities($song['title']));
-        $thumbnail = $song['thumbnail'];
-        $channelTitle = $song['channelTitle'];
+        $title = str_replace('\'', '', htmlentities($song['snippet']['title']));
+        $thumbnail = $song['snippet']['thumbnail'];
+        $channelTitle = $song['snippet']['channelTitle'];
         $videoId = $song['videoId'];
 
         $query = "INSERT INTO songs (title, thumbnail, channelTitle, videoId)

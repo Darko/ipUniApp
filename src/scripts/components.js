@@ -43,20 +43,62 @@ app
   templateUrl: './components/playlists/playlist-songs/playlist.songs.template.html',
   controllerAs: '$ctrl',
   bindings: {
-    songs: '='
+    songs: '=',
+    currentSong: '='
   },
   controller: function() {
     var $ctrl = this;
 
+    $ctrl.playSong = function(song) {
+      $ctrl.currentSong = song;
+    }
   }
 })
 .component('playSongWidget', {
   templateUrl: './components/playlists/play-song-widget/play-song-widget.template.html',
   controllerAs: '$ctrl',
-  controller: playSongWidgetController
-});
+  controller: function() {
+    var $ctrl = this;
+  }
+})
+.component('songsAutocomplete', {
+  templateUrl: '../../components/songs/songs.autocomplete.html',
+  controllerAs: '$ctrl',
+  bindings: {
+    list: '='
+  },
+  controller: function($http) {
+    var $ctrl = this;
 
+    $ctrl.lookupSongs = function(text) {
+      var uri = `/api/songs.php?endpoint=search&q=${text}`;
+      return $http.get(uri)
+      .then(function(result) {
+        return result.data || [];
+      })
+    }
 
-function playSongWidgetController() {
-  var $ctrl = this;
-}
+    $ctrl.addToSongs = function(song) {
+      var newSong = undefined;
+      if (!parseInt(song.id)) {
+        newSong = {
+          videoId: song.id.videoId,
+          snippet: {
+            title: song.snippet.title,
+            channelTitle: song.snippet.channelTitle,
+            thumbnail: song.snippet.thumbnails.high.url
+          }
+        }
+      } else {
+        newSong = song;
+      }
+
+      $ctrl.list.items.push(newSong);
+      $ctrl.searchText = '';
+    }
+
+    $ctrl.removeSong = function(song) {
+      _.remove($ctrl.list.items, song);
+    }
+  }
+})

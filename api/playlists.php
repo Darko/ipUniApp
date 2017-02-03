@@ -18,7 +18,7 @@
     $private = (isset($data['private']) && $data['private']) ? 1 : 0;
     $userId = $data['userId'];
     $date = date("Y-m-d", time());
-    $thumbnail = $data['items'][0]['thumbnail'];
+    $thumbnail = $data['items'][0]['snippet']['thumbnail'];
 
     $query = "INSERT INTO playlists (title, createdAt, thumbnail, private, songsCount, likes, dislikes)
               VALUES ('$title', '$date', '$thumbnail', '$private', 0, 0, 0)";
@@ -45,7 +45,7 @@
 
   function show() {
     if (!$_GET['id']) {
-      echo badRequest();
+      echo badRequest('Badd request: No playlist id specified');
       return;
     }
 
@@ -56,7 +56,7 @@
     $output = array();
 
     // prvo da se izvlecat podatoci za playlistata
-    $query = "SELECT * FROM playlists WHERE id = $id";
+    $query = "SELECT * FROM playlists INNER JOIN playlist_identity ON playlist_identity.playlistId = playlists.id AND playlists.id = $id";
     $result = $conn->query($query);
 
     if ($result->num_rows != 0) {
@@ -82,13 +82,14 @@
 
     while ($row = $resultContent->fetch_assoc()) {
       $output['items'][] = array(
-          "id" => $row["id"],
-          "snippet" => array(
-            "title" => $row['title'],
-            "channelTitle" => $row['channelTitle'],
-            "thumbnail" => $row['thumbnail'], 
-          )
-        );
+        "id" => $row["id"],
+        "videoId" => $row['videoId'],
+        "snippet" => array(
+          "title" => $row['title'],
+          "channelTitle" => $row['channelTitle'],
+          "thumbnail" => $row['thumbnail']
+        )
+      );
     }
     $resultContent->close();
     echo json_encode($output);
@@ -106,9 +107,6 @@
     $userId = htmlentities(strip_tags($conn->real_escape_string($_GET["userId"])));
     $res = array();
 
-    // 
-
-    // $query = "SELECT * FROM playlists INNER JOIN playlist_identity WHERE userId = $userId";
     $query = "SELECT * FROM playlists INNER JOIN playlist_identity ON playlist_identity.playlistId = playlists.id and playlist_identity.userId = $userId";
     $result = $conn->query($query);
 
@@ -128,8 +126,9 @@
     }
 
     global $conn;
+
     array_walk($data, 'array_sanitaze');
-    $playlistId = $data['playlistId'];
+    $playlistId = $data['id'];
     $update = array();
 
     foreach ($data as $field => $data) {
@@ -144,6 +143,22 @@
     }
     echo notFound();
     return;
+  }
+
+  function addSongs() {
+    if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
+      echo badRequest('Bad request: To insert songs you must create a PUT request');
+      return;
+    };
+
+    $data = getContents();
+    $playlistId = $data['playlistId'];
+
+    if (insertSongs($data, $playlistId)) {
+      $res = $data['items'];
+      echo json_encode($res);
+      return;
+    }
   }
 
   function deleteList() {
@@ -192,33 +207,34 @@
     return;
   }
 
-  if (!empty($endpoint)) {
-    switch($endpoint) {
-      case 'create':
-        create();
-        break;
-      case 'show':
-        show();
-        break;
-      case 'index':
-        index();
-        break;
-      case 'update':
-        update();
-        break;
-      case 'delete':
-        deleteList();
-        break;
-      case 'like':
-        like();
-        break;
-      default:
-        echo 'xd';
-        break;
-    }
-  }
-  else {
+  if (empty($endpoint)) {
     echo badRequest();
     return;
+  }
+
+  switch($endpoint) {
+    case 'create':
+      create();
+      break;
+    case 'show':
+      show();
+      break;
+    case 'index':
+      index();
+      break;
+    case 'update':
+      update();
+      break;
+    case 'delete':
+      deleteList();
+      break;
+    case 'like':
+      like();
+      break;
+    case 'addSongs':
+      addSongs();
+      break;
+    default:
+      echo 'xd';
   }
 ?>

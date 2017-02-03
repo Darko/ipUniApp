@@ -59,12 +59,62 @@ app
 })
 
 // Playlist controllers
-.controller('PlayListController', function(List) {
+.controller('PlayListController', function(List, $mdDialog, Auth) {
   var vm = this;
 
+  vm.user = Auth.getCurrentUser();
   vm.list = List.data || {};
 
   vm.currentSong = vm.list.items && vm.list.items[0] ? vm.list.items[0] : null;
+
+  vm.addMoreSongs = function($event) {
+    $mdDialog.show({
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      templateUrl: '../../components/dialogs/songs/addsongs.dialog.html',
+      controllerAs: 'vm',
+      bindToController: true,
+      clickOutsideToClose: true,
+      escapeToClose: true,
+      locals: {
+        List: vm.list
+      },
+      controller: function(List, $http) {
+        var vm = this;
+
+        vm.list = List;
+        signSongs();
+
+        vm.save = function() {
+          var items = [];
+          _.each(vm.list.items, function(item) {
+            if (item.already) return;
+
+            return items.push(item);
+          });
+
+          $http.put(`api/playlists.php?endpoint=addSongs`, {
+            playlistId: vm.list.id,
+            items
+          })
+          .then(function(response) {
+            signSongs();
+            $mdDialog.hide();
+          })
+        }
+
+        function signSongs() {
+          return _.each(vm.list.items, function(item) {
+            item.already = true;
+          });
+        }
+      }
+    })
+  };
+
+  vm.isOwner = function() {
+    return vm.user ? parseInt(vm.list.userId) === parseInt(vm.user.id) : false;
+  }
 
 })
 .controller('YourListsController', function(Lists) {
@@ -117,45 +167,10 @@ app
     userId: parseInt(vm.user.id),
     items: []
   }
-
-  vm.lookupSongs = function(text) {
-    var uri = `/api/songs.php?endpoint=search&q=${text}`;
-    return $http.get(uri)
-    .then(function(result) {
-      return result.data || [];
-    })
-    .catch(function(error) {
-      // handle properly
-    })
-  }
-
-  vm.addToSongs = function(song) {
-    var newSong = undefined;
-    if (!parseInt(song.id)) {
-      newSong = {
-        videoId: song.id.videoId,
-        title: song.snippet.title,
-        channelTitle: song.snippet.channelTitle,
-        thumbnail: song.snippet.thumbnails.high.url
-      }
-    } else {
-      newSong = song;
-    }
-    vm.list.items.push(newSong);
-    vm.searchText = '';
-  }
-
-  vm.removeSong = function(song) {
-    _.remove(vm.list.items, song);
-  }
-
+  
   vm.save = function($event) {
-    console.log(vm.list);
     $http.post('api/playlists.php?endpoint=create', vm.list)
     .then(function(response) {
-
-      console.log(response);
-
       $mdDialog.show({
         parent: angular.element(document.body),
         targetEvent: $event,
@@ -164,19 +179,23 @@ app
         bindToController: true,
         clickOutsideToClose: true,
         escapeToClose: true,
-        controller: function($scope) {
+        locals: {
+          playlistId: response.data.id
+        },
+        controller: function(playlistId) {
           var vm = this;
+
           vm.message = 'Успешно креирана листа!';
 
           vm.close = function() {
-            return $mdDialog.hide();
+            $mdDialog.hide(playlistId);
           }
         }
       })
-    })
-    .then(function() {
-
-    })    
+      .then(function(id) {
+        $state.go('playlists.playlist', { playlistId: id })
+      }) 
+    })   
   }
 
 })

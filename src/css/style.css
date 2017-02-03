@@ -188,6 +188,13 @@ table.md-table.songs-list-table th.md-column.songName, table.md-table.songs-list
     padding: 16px;
     text-align: center; }
 
+.add-song-dialog {
+  width: 360px; }
+  .add-song-dialog md-dialog-content {
+    padding: 16px 16px 0; }
+  .add-song-dialog .button-actions-wrapper {
+    padding-bottom: 8px; }
+
 html, body {
   height: auto; }
 

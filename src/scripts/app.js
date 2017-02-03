@@ -3,7 +3,8 @@ var app = angular.module('MusicApp', [
   'ui.router',
   'satellizer',
   'md.data.table',
-  'ngMessages'
+  'ngMessages',
+  'ngSanitize'
 ])
 .run(function(Auth, $rootScope, $http) {
   $rootScope.isLoggedIn = Auth.isAuthenticated();

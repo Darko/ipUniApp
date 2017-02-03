@@ -57,7 +57,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     controller: 'PlayListController as vm',
     resolve: {
       List: function($http, $stateParams) {
-        var id = $stateParams.playlistId
+        var id = $stateParams.playlistId;
         return $http.get(`/api/playlists.php?endpoint=show&id=${id}`);
       }
     }

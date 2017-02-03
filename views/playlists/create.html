@@ -13,35 +13,7 @@
         </div>
       </md-input-container>
 
-      <div class="flex-100 autocomplete-wrapper">
-        <label>Песни</label>
-        <md-autocomplete
-          required
-          md-autofocus
-          class="flex"
-          md-delay="500"
-          md-search-text="vm.searchText"
-          md-selected-item="vm.song"
-          md-items="song in vm.lookupSongs(vm.searchText)"
-          md-input-name="songsAutocomplete"
-          placeholder="Внеси име на песна"
-          md-item-text="song.snippet.title">
-          <md-item-template>
-            <span ng-click="vm.addToSongs(song)" class="autocomplete-item-template" md-highlight-text="vm.searchText" md-highlight-flags="^i">{{ song.snippet.title }}</span>
-          </md-item-template>
-        </md-autocomplete>
-        <div ng-messages="CreatePlaylistForm.songsAutocomplete.$error" ng-show="CreatePlaylistForm.songsAutocomplete.$dirty && !vm.list.items.length">
-          <div ng-message="required">Мора да селектирате барем 1 песна.</div>
-        </div>
-        <md-list class="flex-100 created-songs-list">
-          <md-list-item ng-repeat="song in vm.list.items" class="flex-100 layout-row layout-align-space-between-center">
-            <span class="title">{{ song.title }}</span>
-            <md-button class="md-icon-button" ng-click="vm.removeSong(song)">
-              <md-icon>close</md-icon>
-            </md-button>
-          </md-list-item>
-        </md-list>
-      </div>
+      <songs-autocomplete class="flex-100" list="vm.list"></songs-autocomplete>
 
       <md-input-container class="flex-100">
         <md-switch class="md-accent md-hue-2" ng-model="vm.list.private">Приватна листа</md-switch>
