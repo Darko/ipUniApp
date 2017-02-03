@@ -13,12 +13,10 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
         return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
       },
       Popular: function($http, Auth) {
-        var id = Auth.getCurrentUser().id;
-        return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+        return $http.get(`/api/index.php?popular=true`);
       },
       New: function($http, Auth) {
-        var id = Auth.getCurrentUser().id;
-        return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+        return $http.get(`/api/index.php?new=true`);
       }
     }
   })
@@ -36,8 +34,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     controllerAs: 'vm',
     resolve: {
       Popular: function($http, Auth) {
-        var id = Auth.getCurrentUser().id;
-        return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+        return $http.get(`/api/index.php?popular=true`);
       }
     }
   })
@@ -47,8 +44,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     controller: 'NewListsController as vm',
     resolve: {
       New: function($http, Auth) {
-        var id = Auth.getCurrentUser().id;
-        return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+        return $http.get(`/api/index.php?new=true`);
       }
     }
   })
