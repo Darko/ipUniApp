@@ -1,5 +1,4 @@
 <?php
-
   header('Content-Type: application/json');
 
   include 'components/errors.php';
@@ -19,39 +18,34 @@
     $private = (isset($data['private']) && $data['private']) ? 1 : 0;
     $userId = $data['userId'];
     $date = date("Y-m-d", time());
+    $thumbnail = $data['items'][0]['snippet']['thumbnail'];
 
-    $query = "INSERT INTO playlists (title, createdAt, private, songsCount, likes, dislikes)
-              VALUES ('$title', '$date', '$private', 0, 0, 0)";
+    $query = "INSERT INTO playlists (title, createdAt, thumbnail, private, songsCount, likes, dislikes)
+              VALUES ('$title', '$date', '$thumbnail', '$private', 0, 0, 0)";
     $result = $conn->query($query);
 
-    if ($result) {
-      $playlistId = $conn->insert_id;
-
-      $query = "INSERT INTO playlist_identity (playlistId, userId) VALUES ('$playlistId', '$userId')";
-      $resultIdentity = $conn->query($query);
-
-      if ($resultIdentity) {
-        echo success("Create playlist");
-      }
-
-      else {
-        echo notFound();
-        return;
-      }
-
-      if (insertSongs($data, $playlistId)) {
-        echo success("Songs insert");
-        return;
-      }
-
+    if (!$result) {
+      echo notFound();
+      return;
     }
-    echo notFound();
-    return;
+
+    $playlistId = $conn->insert_id;
+
+    $query = "INSERT INTO playlist_identity (playlistId, userId) VALUES ('$playlistId', '$userId')";
+    $resultIdentity = $conn->query($query);
+
+    if ($resultIdentity && insertSongs($data, $playlistId)) {
+      $res = array(
+        "id" => $playlistId
+      );
+      echo json_encode($res);
+      return;
+    }
   }
 
-  function read() {
+  function show() {
     if (!$_GET['id']) {
-      echo badRequest();
+      echo badRequest('Badd request: No playlist id specified');
       return;
     }
 
@@ -62,7 +56,7 @@
     $output = array();
 
     // prvo da se izvlecat podatoci za playlistata
-    $query = "SELECT * FROM playlists WHERE id = $id";
+    $query = "SELECT * FROM playlists INNER JOIN playlist_identity ON playlist_identity.playlistId = playlists.id AND playlists.id = $id";
     $result = $conn->query($query);
 
     if ($result->num_rows != 0) {
@@ -81,15 +75,46 @@
               AND playlist_contents.playlistId = $id";
     $resultContent = $conn->query($query);
 
-    if ($resultContent) {
-      while ($row = $resultContent->fetch_assoc()) {
-        $output['items'][] = $row;
-      }
-      $resultContent->close();
-      echo json_encode($output);
+    if (!$resultContent) {
+      echo notFound();
       return;
     }
-    echo notFound();
+
+    while ($row = $resultContent->fetch_assoc()) {
+      $output['items'][] = array(
+        "id" => $row["id"],
+        "videoId" => $row['videoId'],
+        "snippet" => array(
+          "title" => $row['title'],
+          "channelTitle" => $row['channelTitle'],
+          "thumbnail" => $row['thumbnail']
+        )
+      );
+    }
+    $resultContent->close();
+    echo json_encode($output);
+    return;
+  }
+
+  function index() {
+    if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+      echo badRequest('To get user playlists for user you must create a GET request');
+      return;
+    };
+
+    global $conn;
+
+    $userId = htmlentities(strip_tags($conn->real_escape_string($_GET["userId"])));
+    $res = array();
+
+    $query = "SELECT * FROM playlists INNER JOIN playlist_identity ON playlist_identity.playlistId = playlists.id and playlist_identity.userId = $userId";
+    $result = $conn->query($query);
+
+    while ($row = $result->fetch_assoc()) {
+      $res[] = $row;
+    }
+
+    echo json_encode($res);
     return;
   }
 
@@ -101,8 +126,9 @@
     }
 
     global $conn;
+
     array_walk($data, 'array_sanitaze');
-    $playlistId = $data['playlistId'];
+    $playlistId = $data['id'];
     $update = array();
 
     foreach ($data as $field => $data) {
@@ -117,6 +143,22 @@
     }
     echo notFound();
     return;
+  }
+
+  function addSongs() {
+    if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
+      echo badRequest('Bad request: To insert songs you must create a PUT request');
+      return;
+    };
+
+    $data = getContents();
+    $playlistId = $data['playlistId'];
+
+    if (insertSongs($data, $playlistId)) {
+      $res = $data['items'];
+      echo json_encode($res);
+      return;
+    }
   }
 
   function deleteList() {
@@ -165,31 +207,34 @@
     return;
   }
 
-  if (!empty($endpoint)) {
-    switch($endpoint) {
-      case 'create':
-        create();
-        break;
-      case 'read':
-        read();
-        break;
-      case 'update':
-        update();
-        break;
-      case 'deleteList':
-        deleteList();
-        break;
-      case 'like':
-        like();
-        break;
-      default:
-        echo 'xd';
-        break;
-    }
-  }
-  else {
+  if (empty($endpoint)) {
     echo badRequest();
     return;
   }
 
-// ?>
+  switch($endpoint) {
+    case 'create':
+      create();
+      break;
+    case 'show':
+      show();
+      break;
+    case 'index':
+      index();
+      break;
+    case 'update':
+      update();
+      break;
+    case 'delete':
+      deleteList();
+      break;
+    case 'like':
+      like();
+      break;
+    case 'addSongs':
+      addSongs();
+      break;
+    default:
+      echo 'xd';
+  }
+?>

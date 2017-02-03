@@ -1,0 +1,13 @@
+<md-dialog aria-label="List dialog" class="add-song-dialog">
+  <md-dialog-content>
+    <form autocomplete="off" ng-submit="vm.save($event)" name="CreatePlaylistForm" class="CreatePlaylistForm flex-100 layout-row layout-align-center-start layout-wrap">
+      <div class="layout-row layout-align-start-start flex-60 layout-wrap">
+        <songs-autocomplete list="vm.list" class="flex-100"></songs-autocomplete>
+        
+        <div class="layout-row layout-align-end-end flex-100 button-actions-wrapper">
+          <md-button class="md-accent md-hue-2 md-raised" type="submit">Зачувај</md-button>
+        </div>
+      </div>
+    </form>
+  </md-dialog-content>
+</md-dialog>

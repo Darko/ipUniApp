@@ -2,7 +2,7 @@
   $host = 'localhost';
   $db = 'ip_app';
   $dbuser = 'root';
-  $dbpass = '';
+  $dbpass = 'root';
 
   $conn = new mysqli($host, $dbuser, $dbpass, $db);
   if ($conn->connect_errno) {

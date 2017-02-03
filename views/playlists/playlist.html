@@ -1,0 +1,23 @@
+<div class="container">
+  <current-song song="vm.currentSong" playlist="vm.playlist"></current-song>
+
+  <div class="layout-row layout-align-space-between-center flex-100">
+    <h1 class="front-section-title md-title">Содржина</h1>
+    <div class="layout-row layout-align-end-end" ng-if="vm.isOwner()">
+      <md-button ng-click="vm.addMoreSongs($event)">
+        <md-icon>add</md-icon> Додај повеќе песни
+      </md-button>
+      <md-button ng-click="vm.deleteList($event)">
+        <md-icon>delete</md-icon> Избриши листа
+      </md-button>
+    </div>
+    <div class="layout-row layout-align-end-end" ng-if="!vm.isOwner()">
+      <md-button ng-click="vm.addMoreSongs($event)">
+        <md-icon>save</md-icon> Зачувај во твоите листи
+      </md-button>
+    </div>
+  </div>
+
+  <playlist-songs songs="vm.list.items" current-song="vm.currentSong"></playlist-songs>
+
+</div>

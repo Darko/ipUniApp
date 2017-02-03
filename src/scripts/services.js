@@ -17,10 +17,6 @@ app
 
   this.authenticate = function (provider) {
     return $auth.authenticate(provider)
-    .then(function() {
-      _this.userData = $auth.getPayload();
-      $rootScope.$emit('user:login');
-    })
   };
 
   this.logout = function () {
@@ -30,6 +26,11 @@ app
       $rootScope.$emit('user:logout');
     })
   };
+
+  this.setUser = function(data) {
+    this.userData = data;
+    $rootScope.user = data;
+  }
 
   this.getCurrentUser = function () {
     return _this.userData;

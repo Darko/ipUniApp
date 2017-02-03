@@ -1,0 +1,41 @@
+<div class="create-list-wrapper layout-wrap flex-30 layout-row layout-align-center-start">
+  <h1 class="front-section-title md-title text-center">Креирај листа</h1>
+
+  <form autocomplete="off" ng-submit="vm.save($event)" name="CreatePlaylistForm" class="CreatePlaylistForm flex-100 layout-row layout-align-center-start layout-wrap" ng-if="vm.loggedIn">
+    <div class="layout-row layout-align-start-start flex-60 layout-wrap">
+      <md-input-container class="flex-100">
+        <label>Име</label>
+        <input type="text" ng-model="vm.list.title" name="title" ng-minlength="3" ng-maxlength="30" required>
+        <div ng-messages="CreatePlaylistForm.title.$error" ng-show="CreatePlaylistForm.title.$dirty">
+          <div ng-message="required">Име за плејлиста е задолжително.</div>
+          <div ng-message="minlength">Името мора да биде 3 или повеќе карактери</div>
+          <div ng-message="maxlength">Името мора да биде помалку од 30 карактери</div>
+        </div>
+      </md-input-container>
+
+      <songs-autocomplete class="flex-100" list="vm.list"></songs-autocomplete>
+
+      <md-input-container class="flex-100">
+        <md-switch class="md-accent md-hue-2" ng-model="vm.list.private">Приватна листа</md-switch>
+      </md-input-container>
+
+      <div class="layout-row layout-align-end-end flex-100 button-actions-wrapper">
+        <md-button class="md-accent md-hue-2 md-raised" type="submit">Креирај листа</md-button>
+      </div>
+
+    </div>
+  </form>
+
+  <div class="layout-row layout-align-center-start element-100pw" ng-if="!vm.loggedIn">
+    <md-card class="login-options-form">
+      <md-card-title>
+        <h1 class="md-title text-center">Мора да сте најавени за да креирате листа</h1>
+      </md-card-title>
+      <md-card-content class="element-100pw layout-row layout-wrap">
+        <md-button class="authenticate facebook" ng-click="vm.login('facebook')">Најави се со Facebook</md-button>
+        <md-button class="authenticate google" ng-click="vm.login('google')">Најави се со Google</md-button>
+      </md-card-content>
+    </md-card>
+  </div>
+
+</div>

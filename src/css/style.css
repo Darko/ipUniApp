@@ -2,9 +2,21 @@ body, html {
   background-color: #1d1e32;
   color: white; }
 
+.text-center {
+  text-align: center; }
+
+*.dark-theme {
+  color: rgba(255, 255, 255, 0.87); }
+
 body, html {
   background-color: #1d1e32;
   color: white; }
+
+.text-center {
+  text-align: center; }
+
+*.dark-theme {
+  color: rgba(255, 255, 255, 0.87); }
 
 navbar {
   width: 100%;
@@ -39,20 +51,149 @@ body, html {
   background-color: #1d1e32;
   color: white; }
 
+.text-center {
+  text-align: center; }
+
+*.dark-theme {
+  color: rgba(255, 255, 255, 0.87); }
+
 playlist-card {
   display: inline-block;
   width: 276px;
-  margin: 8px; }
+  margin: 8px;
+  perspective: 500; }
   playlist-card md-card {
     background-color: #2c2d4c;
     color: rgba(255, 255, 255, 0.87);
-    overflow: hidden; }
+    overflow: hidden;
+    position: relative; }
+    playlist-card md-card md-card-content {
+      cursor: default; }
   playlist-card .image-wrapper {
     width: 100%;
     height: 220px;
     position: relative;
-    overflow: hidden;
-    background-size: 100%; }
+    overflow: hidden; }
+    playlist-card .image-wrapper img {
+      transition: transform 0.4s;
+      height: 100%;
+      width: auto;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0); }
+  playlist-card .slide-out-play-button {
+    position: absolute;
+    width: 100%;
+    height: 140px;
+    bottom: 0;
+    left: 0;
+    background-color: #ed265d;
+    transition: transform 0.35s;
+    transform: translate3D(0, 140px, 0); }
+    playlist-card .slide-out-play-button .md-button {
+      margin: -10px 0 0; }
+  playlist-card:hover .image-wrapper img {
+    transform: translate3D(0, -10%, 0) translateX(-50%); }
+  playlist-card:hover .slide-out-play-button {
+    transform: translate3D(0, 20px, 0); }
+
+.autocomplete-wrapper {
+  padding: 0 3px; }
+  .autocomplete-wrapper label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 5px; }
+  .autocomplete-wrapper md-autocomplete {
+    margin-top: 5px; }
+
+.button-actions-wrapper {
+  padding: 24px 0; }
+  .button-actions-wrapper .md-button:last-of-type {
+    margin-right: 0; }
+
+.CreatePlaylistForm .button-actions-wrapper {
+  padding: 24px 3px; }
+
+.CreatePlaylistForm > div:first-child {
+  min-width: 320px; }
+
+.created-songs-list md-list-item {
+  padding: 0;
+  font-size: 14px; }
+  .created-songs-list md-list-item span.title {
+    display: inline-block;
+    width: 100%;
+    padding-left: 16px;
+    max-width: calc(100% - 36px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden; }
+  .created-songs-list md-list-item .md-button {
+    margin-right: 3px; }
+
+.autocomplete-item-template {
+  width: 100%;
+  display: block; }
+
+table.md-table.dark-theme th.md-column, table.md-table.dark-theme td.md-cell {
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 16px; }
+  table.md-table.dark-theme th.md-column.actions, table.md-table.dark-theme td.md-cell.actions {
+    text-align: right; }
+    table.md-table.dark-theme th.md-column.actions .md-button, table.md-table.dark-theme td.md-cell.actions .md-button {
+      margin: 0; }
+
+table.md-table.songs-list-table th.md-column.songName, table.md-table.songs-list-table td.md-cell.songName {
+  text-align: left; }
+
+.current-song-template {
+  color: rgba(255, 255, 255, 0.87);
+  margin: 36px 0 56px; }
+
+.current-song-preview {
+  width: 260px;
+  height: 145px;
+  background: #262842;
+  margin-right: 24px;
+  position: relative;
+  overflow: hidden; }
+  .current-song-preview img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: auto;
+    border: none; }
+
+.current-song-data .front-section-title {
+  margin: 0;
+  font-weight: 600;
+  max-width: 350px; }
+
+#play-song-widget {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  background-color: #ed265d; }
+  #play-song-widget .md-button md-icon {
+    color: rgba(255, 255, 255, 0.9); }
+
+.success-dialog {
+  background-color: #46b450;
+  color: rgba(0, 0, 0, 0.87);
+  perspective: 500px;
+  padding: 16px; }
+  .success-dialog md-dialog-content {
+    padding: 16px;
+    text-align: center; }
+
+.add-song-dialog {
+  width: 360px; }
+  .add-song-dialog md-dialog-content {
+    padding: 16px 16px 0; }
+  .add-song-dialog .button-actions-wrapper {
+    padding-bottom: 8px; }
 
 html, body {
   height: auto; }
@@ -71,10 +212,15 @@ ui-view {
 .element-100pw {
   width: 100%; }
 
-.spacer-1 {
+[class^="spacer-"] {
   display: block;
-  width: 100%;
+  width: 100%; }
+
+.spacer-1 {
   height: 40px; }
+
+.spacer-2 {
+  height: 80px; }
 
 .hero {
   width: 100%;
@@ -120,7 +266,7 @@ ui-view {
 .front-section-title {
   text-transform: uppercase;
   margin: 32px 0 16px 18px;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
   position: relative; }
   .front-section-title:after {
     content: '';
@@ -130,6 +276,9 @@ ui-view {
     width: 30px;
     height: 5px;
     background-color: #ed265d; }
+  .front-section-title.text-center:after {
+    left: 50%;
+    transform: translateX(-50%); }
 
 .popular-playlists {
   margin-bottom: 24px; }
@@ -137,6 +286,12 @@ ui-view {
 body, html {
   background-color: #1d1e32;
   color: white; }
+
+.text-center {
+  text-align: center; }
+
+*.dark-theme {
+  color: rgba(255, 255, 255, 0.87); }
 
 .login-options-form {
   width: 100%;
@@ -152,5 +307,35 @@ body, html {
     background-color: #3b78e7;
     color: #fff; }
 
+.no-personal-lists h2 {
+  margin-bottom: 0px; }
+
+.no-personal-lists p {
+  margin-bottom: 32px;
+  max-width: 360px;
+  width: 100%; }
+
+.create-list-wrapper {
+  margin: 0 auto; }
+  .create-list-wrapper .front-section-title {
+    margin-left: 0;
+    margin-bottom: 48px; }
+  .create-list-wrapper md-input-container:not(.md-input-invalid).md-input-focused label {
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 1; }
+
 .global-view {
   padding-bottom: 48px; }
+
+*.md-input-invalid .md-input-message-animation,
+*[ng-messages] {
+  color: #ed265d !important;
+  font-size: 12px !important;
+  margin-top: 5px; }
+
+*.md-input-invalid .md-input-message-animation,
+*.md-input-invalid .md-input,
+*.md-input-invalid label,
+*[ng-messages] {
+  color: #ed265d !important;
+  border-color: #ed265d !important; }

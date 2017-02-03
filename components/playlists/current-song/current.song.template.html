@@ -1,0 +1,10 @@
+<div class="layout-row layout-align-start-start current-song-template">
+  <div class="current-song-preview">
+    <img ng-src="{{ $ctrl.song.snippet.thumbnail }}">
+  </div>
+
+  <div class="current-song-data">
+    <h1 class="front-section-title md-headline" ng-bind-html="$ctrl.song.snippet.title | trust"></h1>
+    <h2 class="md-subhead">{{ $ctrl.song.snippet.channelTitle }}</h2>    
+  </div>
+</div>

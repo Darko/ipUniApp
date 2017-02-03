@@ -23,22 +23,27 @@
     $result = $conn->query($query);
     if ($result->num_rows != 0) {
       while ($row = $result->fetch_assoc()) {
-        $output[] = $row;
+        $output[] = array(
+          "id" => $row["id"],
+          "snippet" => array(
+            "title" => $row['title'],
+            "channelTitle" => $row['channelTitle'],
+            "thumbnail" => $row['thumbnail'], 
+          )
+        );
       }
       $result->close();
       echo json_encode($output);
       return;
     }
     else {
-      // $DEVELOPER_KEY = 'AIzaSyDOkg-u9jnhP-WnzX5WPJyV1sc5QQrtuyc';
-      $DEVELOPER_KEY = 'AIzaSyBv_P2KGXgnz1S14bgfrIiNHT4tQC8DQbg'; // kluc
+      $DEVELOPER_KEY = 'AIzaSyCoXR0IQnJf_29KC62K_hl5C00CFUofcDw';
+      // $DEVELOPER_KEY = 'AIzaSyBv_P2KGXgnz1S14bgfrIiNHT4tQC8DQbg'; // kluc
       $url='https://www.googleapis.com/youtube/v3/search?q='.$q.'&maxResults='.$maxResults.
             '&part=snippet&type=video&key='.$DEVELOPER_KEY;
 
       $data = json_decode(file_get_contents($url), true);
-      if ($data && $data['items']) {
-        $data = $data['items'];
-      }
+      $data = $data['items'];
       echo json_encode($data);
       return;
     }

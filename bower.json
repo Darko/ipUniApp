@@ -8,6 +8,9 @@
     "angular": "^1.6.1",
     "angular-ui-router": "^0.3.2",
     "angular-material": "^1.1.1",
-    "satellizer": "^0.15.5"
+    "satellizer": "^0.15.5",
+    "angular-material-data-table": "^0.10.10",
+    "lodash": "^4.17.4",
+    "angular-sanitize": "^1.6.1"
   }
 }

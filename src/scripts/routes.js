@@ -27,11 +27,40 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     controller: 'NewListsController as vm'
   })
 
-  // User routes
-  .state('main.createList', {
+  // Playlists
+  .state('playlists', {
+    abstract: true,
+    templateUrl: './views/playlists/playlists.html',
+  })
+
+  .state('playlists.createList', {
     url: '/create',
-    templateUrl: './views/user/createList.html',
+    templateUrl: './views/playlists/create.html',
     controller: 'CreateListController as vm'
+  })
+
+  .state('playlists.yourLists', {
+    url: '/yourlists',
+    templateUrl: './views/playlists/yourLists.html',
+    controller: 'YourListsController as vm',
+    resolve: {
+      Lists: function($http, Auth) {
+        var id = Auth.getCurrentUser().id;
+        return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+      }
+    }
+  })
+
+  .state('playlists.playlist', {
+    url: '/playlist/:playlistId',
+    templateUrl: './views/playlists/playlist.html',
+    controller: 'PlayListController as vm',
+    resolve: {
+      List: function($http, $stateParams) {
+        var id = $stateParams.playlistId;
+        return $http.get(`/api/playlists.php?endpoint=show&id=${id}`);
+      }
+    }
   })
 
   // Auth routes

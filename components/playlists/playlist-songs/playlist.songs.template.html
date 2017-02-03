@@ -1,0 +1,35 @@
+<md-table-container>
+  <table class="dark-theme songs-list-table" md-table md-progress="promise">
+    <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+      <tr md-row>
+        <th md-column>#</th>
+        <th md-column class="songName">Песна</th>
+        <th md-column>Автор</th>
+        <th md-column class="actions">Опции</th>        
+      </tr>
+    </thead>
+    <tbody md-body>
+      <tr md-row md-select="dessert" md-select-id="name" md-auto-select ng-repeat="song in $ctrl.songs track by $index">
+        <td md-cell>{{ $index + 1 }}</td>
+        <td md-cell class="songName">
+          <span ng-bind-html="song.snippet.title | trust"></span>
+        </td>
+        <td md-cell>
+          <span>{{ song.snippet.channelTitle }}</span>
+        </td>
+        <td md-cell class="actions">
+          <md-button class="md-icon-button">
+            <md-icon>delete</md-icon>
+            <md-tooltip md-direction="bottom">Избриши од листа</md-tooltip>
+          </md-button>
+          <md-button class="md-icon-button" ng-click="$ctrl.playSong(song)">
+            <md-icon>play_arrow</md-icon>
+            <md-tooltip md-direction="bottom">Пушти</md-tooltip>
+          </md-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</md-table-container>
+<!--
+<md-table-pagination class="dark-theme" md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{ desserts.count }}" md-on-paginate="getDesserts" md-page-select></md-table-pagination>-->

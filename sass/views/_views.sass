@@ -1,5 +1,19 @@
 @import '_index.sass'
 @import '_login.sass'
+@import '_lists.sass'
 
 .global-view
   padding-bottom: 48px
+
+*.md-input-invalid .md-input-message-animation,
+*[ng-messages]
+  color: $accent !important
+  font-size: 12px !important
+  margin-top: 5px
+
+*.md-input-invalid .md-input-message-animation,
+*.md-input-invalid .md-input,
+*.md-input-invalid label,
+*[ng-messages]
+  color: $accent !important
+  border-color: $accent !important
