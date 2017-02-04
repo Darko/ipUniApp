@@ -2,8 +2,8 @@
 
   header('Content-Type: application/json');
 
-  include 'components/functions.php';
-  include 'components/errors.php';
+  include_once 'components/functions.php';
+  include_once 'components/errors.php';
 
   $endpoint = $_REQUEST['endpoint'];
 

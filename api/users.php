@@ -6,8 +6,8 @@
 
   header('Content-Type: application/json');
 
-  include 'controllers/users.php';
-  include 'components/errors.php';
+  include_once 'controllers/users.php';
+  include_once 'components/errors.php';
 
   $endpoint = $_REQUEST['endpoint'];
 

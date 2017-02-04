@@ -2,8 +2,8 @@
 
   header('Content-Type: application/json');
 
-  include 'components/errors.php';
-  include 'components/functions.php';
+  include_once 'components/errors.php';
+  include_once 'components/functions.php';
 
   if (isset($_GET['new']) || isset($_GET['popular'])) {
 

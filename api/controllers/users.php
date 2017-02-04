@@ -1,7 +1,7 @@
 <?php
-  include 'components/connect.php';
-  include 'components/errors.php';
-  include 'components/loginApis.php';
+  include_once 'components/connect.php';
+  include_once 'components/errors.php';
+  include_once 'components/loginApis.php';
 
   $headers = getallheaders();
 
@@ -15,10 +15,10 @@
       $access_token = explode(" ", $headers['authorization'])[1];
 
       if (!$access_token) {
-        echo badRequest('Bad request: Missing auth parameter: access_token');
+        echo badRequest('Missing auth parameter: access_token');
         return;
       } else if (!$provider) {
-        echo badRequest('Bad request: Missing auth parameter: provider');
+        echo badRequest('Missing auth parameter: provider');
       }
 
       global $conn;
@@ -76,7 +76,7 @@
         echo unauthorized();
         return;
       } else if (!$userId) {
-        echo badRequest('Bad request: Missing parameter userId');
+        echo badRequest('Missing parameter userId');
         return;
       }
 
@@ -95,8 +95,4 @@
       return;
     }
   }
-
-  $user = new User();
-
-  $user->authenticate();
 ?>

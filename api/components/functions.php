@@ -1,5 +1,5 @@
 <?php
-  include 'components/connect.php';
+  include_once 'connect.php';
 
   function array_sanitaze(&$item) {
     global $conn;
@@ -14,7 +14,7 @@
   function insertSongs ($data, $playlistId) {
     global $conn;
 
-    foreach ($data['items'] as $song) {
+    foreach ($data->items as $song) {
 
       if (!isset($song['id'])) {
         $title = str_replace('\'', '', htmlentities($song['snippet']['title']));
