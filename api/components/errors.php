@@ -30,4 +30,8 @@
     return json_encode($result);
   }
 
+  function unauthorized() {
+    return header('HTTP/1.0 401 Unauthorized');
+  }
+
 ?>
