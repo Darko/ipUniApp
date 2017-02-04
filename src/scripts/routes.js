@@ -7,6 +7,18 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     url: '/',
     controller: 'HomePageController as vm',
     templateUrl: './views/main/index.html',
+    resolve: {
+      Your: function($http, Auth) {
+        var id = Auth.getCurrentUser().id;
+        return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+      },
+      Popular: function($http, Auth) {
+        return $http.get(`/api/index.php?popular=true`);
+      },
+      New: function($http, Auth) {
+        return $http.get(`/api/index.php?new=true`);
+      }
+    }
   })
   
   // Public routes
@@ -19,12 +31,22 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     url: '/popular',
     templateUrl: './views/main/popularLists.html',
     controller: 'PopularListsController',
-    controllerAs: 'vm'
+    controllerAs: 'vm',
+    resolve: {
+      Popular: function($http, Auth) {
+        return $http.get(`/api/index.php?popular=true`);
+      }
+    }
   })
   .state('main.newLists', {
     url: '/new',
     templateUrl: './views/main/newLists.html',
-    controller: 'NewListsController as vm'
+    controller: 'NewListsController as vm',
+    resolve: {
+      New: function($http, Auth) {
+        return $http.get(`/api/index.php?new=true`);
+      }
+    }
   })
 
   // Playlists
