@@ -238,5 +238,55 @@
       echo notFound('Playlist with such id was not found');
       return;
     }
+
+    function popular() {
+      if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+        echo notFound();
+        return;
+      };
+
+      global $conn;
+
+      $query = "SELECT * 
+                FROM playlists
+                ORDER BY likes
+                DESC LIMIT 20";
+
+      $result = $conn->query($query);
+      $res = array();
+
+      while ($row = $result->fetch_assoc()) {
+        $res[] = (object) $row;
+      }
+      $res = (object) $res;
+      echo json_encode($res);
+      $result->close();
+    }
+
+    function newLists() {
+      if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+        echo notFound();
+        return;
+      };
+
+      global $conn;
+
+      $query = "SELECT * 
+                FROM playlists
+                ORDER BY createdAt
+                DESC LIMIT 10";
+
+      $result = $conn->query($query);
+      $res = array();
+
+      while ($row = $result->fetch_assoc()) {
+        $res[] = (object) $row;
+      }
+      $res = (object) $res;
+
+      echo json_encode($res);
+      $result->close();
+    }
+  
   }
 ?>

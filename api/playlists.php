@@ -39,6 +39,12 @@
     case 'addSongs':
       $playlist->addSongs();
       break;
+    case 'popular':
+      $playlist->popular();
+      break;
+    case 'new':
+      $playlist->newLists();
+      break;
     default:
       echo notFound();
       break;
