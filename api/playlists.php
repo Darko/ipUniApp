@@ -10,13 +10,14 @@
 
   $endpoint = isset($_REQUEST['endpoint']) ? $_REQUEST['endpoint'] : null;
 
-  $playlist = new Playlist();
-
   if (empty($endpoint)) {
-    echo badRequest();
+    echo notFound();
     return;
   }
 
+  $playlist = new Playlist();
+
+  // Router
   switch($endpoint) {
     case 'create':
       $playlist->create();

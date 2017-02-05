@@ -9,13 +9,15 @@
   include_once 'components/errors.php';
 
   $endpoint = isset($_REQUEST['endpoint']) ? $_REQUEST['endpoint'] : null;
-  $songs = new Songs();
 
-  if (!$endpoint) {
-    echo badRequest();
+  if (empty($endpoint)) {
+    echo notFound();
     return;
   }
 
+  $songs = new Songs();
+
+  // Router
   switch($endpoint) {
     case 'search':
       $songs->search();
@@ -27,7 +29,7 @@
       $songs->deleteSong();
       break;
     default:
-      echo 'xd';
+      echo notFound();
       break;
   }
 ?>
