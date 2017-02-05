@@ -1,4 +1,4 @@
-export default function($stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
   $locationProvider.html5Mode(true);
   $urlMatcherFactoryProvider.strictMode(false);
 
@@ -6,11 +6,11 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
   .state('home', {
     url: '/',
     controller: 'HomePageController as vm',
-    templateUrl: './views/main/home/index.html',
+    templateUrl: './views/main/index.html',
     resolve: {
       Your: function($http, Auth) {
         if (Auth.isAuthenticated()) {
-          const id = Auth.getCurrentUser().id;
+          var id = Auth.getCurrentUser().id;
           return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
         } else {
           return {
@@ -31,11 +31,11 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
   .state('main', {
     url: '',
     abstract: true,
-    templateUrl: './views/main/main/main.html',
+    templateUrl: './views/main/main.html',
   })
   .state('main.popularLists', {
     url: '/popular',
-    templateUrl: './views/main/popular-lists/popular-lists.html',
+    templateUrl: './views/main/popularLists.html',
     controller: 'PopularListsController',
     controllerAs: 'vm',
     resolve: {
@@ -46,7 +46,7 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
   })
   .state('main.newLists', {
     url: '/new',
-    templateUrl: './views/main/new-lists/new-lists.html',
+    templateUrl: './views/main/newLists.html',
     controller: 'NewListsController as vm',
     resolve: {
       New: function($http, Auth) {
@@ -63,17 +63,17 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
 
   .state('playlists.createList', {
     url: '/create',
-    templateUrl: './views/playlists/create/create.html',
+    templateUrl: './views/playlists/create.html',
     controller: 'CreateListController as vm'
   })
 
   .state('playlists.yourLists', {
     url: '/yourlists',
-    templateUrl: './views/playlists/your-lists/your-lists.html',
+    templateUrl: './views/playlists/yourLists.html',
     controller: 'YourListsController as vm',
     resolve: {
       Lists: function($http, Auth) {
-        const id = Auth.getCurrentUser().id;
+        var id = Auth.getCurrentUser().id;
         return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
       }
     }
@@ -81,11 +81,11 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
 
   .state('playlists.playlist', {
     url: '/playlist/:playlistId',
-    templateUrl: './views/playlists/playlist/playlist.html',
-    controller: 'PlaylistController as vm',
+    templateUrl: './views/playlists/playlist.html',
+    controller: 'PlayListController as vm',
     resolve: {
       List: function($http, $stateParams) {
-        const id = $stateParams.playlistId;
+        var id = $stateParams.playlistId;
         return $http.get(`/api/playlists.php?endpoint=show&playlistId=${id}`);
       }
     }
@@ -94,12 +94,12 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
   // Auth routes
   .state('login', {
     url: '/login',
-    templateUrl: './views/auth/login/login.html',
+    templateUrl: './views/auth/login.html',
     controller: 'LoginController as vm'
   })
   .state('logout', {
     url: '/logout',
-    templateUrl: './views/auth/login/login.html',
+    templateUrl: './views/auth/login.html',
     controller: function(Auth, $state) {
       Auth.logout()
       .then(function() {
@@ -109,4 +109,4 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
   })
 
   $urlRouterProvider.otherwise('/');
-}
+});

@@ -1,5 +1,4 @@
 app
-.run(function($state, $stateParams) {})
 .config(function($mdThemingProvider, $sceDelegateProvider) {
 
   $mdThemingProvider.definePalette('dank', {
