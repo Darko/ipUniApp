@@ -65,7 +65,7 @@
       $query = "SELECT * FROM playlists
                 INNER JOIN playlist_identity
                 ON playlist_identity.playlistId = playlists.id
-                AND playlists.id = $playlistId";
+                WHERE playlists.id = $playlistId";
 
       $result = $conn->query($query);
 
@@ -131,7 +131,7 @@
       $query = "SELECT * FROM playlists
                 INNER JOIN playlist_identity
                 ON playlist_identity.playlistId = playlists.id 
-                AND playlist_identity.userId = $userId";
+                WHERE playlist_identity.userId = $userId";
       $result = $conn->query($query);
 
       while ($row = $result->fetch_assoc()) {
