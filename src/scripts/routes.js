@@ -12,6 +12,10 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
         if (Auth.isAuthenticated()) {
           var id = Auth.getCurrentUser().id;
           return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+        } else {
+          return {
+            data: []
+          }
         }
       },
       Popular: function($http, Auth) {
@@ -82,7 +86,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     resolve: {
       List: function($http, $stateParams) {
         var id = $stateParams.playlistId;
-        return $http.get(`/api/playlists.php?endpoint=show&id=${id}`);
+        return $http.get(`/api/playlists.php?endpoint=show&playlistId=${id}`);
       }
     }
   })

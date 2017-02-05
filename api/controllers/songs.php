@@ -4,25 +4,22 @@
 
   class Songs {
     function search() {
-      $q = isset($_GET['q']) ? isset($_GET['q']) : null;
-
-      if (!$q) {
-        echo badRequest('Missing parameter q (search text)');
+      if (!$_GET['q']) {
+        echo badRequest();
         return;
       }
 
       global $conn;
-      $q = preg_replace('/\s+/', '%20', $q);
+      $q = preg_replace('/\s+/', '%20', $_GET['q']);
       $q =  htmlentities(strip_tags($conn->real_escape_string($q)));
       $maxResults = 5;
       $output = array();
 
       $query = "SELECT * FROM songs WHERE title LIKE '%$q%' OR channelTitle LIKE '%$q%' LIMIT $maxResults";
       $result = $conn->query($query);
-
       if ($result->num_rows != 0) {
         while ($row = $result->fetch_assoc()) {
-          $output[] = (object) array(
+          $output[] = array(
             "id" => $row["id"],
             "snippet" => array(
               "title" => $row['title'],
@@ -42,17 +39,12 @@
               '&part=snippet&type=video&key='.$DEVELOPER_KEY;
 
         $data = json_decode(file_get_contents($url), true);
-        $data = (object) $data['items'];
-
-        // $data = (object) json_decode(file_get_contents($url), true);
-        // $data = $data->items;
-
+        $data = $data['items'];
         echo json_encode($data);
         return;
       }
       echo notFound();
       return;
-
     }
 
     function insert() {
