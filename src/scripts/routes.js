@@ -9,14 +9,20 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     templateUrl: './views/main/index.html',
     resolve: {
       Your: function($http, Auth) {
-        var id = Auth.getCurrentUser().id;
-        return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+        if (Auth.isAuthenticated()) {
+          var id = Auth.getCurrentUser().id;
+          return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
+        } else {
+          return {
+            data: []
+          }
+        }
       },
       Popular: function($http, Auth) {
-        return $http.get(`/api/index.php?popular=true`);
+        return $http.get(`/api/playlists.php?endpoint=popular`);
       },
       New: function($http, Auth) {
-        return $http.get(`/api/index.php?new=true`);
+        return $http.get(`/api/playlists.php?endpoint=new`);
       }
     }
   })
@@ -34,7 +40,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     controllerAs: 'vm',
     resolve: {
       Popular: function($http, Auth) {
-        return $http.get(`/api/index.php?popular=true`);
+        return $http.get(`/api/playlists.php?endpoint=popular`);
       }
     }
   })
@@ -44,7 +50,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     controller: 'NewListsController as vm',
     resolve: {
       New: function($http, Auth) {
-        return $http.get(`/api/index.php?new=true`);
+        return $http.get(`/api/playlists.php?endpoint=new`);
       }
     }
   })
@@ -80,7 +86,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
     resolve: {
       List: function($http, $stateParams) {
         var id = $stateParams.playlistId;
-        return $http.get(`/api/playlists.php?endpoint=show&id=${id}`);
+        return $http.get(`/api/playlists.php?endpoint=show&playlistId=${id}`);
       }
     }
   })
