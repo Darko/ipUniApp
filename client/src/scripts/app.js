@@ -13,6 +13,10 @@ import appRun from './app.run';
 // Configs
 import routes from './routes';
 import authConfig from '../../components/Auth/auth.config';
+import themeConfig from './theme';
+
+// Services
+import AuthService from '../../components/Auth/auth.service';
 
 // Main Controllers
 import IndexController from '../../views/main/home/index.controller';
@@ -30,7 +34,7 @@ import YourListsController from '../../views/playlists/your-lists/yourlists.cont
 // Auth Controllers
 import LoginController from '../../views/auth/login/login.controller';
 
-// components
+// Components
 import navbar from '../../components/navbar/navbar.component';
 import player from '../../components/player/player.component';
 import playlistSongs from '../../components/playlists/playlist-songs/playlist.songs.component';
@@ -38,11 +42,18 @@ import playlistCard from '../../components/playlists/playlist-card/playlist.card
 import currentSong from '../../components/playlists/current-song/current.song.component';
 import songsAutocomplete from '../../components/songs/songs-autocomplete/songs.autocomplete.component';
 
+// Filters
+import TrustFilter from '../../components/filters/trust.filter';
+
 app
 .run(appRun)
 
 .config(routes)
 .config(authConfig)
+.config(themeConfig)
+
+// Services
+.service('Auth', AuthService)
 
 // Main Controllers
 .controller('IndexController', IndexController)
@@ -65,3 +76,5 @@ app
 .component('currentSong', currentSong)
 .component('player', player)
 .component('songsAutocomplete', songsAutocomplete)
+
+.filter('trust', TrustFilter)

@@ -1,4 +1,4 @@
-app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+export default function($stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
   $locationProvider.html5Mode(true);
   $urlMatcherFactoryProvider.strictMode(false);
 
@@ -6,11 +6,11 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   .state('home', {
     url: '/',
     controller: 'HomePageController as vm',
-    templateUrl: './views/main/index.html',
+    templateUrl: './client/views/main/home/home.html',
     resolve: {
       Your: function($http, Auth) {
         if (Auth.isAuthenticated()) {
-          var id = Auth.getCurrentUser().id;
+          const id = Auth.getCurrentUser().id;
           return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
         } else {
           return {
@@ -31,11 +31,11 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   .state('main', {
     url: '',
     abstract: true,
-    templateUrl: './views/main/main.html',
+    templateUrl: './client/views/main/main/main.html',
   })
   .state('main.popularLists', {
     url: '/popular',
-    templateUrl: './views/main/popularLists.html',
+    templateUrl: './client/views/main/popular-lists/popular-lists.html',
     controller: 'PopularListsController',
     controllerAs: 'vm',
     resolve: {
@@ -46,7 +46,7 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   })
   .state('main.newLists', {
     url: '/new',
-    templateUrl: './views/main/newLists.html',
+    templateUrl: './client/views/main/new-lists/new-lists.html',
     controller: 'NewListsController as vm',
     resolve: {
       New: function($http, Auth) {
@@ -58,22 +58,22 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   // Playlists
   .state('playlists', {
     abstract: true,
-    templateUrl: './views/playlists/playlists.html',
+    templateUrl: './client/views/playlists/playlists.html',
   })
 
   .state('playlists.createList', {
     url: '/create',
-    templateUrl: './views/playlists/create.html',
+    templateUrl: './client/views/playlists/create/create.html',
     controller: 'CreateListController as vm'
   })
 
   .state('playlists.yourLists', {
     url: '/yourlists',
-    templateUrl: './views/playlists/yourLists.html',
+    templateUrl: './client/views/playlists/your-lists/your-lists.html',
     controller: 'YourListsController as vm',
     resolve: {
       Lists: function($http, Auth) {
-        var id = Auth.getCurrentUser().id;
+        const id = Auth.getCurrentUser().id;
         return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
       }
     }
@@ -81,11 +81,11 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
 
   .state('playlists.playlist', {
     url: '/playlist/:playlistId',
-    templateUrl: './views/playlists/playlist.html',
-    controller: 'PlayListController as vm',
+    templateUrl: './client/views/playlists/playlist/playlist.html',
+    controller: 'PlaylistController as vm',
     resolve: {
       List: function($http, $stateParams) {
-        var id = $stateParams.playlistId;
+        const id = $stateParams.playlistId;
         return $http.get(`/api/playlists.php?endpoint=show&playlistId=${id}`);
       }
     }
@@ -94,12 +94,12 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   // Auth routes
   .state('login', {
     url: '/login',
-    templateUrl: './views/auth/login.html',
+    templateUrl: './client/views/auth/login/login.html',
     controller: 'LoginController as vm'
   })
   .state('logout', {
     url: '/logout',
-    templateUrl: './views/auth/login.html',
+    templateUrl: './client/views/auth/login/login.html',
     controller: function(Auth, $state) {
       Auth.logout()
       .then(function() {
@@ -109,4 +109,4 @@ app.config(function($stateProvider, $locationProvider, $urlRouterProvider, $urlM
   })
 
   $urlRouterProvider.otherwise('/');
-});
+}

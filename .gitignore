@@ -1,3 +1,5 @@
 node_modules
 bower_components
 vendor
+client/src/app.js
+client/src/app.js.map
