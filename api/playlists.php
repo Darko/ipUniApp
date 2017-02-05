@@ -1,20 +1,10 @@
 <?php
-
-  ini_set('display_startup_errors', 1);
-  ini_set('display_errors', 1);
-  error_reporting(-1);
-
-  header('Content-Type: application/json');
   include_once 'controllers/playlists.php';
   include_once 'components/errors.php';
 
+  header('Content-Type: application/json');
+
   $endpoint = isset($_REQUEST['endpoint']) ? $_REQUEST['endpoint'] : null;
-
-  if (empty($endpoint)) {
-    echo notFound();
-    return;
-  }
-
   $playlist = new Playlist();
 
   // Router
