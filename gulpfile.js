@@ -32,20 +32,21 @@ gulp.task('sass', function () {
 });
 
 gulp.task('build', function () {
-  return browserify({
-    entries: './client/src/scripts/app.js',
+  var b = browserify({
+    entries: 'client/src/scripts/app.js',
     debug: true
   })
   .transform(babelify.configure({
     presets: ["es2015"]
-  }))
-  bundle()
-  .pipe(source('./client/src/scripts/app.js'))
+  }));
+  
+  return b.bundle()
+  .pipe(source('./client/app.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
   .on('error', gutil.log)
-  // .pipe(sourcemaps.write('./'))
-  .pipe(gulp.dest('./app.js'));
+  .pipe(sourcemaps.write('./'))
+  .pipe(gulp.dest('./'));
 });
 
 gulp.task('build-reload', ['build'], function() {
@@ -55,7 +56,7 @@ gulp.task('build-reload', ['build'], function() {
 gulp.task('watch', function() {
   gulp.watch('sass/**/*.sass', ['sass']);
   gulp.watch('api/**/*.php', ['php']);
-  gulp.watch(['!./client/src/app.js', './client/**/**/*.js'], ['build-reload']);
+  gulp.watch(['!./client/app.js', './client/**/**/*.js'], ['build-reload']);
 });
 
 gulp.task('browser-sync', function() {

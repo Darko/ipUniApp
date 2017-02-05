@@ -16,7 +16,7 @@ export default class CreateController {
         userId: vm.user.id,
         items: []
       }
-      console.log('kappapride');
+      console.log('meimeis');
     }
     
     vm.save = function($event) {
