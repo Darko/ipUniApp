@@ -1,5 +1,5 @@
 export default {
-  templateUrl: './components/playlists/playlist-card/playlist.card.template.html',
+  templateUrl: './client/components/playlists/playlist-card/playlist.card.template.html',
   bindings: {
     playlist: '='
   },

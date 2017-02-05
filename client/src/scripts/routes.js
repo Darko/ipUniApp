@@ -58,7 +58,7 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
   // Playlists
   .state('playlists', {
     abstract: true,
-    templateUrl: './client/views/playlists/playlists.html',
+    templateUrl: './client/views/playlists/playlists/playlists.html',
   })
 
   .state('playlists.createList', {

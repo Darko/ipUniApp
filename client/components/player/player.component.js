@@ -1,5 +1,5 @@
 export default {
-  templateUrl: './components/navbar/navbar.html',
+  templateUrl: './client/components/navbar/navbar.html',
   controllerAs: '$ctrl',
   controller: PlayerController
 }

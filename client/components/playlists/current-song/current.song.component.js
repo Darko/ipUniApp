@@ -1,5 +1,5 @@
 export default {
-  templateUrl: './components/playlists/current-song/current.song.template.html',
+  templateUrl: './client/components/playlists/current-song/current.song.template.html',
   controllerAs: '$ctrl',
   controller: CurrentSongController
 }

@@ -1,5 +1,5 @@
 export default class LoginController {
-  constructor(Auth, $timeout, $rootScope) {
+  constructor($state, $http, $rootScope, Auth) {
     'ngInject';
 
     const vm = this;

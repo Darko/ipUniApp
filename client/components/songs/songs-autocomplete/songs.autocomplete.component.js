@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 export default {
-  templateUrl: './components/songs/songs-autocomplete/songs.autocomplete.html',
+  templateUrl: './client/components/songs/songs-autocomplete/songs.autocomplete.html',
   bindings: {
     list: '='
   },

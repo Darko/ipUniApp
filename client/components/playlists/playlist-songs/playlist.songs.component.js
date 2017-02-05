@@ -1,5 +1,5 @@
 export default {
-  templateUrl: './components/playlists/playlist-songs/playlist.songs.template.html',
+  templateUrl: './client/components/playlists/playlist-songs/playlist.songs.template.html',
   bindings: {
     songs: '=',
     currentSong: '='
