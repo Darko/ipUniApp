@@ -258,7 +258,7 @@
       while ($row = $result->fetch_assoc()) {
         $res[] = (object) $row;
       }
-      $res = (object) $res;
+
       echo json_encode($res);
       $result->close();
     }
@@ -282,7 +282,6 @@
       while ($row = $result->fetch_assoc()) {
         $res[] = (object) $row;
       }
-      $res = (object) $res;
 
       echo json_encode($res);
       $result->close();
