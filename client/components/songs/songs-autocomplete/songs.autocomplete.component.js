@@ -9,7 +9,7 @@ export default {
   controller: SongsAutocompleteController
 }
 
-function SongsAutocompleteController (Auth, $rootScope) {
+function SongsAutocompleteController (Auth, $rootScope, $http) {
   'ngInject';
   const $ctrl = this;
   
