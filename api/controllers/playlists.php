@@ -1,7 +1,8 @@
 <?php
-
   include_once 'components/errors.php';
   include_once 'components/functions.php';
+
+  enableErrors();
 
   class Playlist {
     function create() {
@@ -195,8 +196,7 @@
       }
 
       global $conn;
-
-      $playlistId = htmlentities(strip_tags($conn->real_escape_string($data['playlistId'])));
+      $playlistId = htmlentities(strip_tags($conn->real_escape_string($data->playlistId)));
 
       if (!$playlistId) {
         echo badRequest('Missing parameter: playlistId');
