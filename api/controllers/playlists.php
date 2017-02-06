@@ -2,8 +2,6 @@
   include_once 'components/errors.php';
   include_once 'components/functions.php';
 
-  enableErrors();
-
   class Playlist {
     function create() {
       $data = (object) getContents();
