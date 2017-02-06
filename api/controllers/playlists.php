@@ -1,5 +1,4 @@
 <?php
-
   include_once 'components/errors.php';
   include_once 'components/functions.php';
 
@@ -195,8 +194,7 @@
       }
 
       global $conn;
-
-      $playlistId = htmlentities(strip_tags($conn->real_escape_string($data['playlistId'])));
+      $playlistId = htmlentities(strip_tags($conn->real_escape_string($data->playlistId)));
 
       if (!$playlistId) {
         echo badRequest('Missing parameter: playlistId');

@@ -5,18 +5,17 @@ export default class CreateController {
     const vm = this;
 
     vm.loggedIn = Auth.isAuthenticated();
-    vm.user = Auth.getCurrentUser();
 
     if (!vm.loggedIn) {
       $rootScope.returnState = 'playlists.createList';
       $state.go('login');
     } else {
+      vm.user = Auth.getCurrentUser();
       vm.list = {
         private: false,
         userId: vm.user.id,
         items: []
       }
-      console.log('meimeis');
     }
     
     vm.save = function($event) {
@@ -25,7 +24,7 @@ export default class CreateController {
         $mdDialog.show({
           parent: angular.element(document.body),
           targetEvent: $event,
-          templateUrl: '../../components/dialogs/success/success.dialog.html',
+          templateUrl: '../../client/components/dialogs/success/success.dialog.html',
           controllerAs: 'vm',
           bindToController: true,
           clickOutsideToClose: true,

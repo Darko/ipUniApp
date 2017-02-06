@@ -1,4 +1,4 @@
-export default function($mdThemingProvider, $sceDelegateProvider) {
+export default function($mdThemingProvider, $sceDelegateProvider, $mdAriaProvider) {
   $mdThemingProvider.definePalette('dank', {
     '50': '1d1e32', // primary
     '100': '4d5096', // primary hue-1
@@ -32,4 +32,6 @@ export default function($mdThemingProvider, $sceDelegateProvider) {
     'hue-2': 'A400'
   })
   .dark();
+
+  $mdAriaProvider.disableWarnings();
 }
