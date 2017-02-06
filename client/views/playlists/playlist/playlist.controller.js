@@ -4,6 +4,7 @@ export default class PlayListController {
 
     const vm = this;
     vm.list = List.data || {};
+    vm.user = Auth.getCurrentUser();
 
     vm.currentSong = vm.list.items && vm.list.items[0] ? vm.list.items[0] : null;
 

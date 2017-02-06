@@ -27,7 +27,7 @@ gulp.task('sass', function () {
   gulp.src('sass/**/*.sass')
   // .pipe(sass({includePaths: ['sass'], outputStyle: 'compressed'}))
   .pipe(sass())
-  .pipe(gulp.dest('client/src/css'))
+  .pipe(gulp.dest('dist/css'))
   .pipe(browserSync.reload({stream: true}));
 });
 
@@ -41,12 +41,12 @@ gulp.task('build', function () {
   }));
   
   return b.bundle()
-  .pipe(source('./client/app.js'))
+  .pipe(source('app.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
   .on('error', gutil.log)
   .pipe(sourcemaps.write('./'))
-  .pipe(gulp.dest('./'));
+  .pipe(gulp.dest('./dist/js'));
 });
 
 gulp.task('build-reload', ['build'], function() {
@@ -56,13 +56,14 @@ gulp.task('build-reload', ['build'], function() {
 gulp.task('watch', function() {
   gulp.watch('sass/**/*.sass', ['sass']);
   gulp.watch('api/**/*.php', ['php']);
-  gulp.watch(['!./client/app.js', './client/**/**/*.js'], ['build-reload']);
+  gulp.watch('./client/**/*.js', ['build-reload']);
 });
 
 gulp.task('browser-sync', function() {
   browserSync.init(['client/src/scripts/*.js', 'client/*.html'], {
     proxy: 'http://localhost:8888',
-    notify: false
+    notify: false,
+    open: false
   });
 });
 
