@@ -34,7 +34,7 @@
 
       $playlistId = $conn->insert_id;
 
-      $query = "INSERT INTO playlist_identity (playlistId, userId) 
+      $query = "INSERT INTO playlist_identity (playlistId, userId)
                 VALUES ('$playlistId', '$data->userId')";
       $identity = $conn->query($query);
 
@@ -81,7 +81,7 @@
       }
 
       // posle se vlecat podatoci za pesnite od taa playlista
-      $query = "SELECT * FROM songs 
+      $query = "SELECT * FROM songs
                 INNER JOIN playlist_contents
                 ON songs.id =  playlist_contents.songId
                 AND playlist_contents.playlistId = $playlistId";
@@ -92,7 +92,7 @@
         echo notFound('No playlist identity was found');
         return;
       }
-      
+
 
       while ($row = $resultContent->fetch_assoc()) {
         $obj = array(
@@ -109,7 +109,7 @@
 
       $resultContent->close();
       echo json_encode($res);
-      return; 
+      return;
     }
 
     function index() {
@@ -130,7 +130,7 @@
 
       $query = "SELECT * FROM playlists
                 INNER JOIN playlist_identity
-                ON playlist_identity.playlistId = playlists.id 
+                ON playlist_identity.playlistId = playlists.id
                 WHERE playlist_identity.userId = $userId";
       $result = $conn->query($query);
 
@@ -227,7 +227,7 @@
       if (isset($data->like)) {
         $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $playlistId";
       }
-      else if (isset($data['dislike'])) {
+      else if (isset($data->dislike)) {
         $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $playlistId";
       }
       $result = $conn->query($query);
@@ -247,7 +247,7 @@
 
       global $conn;
 
-      $query = "SELECT * 
+      $query = "SELECT *
                 FROM playlists
                 ORDER BY likes
                 DESC LIMIT 20";
@@ -271,7 +271,7 @@
 
       global $conn;
 
-      $query = "SELECT * 
+      $query = "SELECT *
                 FROM playlists
                 ORDER BY createdAt
                 DESC LIMIT 10";
@@ -286,6 +286,29 @@
       echo json_encode($res);
       $result->close();
     }
-  
+
+    function clone() {
+      $data = getContents();
+      if (!$data) {
+        echo badRequest();
+        return;
+      }
+
+      global $conn;
+      array_walk($data, 'array_sanitaze');
+      $data = (object) $data;
+      $playlistId = $data->playlistId;
+      $userId = $data->userId;
+
+      $query = "INSERT INTO playlist_identity (playlistId, userId) VALUES ('$playlistId', '$userId')";
+      $result = $conn->query($query);
+      if ($result) {
+        echo success("Playlist copied");
+        return;
+      }
+      echo badRequest();
+      return;
+    }
+
   }
 ?>
