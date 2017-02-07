@@ -36,8 +36,8 @@
     case 'new':
       $playlist->newLists();
       break;
-    case 'clone':
-      $playlist->cloneList();
+    case 'follow':
+      $playlist->follow();
       break;
     default:
       echo notFound();

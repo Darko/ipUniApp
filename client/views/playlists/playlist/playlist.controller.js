@@ -1,5 +1,5 @@
 export default class PlayListController {
-  constructor(List, $mdDialog, Auth, $http, $document, $state) {
+  constructor(List, $mdDialog, Auth, $http, $document, $state, $mdToast) {
     'ngInject';
 
     const vm = this;
@@ -62,7 +62,7 @@ export default class PlayListController {
           .title('Избриши листа')
           .textContent(`Ова ќе ја избрише листата ${vm.list.title}.`)
           .targetEvent($event)
-          .ok('Избриши!')
+          .ok('Избриши')
           .cancel('Откажи');
         
         $mdDialog.show(confirm)
@@ -92,8 +92,33 @@ export default class PlayListController {
       playAll: function($event) {
         return;
       },
-      addToMyLists: function($event) {
-        return;
+      follow: function($event, action) {
+        console.log(action);
+        const message = action === 'follow' ? `Ќе ја заследите листата ${vm.list.title}.` : `Ќе престанете да ја следите листата ${vm.list.title}.`;
+
+        const confirm = $mdDialog.confirm()
+          .title('Следење листа')
+          .textContent(message)
+          .targetEvent($event)
+          .ok('Важи')
+          .cancel('Откажи');
+        
+        return $mdDialog.show(confirm)
+        .then(() => {
+          return $http.post(`api/playlists.php?endpoint=${action}`, {
+            playlistId: parseInt(vm.list.playlistId),
+            userId: parseInt(vm.list.userId)
+          })
+        })
+        .then((response) => {
+          console.log(response);
+          const content = 'Ја заследивте оваа листа';
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent(content)
+            .position('bottom right')
+          );
+        })
       }
     }
   }

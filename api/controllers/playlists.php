@@ -71,6 +71,7 @@
       if ($result->num_rows != 0) {
         while ($row = $result->fetch_assoc()) {
           $res = (object) $row;
+          // TODO: Fix this. $res-id = $row['playlistId']
         }
         $result->close();
       }
@@ -286,7 +287,7 @@
       return;
     }
 
-    function cloneList() {
+    function follow() {
       $data = getContents();
       if (!$data) {
         echo badRequest();
@@ -297,13 +298,16 @@
       array_walk($data, 'array_sanitaze');
       $data = (object) $data;
 
-      $query = "INSERT INTO playlist_identity (playlistId, userId, cloned) VALUES ('$data->playlistId', '$data->userId', 1)";
+      $query = "INSERT INTO playlist_identity (playlistId, userId, following) VALUES ('$data->playlistId', '$data->userId', 1)";
+
       $result = $conn->query($query);
+
       if ($result) {
-        echo success("Playlist copied");
+        echo success("Playlist followed");
         return;
       }
-      echo badRequest();
+
+      echo notFound();
       return;
     }
 
