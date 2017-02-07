@@ -37,7 +37,7 @@
       $playlist->newLists();
       break;
     case 'clone':
-      $playlist->clone();
+      $playlist->cloneList();
       break;
     default:
       echo notFound();

@@ -285,9 +285,10 @@
 
       echo json_encode($res);
       $result->close();
+      return;
     }
 
-    function clone() {
+    function cloneList() {
       $data = getContents();
       if (!$data) {
         echo badRequest();
@@ -297,10 +298,8 @@
       global $conn;
       array_walk($data, 'array_sanitaze');
       $data = (object) $data;
-      $playlistId = $data->playlistId;
-      $userId = $data->userId;
 
-      $query = "INSERT INTO playlist_identity (playlistId, userId) VALUES ('$playlistId', '$userId')";
+      $query = "INSERT INTO playlist_identity (playlistId, userId, cloned) VALUES ('$data->playlistId', '$data->userId', 1)";
       $result = $conn->query($query);
       if ($result) {
         echo success("Playlist copied");
