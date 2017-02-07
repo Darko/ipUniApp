@@ -1,5 +1,4 @@
 <?php
-
   include_once 'components/errors.php';
   include_once 'components/functions.php';
 
@@ -20,7 +19,7 @@
       global $conn;
 
       $data->private = ( isset($data->private) && $data->private ) ? 1 : 0;
-      $data->thumbnail = $data->items[0]['snippet']['thumbnail'];
+      $data->thumbnail = 'https://img.youtube.com/vi/'. $data->items[0]['videoId'] .'/maxresdefault.jpg';
       $createdAt = date("Y-m-d", time());
 
       $query = "INSERT INTO playlists (title, createdAt, thumbnail, private, songsCount, likes, dislikes)
@@ -195,8 +194,7 @@
       }
 
       global $conn;
-
-      $playlistId = htmlentities(strip_tags($conn->real_escape_string($data['playlistId'])));
+      $playlistId = htmlentities(strip_tags($conn->real_escape_string($data->playlistId)));
 
       if (!$playlistId) {
         echo badRequest('Missing parameter: playlistId');

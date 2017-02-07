@@ -19,8 +19,9 @@
       $result = $conn->query($query);
       if ($result->num_rows != 0) {
         while ($row = $result->fetch_assoc()) {
-          $output[] = array(
-            "id" => $row["id"],
+          $output[] = (object) array(
+            "id" => $row['id'],
+            "videoId" => $row['videoId'],
             "snippet" => array(
               "title" => $row['title'],
               "channelTitle" => $row['channelTitle'],
