@@ -19,7 +19,7 @@
       global $conn;
 
       $data->private = ( isset($data->private) && $data->private ) ? 1 : 0;
-      $data->thumbnail = $data->items[0]['snippet']['thumbnail'];
+      $data->thumbnail = 'https://img.youtube.com/vi/'. $data->items[0]['videoId'] .'/maxresdefault.jpg';
       $createdAt = date("Y-m-d", time());
 
       $query = "INSERT INTO playlists (title, createdAt, thumbnail, private, songsCount, likes, dislikes)
