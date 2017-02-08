@@ -3,7 +3,7 @@
 
   <div class="layout-row layout-align-space-between-center flex-100">
     <h1 class="front-section-title md-title">Содржина</h1>
-    <div class="layout-row layout-align-end-end" ng-if="vm.isOwner()">
+    <div class="layout-row layout-align-end-end" ng-if="vm.isOwner() && !vm.isFollowing">
       <md-button class="md-icon-button" ng-click="vm.actions.playAll($event)">
         <md-icon>play_arrow</md-icon>
         <md-tooltip md-direction="bottom">Пушти ги сите</md-tooltip>
@@ -12,18 +12,18 @@
         <md-icon>add</md-icon>
         <md-tooltip md-direction="bottom">Додај повеќе песни</md-tooltip>
       </md-button>
-      <md-button class="md-icon-button" ng-click="vm.actions.deleteList($event)">
+      <md-button class="md-icon-button" ng-click="vm.actions.deleteList($event)" ng-if="vm.loggedIn && vm.isOwner()">
         <md-icon>delete</md-icon>
         <md-tooltip md-direction="bottom">Избриши листа</md-tooltip>
       </md-button>
     </div>
     <div class="layout-row layout-align-end-end" ng-if="!vm.isOwner()">
-      <md-button ng-click="vm.actions.addToMyLists($event)">
-        <md-icon>save</md-icon> Зачувај во твоите листи
+      <md-button ng-click="vm.actions.follow($event)">
+        <md-icon>{{ vm.isFollowing ? 'cancel' : 'save' }}</md-icon> {{ vm.isFollowing ? 'Одследи листа' : 'Заследи листа' }}
       </md-button>
     </div>
   </div>
 
-  <playlist-songs songs="vm.list.items" current-song="vm.currentSong"></playlist-songs>
+  <playlist-songs list="vm.list" current-song="vm.currentSong" following="vm.isFollowing"></playlist-songs>
 
 </div>

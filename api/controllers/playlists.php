@@ -19,7 +19,7 @@
       global $conn;
 
       $data->private = ( isset($data->private) && $data->private ) ? 1 : 0;
-      $data->thumbnail = 'https://img.youtube.com/vi/'. $data->items[0]['videoId'] .'/maxresdefault.jpg';
+      $data->thumbnail = $data->items[0]['snippet']['thumbnail'];
       $createdAt = date("Y-m-d", time());
 
       $query = "INSERT INTO playlists (title, createdAt, thumbnail, private, songsCount, likes, dislikes)
@@ -33,7 +33,7 @@
 
       $playlistId = $conn->insert_id;
 
-      $query = "INSERT INTO playlist_identity (playlistId, userId) 
+      $query = "INSERT INTO playlist_identity (playlistId, userId)
                 VALUES ('$playlistId', '$data->userId')";
       $identity = $conn->query($query);
 
@@ -80,10 +80,10 @@
       }
 
       // posle se vlecat podatoci za pesnite od taa playlista
-      $query = "SELECT * FROM songs 
+      $query = "SELECT * FROM songs
                 INNER JOIN playlist_contents
                 ON songs.id =  playlist_contents.songId
-                AND playlist_contents.playlistId = $playlistId";
+                WHERE playlist_contents.playlistId = $playlistId";
 
       $resultContent = $conn->query($query);
 
@@ -91,7 +91,6 @@
         echo notFound('No playlist identity was found');
         return;
       }
-      
 
       while ($row = $resultContent->fetch_assoc()) {
         $obj = array(
@@ -108,7 +107,7 @@
 
       $resultContent->close();
       echo json_encode($res);
-      return; 
+      return;
     }
 
     function index() {
@@ -129,7 +128,7 @@
 
       $query = "SELECT * FROM playlists
                 INNER JOIN playlist_identity
-                ON playlist_identity.playlistId = playlists.id 
+                ON playlist_identity.playlistId = playlists.id
                 WHERE playlist_identity.userId = $userId";
       $result = $conn->query($query);
 
@@ -225,7 +224,7 @@
       if (isset($data->like)) {
         $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $playlistId";
       }
-      else if (isset($data['dislike'])) {
+      else if (isset($data->dislike)) {
         $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $playlistId";
       }
       $result = $conn->query($query);
@@ -245,7 +244,7 @@
 
       global $conn;
 
-      $query = "SELECT * 
+      $query = "SELECT *
                 FROM playlists
                 ORDER BY likes
                 DESC LIMIT 20";
@@ -254,6 +253,7 @@
       $res = array();
 
       while ($row = $result->fetch_assoc()) {
+        $row['playlistId'] = $row['id'];
         $res[] = (object) $row;
       }
 
@@ -269,7 +269,7 @@
 
       global $conn;
 
-      $query = "SELECT * 
+      $query = "SELECT *
                 FROM playlists
                 ORDER BY createdAt
                 DESC LIMIT 10";
@@ -278,12 +278,138 @@
       $res = array();
 
       while ($row = $result->fetch_assoc()) {
+        $row['playlistId'] = $row['id'];
         $res[] = (object) $row;
       }
 
       echo json_encode($res);
       $result->close();
+      return;
     }
-  
+
+    function follow() {
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        echo notFound();
+        return;
+      };
+
+      // $userObj->isAuthenticated();
+      $data = getContents();
+      if (!$data) {
+        echo badRequest();
+        return;
+      }
+
+      global $conn;
+      array_walk($data, 'array_sanitaze');
+      
+      $userData = (object) $data;
+      $following = $this->isFollowing($userData, true)->following;
+
+      if ($following) {
+        $res = new stdClass(); $res->already_following = true;
+        echo json_encode($res);
+        return;
+      }
+
+      $query = "INSERT INTO playlist_followers (playlistId, userId) VALUES ('$userData->playlistId', '$userData->userId')";
+      $result = $conn->query($query);
+
+      if ($result) {
+        echo success("Playlist followed");
+        return;
+      }
+
+      echo notFound();
+      return;
+    }
+
+    function unfollow() {
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        echo notFound();
+        return;
+      };
+
+      // $userObj->isAuthenticated();
+      global $conn;
+
+      $userData = (object) getContents();
+
+      $userData->userId = $userData->userId ? htmlentities(strip_tags($conn->real_escape_string($userData->userId))) : null;
+      $userData->playlistId = $userData->playlistId ? htmlentities(strip_tags($conn->real_escape_string($userData->playlistId))) : null;
+
+      if (!$userData->userId) {
+        echo badRequest('Missing parameter userId');
+        return;
+      } else if (!$userData->playlistId) {
+        echo badRequest('Missing parameter playlistId');
+        return;
+      }
+
+      $query = "DELETE FROM playlist_followers
+                WHERE userId = $userData->userId
+                AND playlistId = $userData->playlistId";
+
+      $result = $conn->query($query);
+      $res = new stdClass();
+
+      if ($result) {
+        $res->unfollowed = true;
+      } else {
+        $res->unfollowed = false;
+      }
+
+      echo json_encode($res);
+      return;
+    }
+
+    function isFollowing($data = null, $internalReq = false) {
+      if (!$internalReq) {
+        if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+          echo notFound();
+          return;
+        };
+      }
+
+      // $userObj->isAuthenticated();
+      global $conn;
+      $userData = null;
+
+      if (!$data) {
+        $userData = new stdClass();
+        $userData->userId = $_GET['userId'] ?  intval(htmlentities(strip_tags($conn->real_escape_string($_GET['userId'])))): null;
+        $userData->playlistId = $_GET['playlistId'] ? intval(htmlentities(strip_tags($conn->real_escape_string($_GET['playlistId'])))) : null;
+      } else {
+        $userData = $data;
+      }
+
+      if (!$userData->userId) {
+        echo badRequest('Missing parameter userId');
+        return;
+      } else if (!$userData->playlistId) {
+        echo badRequest('Missing parameter playlistId');
+        return;
+      }
+
+      $query = "SELECT * FROM playlist_followers
+                WHERE userId = $userData->userId
+                AND playlistId = $userData->playlistId";
+
+      $result = $conn->query($query);
+
+      $res = new stdClass();
+
+      if ($result->num_rows) {
+        $res->following = true;
+      } else {
+        $res->following = false;
+      }
+
+      if(!$internalReq) {
+        echo json_encode($res);
+      }
+      return $res;
+    }
+
   }
 ?>

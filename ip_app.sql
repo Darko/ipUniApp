@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:8889
--- Generation Time: Feb 03, 2017 at 09:53 PM
+-- Generation Time: Feb 08, 2017 at 05:59 PM
 -- Server version: 5.5.42
 -- PHP Version: 5.6.10
 
@@ -41,6 +41,18 @@ CREATE TABLE `playlist_contents` (
   `id` int(11) NOT NULL,
   `playlistId` int(11) NOT NULL,
   `songId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `playlist_followers`
+--
+
+CREATE TABLE `playlist_followers` (
+  `id` int(11) NOT NULL,
+  `playlistId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -116,6 +128,14 @@ ALTER TABLE `playlist_contents`
   ADD KEY `songId` (`songId`);
 
 --
+-- Indexes for table `playlist_followers`
+--
+ALTER TABLE `playlist_followers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `playlistId` (`playlistId`),
+  ADD KEY `userId` (`userId`);
+
+--
 -- Indexes for table `playlist_identity`
 --
 ALTER TABLE `playlist_identity`
@@ -157,6 +177,11 @@ ALTER TABLE `playlists`
 ALTER TABLE `playlist_contents`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `playlist_followers`
+--
+ALTER TABLE `playlist_followers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `playlist_identity`
 --
 ALTER TABLE `playlist_identity`
@@ -186,6 +211,13 @@ ALTER TABLE `users`
 ALTER TABLE `playlist_contents`
   ADD CONSTRAINT `playlist_contents_ibfk_1` FOREIGN KEY (`playlistId`) REFERENCES `playlists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `playlist_contents_ibfk_2` FOREIGN KEY (`songId`) REFERENCES `songs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `playlist_followers`
+--
+ALTER TABLE `playlist_followers`
+  ADD CONSTRAINT `playlist_followers_ibfk_1` FOREIGN KEY (`playlistId`) REFERENCES `playlists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `playlist_followers_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `playlist_identity`

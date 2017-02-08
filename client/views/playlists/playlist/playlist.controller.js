@@ -1,10 +1,19 @@
 export default class PlayListController {
-  constructor(List, $mdDialog, Auth, $http, $document, $state) {
+  constructor(List, $mdDialog, Auth, $http, $document, $state, $mdToast) {
     'ngInject';
 
     const vm = this;
     vm.list = List.data || {};
     vm.user = Auth.getCurrentUser();
+    vm.loggedIn = Auth.isAuthenticated();
+    vm.isFollwing = false;
+
+    if (vm.loggedIn) {
+      $http.get(`/api/playlists.php?endpoint=isfollowing&userId=${vm.user.id}&playlistId=${vm.list.playlistId}`)
+      .then(response => {
+        vm.isFollowing = response.data.following;
+      });
+    }
 
     vm.currentSong = vm.list.items && vm.list.items[0] ? vm.list.items[0] : null;
 
@@ -62,7 +71,7 @@ export default class PlayListController {
           .title('Избриши листа')
           .textContent(`Ова ќе ја избрише листата ${vm.list.title}.`)
           .targetEvent($event)
-          .ok('Избриши!')
+          .ok('Избриши')
           .cancel('Откажи');
         
         $mdDialog.show(confirm)
@@ -92,8 +101,37 @@ export default class PlayListController {
       playAll: function($event) {
         return;
       },
-      addToMyLists: function($event) {
-        return;
+      follow: function($event) {
+        const action = vm.isFollowing ? 'unfollow' : 'follow';
+        const message = action === 'follow' ? `Ќе ја заследите листата ${vm.list.title}.` : `Ќе престанете да ја следите листата ${vm.list.title}.`;
+
+        const confirm = $mdDialog.confirm()
+          .title('Следење листа')
+          .textContent(message)
+          .targetEvent($event)
+          .ok('Важи')
+          .cancel('Откажи');
+        
+        return $mdDialog.show(confirm)
+        .then(() => {
+          return $http.post(`api/playlists.php?endpoint=${action}`, {
+            playlistId: parseInt(vm.list.playlistId),
+            userId: parseInt(vm.user.id)
+          })
+        })
+        .then((response) => {
+          if (response.data.already_following) {
+            return;
+          }
+
+          const content = action === 'follow' ? 'Ја заследивте оваа листа.' : 'Ја одследивте оваа листа.'
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent(content)
+            .position('bottom right')
+          );
+          vm.isFollowing = !vm.isFollowing;
+        })
       }
     }
   }
