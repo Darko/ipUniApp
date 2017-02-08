@@ -39,6 +39,12 @@
     case 'follow':
       $playlist->follow();
       break;
+    case 'unfollow':
+      $playlist->unfollow();
+      break;
+    case 'isfollowing':
+      $playlist->isFollowing();
+      break;
     default:
       echo notFound();
       break;
