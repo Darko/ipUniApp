@@ -28,8 +28,8 @@ export default class PlayerService {
       _this.current.song = song;
     }
 
-    this.stopPlaying = function(player) {
-      player.isPlaying = false;
+    this.closePlayer = function(player) {
+      player.open = false;
     }
 
     return _this;

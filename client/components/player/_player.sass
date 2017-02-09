@@ -10,11 +10,9 @@ player
 
   iframe
     position: absolute
-    z-index: -1
-    // opacity: 0
     display: none
 
-  .md-button md-icon
+  .md-button md-icon, md-icon
     color: rgba(white, 0.9)
 
   &.ng-hide-add.ng-hide-add-active
@@ -25,3 +23,20 @@ player
 
   &.ng-hide-remove.ng-hide-remove-active
     transform: translateY(0)
+
+  .volume-control
+    margin-right: 8px
+    overflow: hidden
+    width: 24px
+    transition: .2s ease-out
+    padding-right: 8px
+    md-icon
+      margin-right: 8px
+      user-select: none
+    md-slider
+      min-width: 72px
+      width: 72px
+    &:hover 
+      width: 130px
+      
+    
