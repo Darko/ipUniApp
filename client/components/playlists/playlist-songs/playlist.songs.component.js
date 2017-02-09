@@ -18,7 +18,7 @@ function PlaylistSongsController (Auth, $rootScope, PlayerService) {
 
   vm.playSong = function(song) {
     vm.currentSong = song;
-    PlayerService.playSong({
+    PlayerService.play({
       playlist: vm.list,
       song: vm.currentSong
     });

@@ -12,17 +12,17 @@ function PlayerController ($scope, PlayerService, $interval) {
 
   vm.playlist = PlayerService.getPlaylist();
   vm.player = {};
+  vm.storage = localStorage;
 
   vm.stats = {
     open: false,
     paused: true,
     songLength: 0,
     currentTime: 0,
-    progressed: 0,
-    loop: true,
+    loop: false,
     volume: {
       muted: false,
-      amount: 50
+      amount: parseInt(_.get(vm.storage, 'donger.volume')) || 50
     }
   }
 
@@ -32,8 +32,9 @@ function PlayerController ($scope, PlayerService, $interval) {
     vm.player = player;
     vm.stats.open = true;
     vm.init(player);
+    player.setVolume(vm.stats.volume.amount);
     player.playVideo();
-    console.log(player);
+    vm.stats.songLength = vm.player.getDuration();
   });
 
   $scope.$on('youtube.player.ended', ($event, player) => {
@@ -53,9 +54,10 @@ function PlayerController ($scope, PlayerService, $interval) {
 
   $scope.$on('youtube.player.playing', ($event, player) => {
     vm.stats.paused = false;
+    vm.player = player;
   });
 
-  $scope.$on('youtube.player.paused', ($event, player) => {
+  $scope.$on('youtube.player.paused', ($event) => {
     vm.stats.paused = true;
   });
 
@@ -81,20 +83,18 @@ function PlayerController ($scope, PlayerService, $interval) {
     vm.stats.paused = !vm.stats.paused;
   }
 
-  vm.updateStatus = function(player) {
-    vm.player = player;
-    vm.stats.songLength = vm.player.getDuration();
-    vm.stats.currentTime = vm.player.getCurrentTime();
-    vm.stats.progressed = (vm.stats.currentTime / vm.stats.songLength) * 100;
+  vm.updateStatus = function() {
+    vm.stats.currentTime = Math.round(vm.player.getCurrentTime());
   }
 
-  vm.init = function(player) {
-    vm.updateStatus(player);
+  vm.init = function(player) { // Bootstrap player 
+    vm.player = player;
+    vm.updateStatus();
 
     $interval.cancel(timer);
 
     timer = $interval(() => {
-      vm.updateStatus(player);
+      vm.updateStatus();
     }, 1000);
   }
 
@@ -118,5 +118,31 @@ function PlayerController ($scope, PlayerService, $interval) {
       }
     }
     vm.player.setVolume(vm.stats.volume.amount);
+    vm.storage.setItem('donger.volume', vm.stats.volume.amount);
   }
+
+  vm.goto = function() {
+    vm.player.seekTo(vm.stats.currentTime);
+  }
+
+  vm.skip = function(dest) {
+    dest === 'next' ? goNext() : goPrev();
+  }
+
+  function goNext() {
+    const index = vm.getCurrentIndex();
+    if (index < vm.playlist.items.length - 1) {
+      vm.currentSong = vm.playlist.items[index + 1];
+    }
+    return;
+  }
+
+  function goPrev() {
+    const index = vm.getCurrentIndex();
+    if (index > 0) {
+      vm.currentSong = vm.playlist.items[index - 1];
+    }
+    return;
+  }
+
 }

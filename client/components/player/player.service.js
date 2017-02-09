@@ -7,7 +7,7 @@ export default class PlayerService {
       song: null
     }
 
-    this.playSong = function(data) {
+    this.play = function(data) {
       this.current = data;
       $rootScope.$broadcast('player:play', _this.current);
     }
@@ -26,6 +26,10 @@ export default class PlayerService {
 
     this.setCurrentSong = function(song) {
       _this.current.song = song;
+    }
+
+    this.setPlaylist = function(playlist) {
+      _this.current.playlist = playlist;
     }
 
     this.closePlayer = function(player) {

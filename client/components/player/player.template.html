@@ -2,21 +2,15 @@
   <youtube-video player="vm.player" player-vars="vm.options" video-id="vm.currentSong.videoId"></youtube-video>
   <div class="container layout-row layout-align-start-center">
     <div class="layout-row play-widget-actions">
-      <md-button class="md-icon-button">
+      <md-button class="md-icon-button" ng-click="vm.skip('previous')">
         <md-icon>skip_previous</md-icon>
       </md-button>
       <md-button class="md-icon-button" ng-click="vm.togglePlayer()">
         <md-icon>{{ vm.stats.paused ? 'play_arrow' : 'pause' }}</md-icon>
       </md-button>
-      <md-button class="md-icon-button">
+      <md-button class="md-icon-button" ng-click="vm.skip('next')">
         <md-icon>skip_next</md-icon>
       </md-button>
-    </div>
-    <div class="volume-control layout-row layout-align-start-center">
-      <md-icon ng-click="vm.changeVolume('toggle')">{{ vm.stats.volume.muted ? 'volume_mute' : 'volume_up' }}</md-icon>
-      <md-slider-container class="slider flex">
-        <md-slider class="flex" ng-model="vm.stats.volume.amount" min="0" max="100" step="0.01" ng-change="vm.changeVolume()"></md-slider>
-      </md-slider-container>
     </div>
     <div class="player-indicator flex">
       <md-slider-container>
@@ -24,11 +18,16 @@
         
         <md-slider class="flex"
                    min="0" max="{{ vm.stats.songLength }}"
-                   ng-model="vm.stats.progressed"></md-slider>
+                   ng-model="vm.stats.currentTime" ng-change="vm.goto()"></md-slider>
 
         <span>{{ vm.stats.songLength | timeFilter }}</span>
       </md-slider-container>
     </div>
-    <div class="flex-5"></div>
+    <div class="volume-control layout-row layout-align-start-center">
+      <md-icon ng-click="vm.changeVolume('toggle')">{{ vm.stats.volume.muted ? 'volume_mute' : 'volume_up' }}</md-icon>
+      <md-slider-container class="slider flex">
+        <md-slider class="flex" ng-model="vm.stats.volume.amount" min="0" max="100" step="1" ng-change="vm.changeVolume()"></md-slider>
+      </md-slider-container>
+    </div>
   </div>
 </div>
