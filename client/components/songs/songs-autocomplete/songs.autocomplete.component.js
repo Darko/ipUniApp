@@ -36,7 +36,12 @@ function SongsAutocompleteController (Auth, $rootScope, $http) {
       newSong = song;
     }
 
-    vm.list.items.push(newSong);
+    if (vm.list.items) {
+      vm.list.items.push(newSong);
+    } else {
+      vm.list.items = [];
+      vm.list.items.push(newSong);
+    }
     vm.searchText = '';
   }
 

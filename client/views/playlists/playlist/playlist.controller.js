@@ -104,7 +104,7 @@ export default class PlayListController {
       playAll: function($event) {
         PlayerService.play({
           playlist: vm.list,
-          song: vm.list.items[0]
+          song: vm.list.items && vm.list.items.length ? vm.list.items[0] : null
         });
       },
       follow: function($event) {
