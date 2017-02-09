@@ -25,13 +25,12 @@ player
     transform: translateY(0)
 
   .volume-control
-    margin-left: 8px
+    margin: 0 16px 0 -4px
     overflow: hidden
-    width: 24px
+    width: 42px
     transition: .2s ease-out
-    padding-right: 8px
     md-icon
-      margin-right: 8px
+      margin: 0 8px 0 0
       user-select: none
       &:focus
         outline: 0
@@ -42,6 +41,18 @@ player
       .md-thumb
         cursor: default
     &:hover 
-      width: 130px
+      width: 155px
+      padding: 0 16px 0 0
       
-    
+  .playlist-info
+    margin-left: 16px
+    .list-preview
+      width: 40px
+      margin: 10px 8px 0 0
+      img
+        max-width: 100%
+    .md-body-1
+      text-overflow: ellipsis
+      max-width: 160px
+      overflow: hidden
+      white-space: nowrap

@@ -84,6 +84,7 @@ function PlayerController ($scope, PlayerService, $interval) {
   }
 
   vm.updateStatus = function() {
+    if (vm.stats.paused) return;
     vm.stats.currentTime = Math.round(vm.player.getCurrentTime());
   }
 
