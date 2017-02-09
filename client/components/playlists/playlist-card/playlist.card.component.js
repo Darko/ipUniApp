@@ -7,7 +7,7 @@ export default {
   controller: PlaylistCardController
 }
 
-function PlaylistCardController (Auth, $rootScope, $element) {
+function PlaylistCardController () {
   'ngInject';
   const vm = this;
 
