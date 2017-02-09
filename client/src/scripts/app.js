@@ -4,7 +4,8 @@ const app = angular.module('MusicApp', [
   'satellizer',
   'md.data.table',
   'ngMessages',
-  'ngSanitize'
+  'ngSanitize',
+  'youtube-embed'
 ]);
 
 // Run
@@ -17,6 +18,7 @@ import themeConfig from './theme';
 
 // Services
 import AuthService from '../../components/Auth/auth.service';
+import PlayerService from '../../components/player/player.service';
 
 // Main Controllers
 import IndexController from '../../views/main/home/index.controller';
@@ -44,6 +46,7 @@ import songsAutocomplete from '../../components/songs/songs-autocomplete/songs.a
 
 // Filters
 import TrustFilter from '../../components/filters/trust.filter';
+import TimeFilter from '../../components/filters/time.filter';
 
 app
 .run(appRun)
@@ -54,6 +57,7 @@ app
 
 // Services
 .service('Auth', AuthService)
+.service('PlayerService', PlayerService)
 
 // Main Controllers
 .controller('IndexController', IndexController)
@@ -78,3 +82,4 @@ app
 .component('songsAutocomplete', songsAutocomplete)
 
 .filter('trust', TrustFilter)
+.filter('timeFilter', TimeFilter)

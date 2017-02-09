@@ -1,0 +1,58 @@
+player
+  display: block
+  position: fixed
+  width: 100%
+  bottom: 0
+  background-color: $accent
+  transform: translateY(0)
+  transition: .2s ease-out
+  overflow: visible
+
+  iframe
+    position: absolute
+    display: none
+
+  .md-button md-icon, md-icon
+    color: rgba(white, 0.9)
+
+  &.ng-hide-add.ng-hide-add-active
+    transform: translateY(100%)
+
+  &.ng-hide-remove
+    transform: translateY(100%)
+
+  &.ng-hide-remove.ng-hide-remove-active
+    transform: translateY(0)
+
+  .volume-control
+    margin: 0 16px 0 -4px
+    overflow: hidden
+    width: 42px
+    transition: .2s ease-out
+    md-icon
+      margin: 0 8px 0 0
+      user-select: none
+      &:focus
+        outline: 0
+        box-shadow: 0
+    md-slider
+      min-width: 72px
+      width: 72px
+      .md-thumb
+        cursor: default
+    &:hover 
+      width: 155px
+      padding: 0 16px 0 0
+      
+  .playlist-info
+    margin-left: 16px
+    .list-preview
+      width: 40px
+      margin: 10px 8px 0 0
+      img
+        max-width: 100%
+    .md-body-1
+      text-overflow: ellipsis
+      max-width: 160px
+      overflow: hidden
+      white-space: nowrap

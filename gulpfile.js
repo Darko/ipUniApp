@@ -54,15 +54,15 @@ gulp.task('build-reload', ['build'], function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('sass/**/*.sass', ['sass']);
-  gulp.watch('api/**/*.php', ['php']);
+  gulp.watch(['./sass/**/*.sass', './client/**/*.sass'], ['sass']);
+  gulp.watch('./api/**/*.php', ['php']);
   gulp.watch('./client/**/*.js', ['build-reload']);
 });
 
 gulp.task('browser-sync', function() {
   browserSync.init(['client/src/scripts/*.js', 'client/**/*.html'], {
     proxy: 'http://localhost:8888',
-    notify: false
+    // notify: false
   });
 });
 

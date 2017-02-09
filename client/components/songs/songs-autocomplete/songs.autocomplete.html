@@ -4,20 +4,20 @@
     md-autofocus
     class="flex"
     md-delay="500"
-    md-search-text="$ctrl.searchText"
-    md-selected-item="$ctrl.song"
-    md-items="song in $ctrl.lookupSongs($ctrl.searchText)"
+    md-search-text="vm.searchText"
+    md-selected-item="vm.song"
+    md-items="song in vm.lookupSongs(vm.searchText)"
     md-input-name="songsAutocomplete"
     placeholder="Внеси име на песна"
     md-item-text="song.snippet.title">
     <md-item-template>
-      <span ng-click="$ctrl.addToSongs(song)" class="autocomplete-item-template" md-highlight-text="$ctrl.searchText" md-highlight-flags="^i">{{ song.snippet.title }}</span>
+      <span ng-click="vm.addToSongs(song)" class="autocomplete-item-template" md-highlight-text="vm.searchText" md-highlight-flags="^i">{{ song.snippet.title }}</span>
     </md-item-template>
   </md-autocomplete>
   <md-list class="flex-100 created-songs-list">
-    <md-list-item ng-repeat="song in $ctrl.list.items" class="flex-100 layout-row layout-align-space-between-center">
+    <md-list-item ng-repeat="song in vm.list.items" class="flex-100 layout-row layout-align-space-between-center">
       <span class="title">{{ song.snippet.title }}</span>
-      <md-button class="md-icon-button" ng-click="$ctrl.removeSong(song)">
+      <md-button class="md-icon-button" ng-click="vm.removeSong(song)">
         <md-icon>close</md-icon>
       </md-button>
     </md-list-item>

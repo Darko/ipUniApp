@@ -1,5 +1,5 @@
 export default class PlayListController {
-  constructor(List, $mdDialog, Auth, $http, $document, $state, $mdToast) {
+  constructor(List, $mdDialog, Auth, $http, $document, $state, $mdToast, PlayerService) {
     'ngInject';
 
     const vm = this;
@@ -65,6 +65,9 @@ export default class PlayListController {
             }
           }
         })
+        .then(() => {
+          PlayerService.setPlaylist(vm.list);
+        })
       },
       deleteList: function($event) {
         const confirm = $mdDialog.confirm()
@@ -99,7 +102,10 @@ export default class PlayListController {
         })
       },
       playAll: function($event) {
-        return;
+        PlayerService.play({
+          playlist: vm.list,
+          song: vm.list.items && vm.list.items.length ? vm.list.items[0] : null
+        });
       },
       follow: function($event) {
         const action = vm.isFollowing ? 'unfollow' : 'follow';

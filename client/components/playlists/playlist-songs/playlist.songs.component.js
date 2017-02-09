@@ -5,23 +5,27 @@ export default {
     currentSong: '=',
     following: '='
   },
-  controllerAs: '$ctrl',
+  controllerAs: 'vm',
   controller: PlaylistSongsController
 }
 
-function PlaylistSongsController (Auth, $rootScope) {
+function PlaylistSongsController (Auth, $rootScope, PlayerService) {
   'ngInject';
-  const $ctrl = this;
+  const vm = this;
 
-  $ctrl.loggedIn = Auth.isAuthenticated();
-  $ctrl.user = Auth.getCurrentUser();
+  vm.loggedIn = Auth.isAuthenticated();
+  vm.user = Auth.getCurrentUser();
 
-  $ctrl.playSong = function(song) {
-    $ctrl.currentSong = song;
+  vm.playSong = function(song) {
+    vm.currentSong = song;
+    PlayerService.play({
+      playlist: vm.list,
+      song: vm.currentSong
+    });
   }
 
-  $ctrl.isOwner = function() {
-    return $ctrl.user ? parseInt($ctrl.list.userId) === parseInt($ctrl.user.id) : false;
+  vm.isOwner = function() {
+    return vm.user ? parseInt(vm.list.userId) === parseInt(vm.user.id) : false;
   }
 
 }
