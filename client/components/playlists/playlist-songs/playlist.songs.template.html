@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody md-body>
-      <tr md-row md-select="dessert" md-select-id="name" md-auto-select ng-repeat="song in $ctrl.list.items track by $index">
+      <tr md-row md-select="dessert" md-select-id="name" md-auto-select ng-repeat="song in vm.list.items track by $index">
         <td md-cell>{{ $index + 1 }}</td>
         <td md-cell class="songName">
           <span ng-bind-html="song.snippet.title | trust"></span>
@@ -18,11 +18,11 @@
           <span>{{ song.snippet.channelTitle }}</span>
         </td>
         <td md-cell class="actions">
-          <md-button class="md-icon-button" ng-if="$ctrl.loggedIn && $ctrl.isOwner()">
+          <md-button class="md-icon-button" ng-if="vm.loggedIn && vm.isOwner()">
             <md-icon>delete</md-icon>
             <md-tooltip md-direction="bottom">Избриши од листа</md-tooltip>
           </md-button>
-          <md-button class="md-icon-button" ng-click="$ctrl.playSong(song)">
+          <md-button class="md-icon-button" ng-click="vm.playSong(song)">
             <md-icon>play_arrow</md-icon>
             <md-tooltip md-direction="bottom">Пушти</md-tooltip>
           </md-button>

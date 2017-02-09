@@ -1,6 +1,6 @@
 export default {
   templateUrl: './client/components/playlists/current-song/current.song.template.html',
-  controllerAs: '$ctrl',
+  controllerAs: 'vm',
   controller: CurrentSongController,
   bindings: {
     song: '=',
@@ -10,6 +10,6 @@ export default {
 
 function CurrentSongController (Auth, $rootScope) {
   'ngInject';
-  const $ctrl = this;
+  const vm = this;
 
 }

@@ -3,11 +3,12 @@ export default {
   bindings: {
     playlist: '='
   },
-  controllerAs: '$ctrl',
+  controllerAs: 'vm',
   controller: PlaylistCardController
 }
 
-function PlaylistCardController (Auth, $rootScope) {
+function PlaylistCardController (Auth, $rootScope, $element) {
   'ngInject';
-  const $ctrl = this;
+  const vm = this;
+
 }

@@ -1,21 +1,21 @@
 export default {
   templateUrl: './client/components/navbar/navbar.html',
-  controllerAs: '$ctrl',
+  controllerAs: 'vm',
   controller: NavbarController
 }
 
 function NavbarController ($rootScope) {
   'ngInject';
-  const $ctrl = this;
+  const vm = this;
 
-  $ctrl.isLoggedIn = $rootScope.isLoggedIn;
+  vm.isLoggedIn = $rootScope.isLoggedIn;
 
   $rootScope.$on('user:logout', function() {
-    $ctrl.isLoggedIn = $rootScope.isLoggedIn;
+    vm.isLoggedIn = $rootScope.isLoggedIn;
   });
 
   $rootScope.$on('user:login', function() {
-    $ctrl.isLoggedIn = $rootScope.isLoggedIn;
+    vm.isLoggedIn = $rootScope.isLoggedIn;
   });
 
 }

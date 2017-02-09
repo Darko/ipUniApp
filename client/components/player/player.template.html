@@ -1,0 +1,27 @@
+<div class="flex-100" ng-show="vm.stats.isPlaying">
+  <youtube-video player="vm.player" player-vars="vm.options" video-id="vm.currentSong.videoId"></youtube-video>
+  <div class="container layout-row layout-align-start-center">
+    <div class="layout-row play-widget-actions">
+      <md-button class="md-icon-button">
+        <md-icon>skip_previous</md-icon>
+      </md-button>
+      <md-button class="md-icon-button" ng-click="vm.togglePlayer()">
+        <md-icon>{{ vm.stats.isPaused ? 'play_arrow' : 'pause' }}</md-icon>
+      </md-button>
+      <md-button class="md-icon-button">
+        <md-icon>skip_next</md-icon>
+      </md-button>
+    </div>
+    <div class="flex-5"></div>
+    <div class="player-indicator flex">
+      <md-slider-container>
+        <span>{{ vm.stats.currentTime | timeFilter }}</span>
+        <md-slider flex min="0" max="{{ vm.stats.songLength }}" ng-model="vm.stats.progressed" aria-label="red" id="red-slider">
+          {{ vm.stats.progressed | timeFilter }}
+        </md-slider>
+        <span>{{ vm.stats.songLength | timeFilter }}</span>
+      </md-slider-container>
+    </div>
+    <div class="flex-5"></div>
+  </div>
+</div>

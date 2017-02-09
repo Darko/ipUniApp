@@ -12,32 +12,7 @@
 <body ng-cloak>
   <ui-view class="global-view"></ui-view>
 
-  <div id="play-song-widget" ng-show="vm.player.isPlaying">
-    <div class="container layout-row layout-align-start-center">
-      <div class="layout-row play-widget-actions">
-        <md-button class="md-icon-button">
-          <md-icon>skip_previous</md-icon>
-        </md-button>
-        <md-button class="md-icon-button">
-          <md-icon ng-if="vm.player.isPaused">pause</md-icon>
-          <md-icon ng-if="!vm.player.isPaused">play_arrow</md-icon>
-        </md-button>
-        <md-button class="md-icon-button">
-          <md-icon>skip_next</md-icon>
-        </md-button>
-      </div>
-      <div class="flex-5"></div>
-      <div class="player-indicator flex">
-        <md-slider-container>
-          <span>00:00</span>
-          <md-slider flex min="0" max="255" ng-model="vm.player.timePlayed" aria-label="red" id="red-slider">
-          </md-slider>
-          <span>4:20</span>
-        </md-slider-container>
-      </div>
-      <div class="flex-5"></div>
-    </div>
-  </div>
+  <player class="player-widget"></player>
         
   <script src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -49,6 +24,8 @@
   <script src="bower_components/angular-material-data-table/dist/md-data-table.min.js"></script>
   <script src="bower_components/lodash/dist/lodash.min.js"></script>
   <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="bower_components/angular-youtube-mb/dist/angular-youtube-embed.min.js"></script>
 
   <script src="dist/js/app.js"></script>
 </body>

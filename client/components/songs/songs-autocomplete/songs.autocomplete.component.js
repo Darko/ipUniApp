@@ -5,15 +5,15 @@ export default {
   bindings: {
     list: '='
   },
-  controllerAs: '$ctrl',
+  controllerAs: 'vm',
   controller: SongsAutocompleteController
 }
 
 function SongsAutocompleteController (Auth, $rootScope, $http) {
   'ngInject';
-  const $ctrl = this;
+  const vm = this;
   
-  $ctrl.lookupSongs = function(text) {
+  vm.lookupSongs = function(text) {
     var uri = `/api/songs.php?endpoint=search&q=${text}`;
     return $http.get(uri)
     .then(result => {
@@ -21,7 +21,7 @@ function SongsAutocompleteController (Auth, $rootScope, $http) {
     })
   }
 
-  $ctrl.addToSongs = function(song) {
+  vm.addToSongs = function(song) {
     var newSong = undefined;
     if (!parseInt(song.id)) {
       newSong = {
@@ -36,11 +36,11 @@ function SongsAutocompleteController (Auth, $rootScope, $http) {
       newSong = song;
     }
 
-    $ctrl.list.items.push(newSong);
-    $ctrl.searchText = '';
+    vm.list.items.push(newSong);
+    vm.searchText = '';
   }
 
-  $ctrl.removeSong = function(song) {
-    _.remove($ctrl.list.items, song);
+  vm.removeSong = function(song) {
+    _.remove(vm.list.items, song);
   }
 }
