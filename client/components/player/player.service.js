@@ -24,6 +24,10 @@ export default class PlayerService {
       return _this.current.song;
     }
 
+    this.setCurrentSong = function(song) {
+      _this.current.song = song;
+    }
+
     this.stopPlaying = function(player) {
       player.isPlaying = false;
     }

@@ -13,7 +13,7 @@ function PlayerController ($scope, PlayerService, $interval) {
 
   vm.stats = {
     isPlaying: false,
-    isPaused: false,
+    isPaused: true,
     songLength: 0,
     currentTime: 0,
     progressed: 0
@@ -24,7 +24,6 @@ function PlayerController ($scope, PlayerService, $interval) {
   $scope.$on('youtube.player.ready', ($event, player) => {
     vm.player = player;
     vm.stats.isPlaying = true;
-    // vm.player.playVideo();
     vm.init();
   });
 
@@ -51,7 +50,6 @@ function PlayerController ($scope, PlayerService, $interval) {
   $scope.$on('player:play', (event, data) => {
     vm.stats.isPlaying = true;
     vm.currentSong = data.song;
-    vm.player.playVideo();
   });
 
   $scope.$watch(() => PlayerService.getPlaylist(), playlist => {
