@@ -226,7 +226,7 @@
         $userData->userId = $_GET['userId'] ?  intval(htmlentities(strip_tags($conn->real_escape_string($_GET['userId'])))): null;
         $userData->playlistId = $_GET['playlistId'] ? intval(htmlentities(strip_tags($conn->real_escape_string($_GET['playlistId'])))) : null;
       } else {
-        $userData = $data;
+        $userData = (object) $data;
       }
 
       if (!$userData->userId) {
@@ -255,7 +255,9 @@
           }
         }
       }
-      else $res->liking = 0;
+      else {
+        $res->liking = null;
+      }
 
       if(!$internalReq) {
         echo json_encode($res);
@@ -281,7 +283,8 @@
       $liking = $this->isLiking($userData, true)->liking;
 
       if ($liking) {
-        $res = new stdClass(); $res->already_liking = true;
+        $res = new stdClass();
+        $res->already_liking = true;
         echo json_encode($res);
         return;
       }
@@ -291,7 +294,7 @@
       $result = $conn->query($query);
 
       if ($result) {
-        $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $userData->$playlistId";
+        $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $userData->playlistId";
         $result = $conn->query($query);
         if ($result){
           echo success("Playlist liked");
@@ -320,7 +323,8 @@
       $liking = $this->isLiking($userData, true)->liking;
 
       if ($liking == false) {
-        $res = new stdClass(); $res->already_disliking = true;
+        $res = new stdClass();
+        $res->already_disliking = true;
         echo json_encode($res);
         return;
       }
@@ -330,7 +334,7 @@
       $result = $conn->query($query);
 
       if ($result) {
-        $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $userData->$playlistId";
+        $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $userData->playlistId";
         $result = $conn->query($query);
         if ($result){
           echo success("Playlist disliked");
