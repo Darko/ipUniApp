@@ -209,7 +209,66 @@
       return;
     }
 
+    function isLiking($data = null, $internalReq = false) {
+      if (!$internalReq) {
+        if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+          echo notFound();
+          return;
+        };
+      }
+
+      // $userObj->isAuthenticated();
+      global $conn;
+      $userData = null;
+
+      if (!$data) {
+        $userData = new stdClass();
+        $userData->userId = $_GET['userId'] ?  intval(htmlentities(strip_tags($conn->real_escape_string($_GET['userId'])))): null;
+        $userData->playlistId = $_GET['playlistId'] ? intval(htmlentities(strip_tags($conn->real_escape_string($_GET['playlistId'])))) : null;
+      } else {
+        $userData = $data;
+      }
+
+      if (!$userData->userId) {
+        echo badRequest('Missing parameter userId');
+        return;
+      } else if (!$userData->playlistId) {
+        echo badRequest('Missing parameter playlistId');
+        return;
+      }
+
+      $query = "SELECT liked FROM playlist_likers
+                WHERE userId = $userData->userId
+                AND playlistId = $userData->playlistId";
+
+      $result = $conn->query($query);
+
+      $res = new stdClass();
+
+      if ($result->num_rows) {
+        while ($row = $result->fetch_assoc()) {
+          if ($row["liked"] == 1) {
+            $res->liking = true;
+          }
+          else {
+            $res->liking = false;
+          }
+        }
+      }
+      else $res->liking = 0;
+
+      if(!$internalReq) {
+        echo json_encode($res);
+      }
+      return $res;
+    }
+
     function like() {
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        echo notFound();
+        return;
+      };
+
       $data = getContents();
       if (!$data) {
         echo badRequest();
@@ -218,21 +277,67 @@
 
       global $conn;
       array_walk($data, 'array_sanitaze');
-      $data = (object) $data;
-      $playlistId = $data->playlistId;
+      $userData = (object) $data;
+      $liking = $this->isLiking($userData, true)->liking;
 
-      if (isset($data->like)) {
-        $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $playlistId";
-      }
-      else if (isset($data->dislike)) {
-        $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $playlistId";
-      }
-      $result = $conn->query($query);
-      if ($result) {
-        echo success("Dis/Liked playlist");
+      if ($liking) {
+        $res = new stdClass(); $res->already_liking = true;
+        echo json_encode($res);
         return;
       }
-      echo notFound('Playlist with such id was not found');
+
+      $query = "INSERT INTO playlist_likers (playlistId, userId, liked, disliked)
+                VALUES ('$userData->playlistId', '$userData->userId', 1, 0)";
+      $result = $conn->query($query);
+
+      if ($result) {
+        $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $userData->$playlistId";
+        $result = $conn->query($query);
+        if ($result){
+          echo success("Playlist liked");
+          return;
+        }
+      }
+      echo notFound();
+      return;
+    }
+
+    function dislike() {
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        echo notFound();
+        return;
+      };
+
+      $data = getContents();
+      if (!$data) {
+        echo badRequest();
+        return;
+      }
+
+      global $conn;
+      array_walk($data, 'array_sanitaze');
+      $userData = (object) $data;
+      $liking = $this->isLiking($userData, true)->liking;
+
+      if ($liking == false) {
+        $res = new stdClass(); $res->already_disliking = true;
+        echo json_encode($res);
+        return;
+      }
+
+      $query = "INSERT INTO playlist_likers (playlistId, userId, liked, disliked)
+                VALUES ('$userData->playlistId', '$userData->userId', 0, 1)";
+      $result = $conn->query($query);
+
+      if ($result) {
+        $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $userData->$playlistId";
+        $result = $conn->query($query);
+        if ($result){
+          echo success("Playlist disliked");
+          return;
+        }
+      }
+      echo notFound();
       return;
     }
 
@@ -302,7 +407,7 @@
 
       global $conn;
       array_walk($data, 'array_sanitaze');
-      
+
       $userData = (object) $data;
       $following = $this->isFollowing($userData, true)->following;
 
