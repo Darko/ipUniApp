@@ -248,15 +248,15 @@
       if ($result->num_rows) {
         while ($row = $result->fetch_assoc()) {
           if ($row["liked"] == 1) {
-            $res->liking = true;
+            $res->liking = "like";
           }
           else {
-            $res->liking = false;
+            $res->liking = "dislike";
           }
         }
       }
       else {
-        $res->liking = null;
+        $res->liking = "none";
       }
 
       if(!$internalReq) {
@@ -281,25 +281,39 @@
       array_walk($data, 'array_sanitaze');
       $userData = (object) $data;
       $liking = $this->isLiking($userData, true)->liking;
+      $res = new stdClass();
 
-      if ($liking) {
-        $res = new stdClass();
-        $res->already_liking = true;
-        echo json_encode($res);
-        return;
+      switch ($liking) {
+        case 'like':
+          $query = "DELETE FROM playlist_likers WHERE playlistId = $userData->playlistId AND userId = $userData->userId";
+          $update = "likes = likes - 1";
+          $res->like = false;
+          $res->dislike = false;
+          break;
+        case 'dislike':
+          $query = "UPDATE playlist_likers SET liked = 1, disliked = 0
+                    WHERE playlistId = $userData->playlistId AND userId = $userData->userId";
+          $update = "likes = likes + 1, dislikes = dislikes - 1";
+          $res->like = true;
+          $res->dislike = false;
+          break;
+        default:
+          $query = "INSERT INTO playlist_likers (playlistId, userId, liked, disliked)
+                    VALUES ('$userData->playlistId', '$userData->userId', 1, 0)";
+          $update = "likes = likes + 1";
+          $res->like = true;
+          $res->dislike = false;
+          break;
       }
 
-      $query = "INSERT INTO playlist_likers (playlistId, userId, liked, disliked)
-                VALUES ('$userData->playlistId', '$userData->userId', 1, 0)";
       $result = $conn->query($query);
-
       if ($result) {
-        $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $userData->playlistId";
-        $result = $conn->query($query);
-        if ($result){
-          echo success("Playlist liked");
-          return;
-        }
+        $query = "UPDATE playlists SET $update WHERE id = $userData->playlistId ";
+          $result = $conn->query($query);
+          if ($result){
+            echo json_encode($res);
+            return;
+          }
       }
       echo notFound();
       return;
@@ -321,25 +335,39 @@
       array_walk($data, 'array_sanitaze');
       $userData = (object) $data;
       $liking = $this->isLiking($userData, true)->liking;
+      $res = new stdClass();
 
-      if ($liking == false) {
-        $res = new stdClass();
-        $res->already_disliking = true;
-        echo json_encode($res);
-        return;
+      switch ($liking) {
+        case 'like':
+          $query = "UPDATE playlist_likers SET liked = 0, disliked = 1
+                    WHERE playlistId = $userData->playlistId AND userId = $userData->userId";
+          $update = "likes = likes - 1, dislikes = dislikes + 1";
+          $res->like = false;
+          $res->dislike = true;
+          break;
+        case 'dislike': 
+          $query = "DELETE FROM playlist_likers WHERE playlistId = $userData->playlistId AND userId = $userData->userId";
+          $update = "dislikes = dislikes - 1";
+          $res->like = false;
+          $res->dislike = false;
+          break;
+        default:
+          $query = "INSERT INTO playlist_likers (playlistId, userId, liked, disliked)
+                    VALUES ('$userData->playlistId', '$userData->userId', 0, 1)";
+          $update = "dislikes = dislikes + 1";
+          $res->like = false;
+          $res->dislike = true;
+          break;
       }
 
-      $query = "INSERT INTO playlist_likers (playlistId, userId, liked, disliked)
-                VALUES ('$userData->playlistId', '$userData->userId', 0, 1)";
       $result = $conn->query($query);
-
       if ($result) {
-        $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $userData->playlistId";
-        $result = $conn->query($query);
-        if ($result){
-          echo success("Playlist disliked");
-          return;
-        }
+        $query = "UPDATE playlists SET $update WHERE id = $userData->playlistId ";
+          $result = $conn->query($query);
+          if ($result){
+            echo json_encode($res);
+            return;
+          }
       }
       echo notFound();
       return;
