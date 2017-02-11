@@ -66,4 +66,4 @@ gulp.task('browser-sync', function() {
   });
 });
 
-gulp.task('default', ['mamp', 'browser-sync', 'watch', 'build-reload']);
+gulp.task('default', ['mamp', 'browser-sync', 'watch', 'build-reload', 'sass']);
