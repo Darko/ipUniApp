@@ -3,7 +3,13 @@ export default class PlayListController {
     'ngInject';
 
     const vm = this;
-    vm.list = List.data || {};
+
+    if (List.data.status === 404) {
+      $state.go('error.404')
+      return;
+    }
+
+    vm.list = List.data;
     vm.user = Auth.getCurrentUser();
     vm.loggedIn = Auth.isAuthenticated();
     vm.isFollwing = false;

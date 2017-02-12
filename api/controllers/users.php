@@ -1,12 +1,20 @@
 <?php
+  include_once 'components/functions.php';
+  enableErrors();
+
+  include_once 'config/config.php';
   include_once 'components/connect.php';
   include_once 'components/errors.php';
   include_once 'components/loginApis.php';
 
+  include_once 'vendor/firebase/php-jwt/src/JWT.php';
+  use \Firebase\JWT\JWT;
+
+
   $headers = getallheaders();
 
   class User {
-    function authenticate() {
+    public static function authenticate() {
       global $headers;
 
       $access_token = null;
@@ -19,6 +27,7 @@
         return;
       } else if (!$provider) {
         echo badRequest('Missing auth parameter: provider');
+        return;
       }
 
       global $conn;
@@ -28,7 +37,7 @@
 
       $res = json_decode(file_get_contents($uri, false));
 
-      $userData = $this->createUserData($res, $provider);
+      $userData = self::createUserData($res, $provider);
 
       $query = "SELECT email, id FROM users WHERE email = '$userData->email'";
       $user = $conn->query($query);
@@ -37,28 +46,36 @@
       // if user with email exists, return to client, else create and return
       if ($user['email']) {
         $userData->id = $user['id'];
-
-        echo json_encode($userData);
-        return;
       }
       else {
         $query = "INSERT INTO users (username, email, avatar, role) VALUES ('$userData->username', '$userData->email', '$userData->avatar' , 'user')";
         $conn->query($query);
 
         $userData->id = $conn->insert_id;
-
-        echo json_encode($userData);
-        return;
       }
+
+      $res = new stdClass();
+
+      $res->token = self::createToken($userData);
+      $res->user = $userData;
+
+      self::setAuthorizationHeader($res->token);
+      echo json_encode($res);
+      return;
     }
 
-    function createUserData($data, $provider) {
+    static function createToken($data) {
+      $token = JWT::encode($data, Config::getSecret());
+      return $token;
+    }
+
+    static function createUserData($data, $provider) {
       $user = new stdClass();
 
       if ($provider === 'facebook') {
-        $user -> email = $data->email;
+        $user -> email    = $data->email;
         $user -> username = $data->name;
-        $user -> avatar = $data->picture->data->url;
+        $user -> avatar   = $data->picture->data->url;
       } else if ($provider === 'google') {
         // do google
       }
@@ -66,7 +83,7 @@
       return $user;
     }
 
-    function showOne() {
+    public static function showOne() {
       global $headers;
 
       $access_token = explode(" ", $headers['authorization'])[1];
@@ -93,6 +110,35 @@
 
       echo json_encode($row);
       return;
+    }
+
+    public static function isAuthenticated($token = null) {
+      $token = $_COOKIE['token'] ? $_COOKIE['token'] : $token; 
+
+      // If there's no token, it's unauthorized
+      if (!$token) {
+        echo unauthorized();
+        return;
+      }
+
+      // Decode token and get user data
+      $key = Config::getSecret();
+      $user = JWT::decode($token, $key, array('HS256'));
+
+      $res = new stdClass();
+      $res->user = $user;
+
+      self::setAuthorizationHeader($token);
+      echo json_encode($res);
+      return;
+    }
+
+    public static function setAuthorizationHeader($jwt) {
+      $mode = Config::getMode();
+      $token = $jwt;
+      $dayzz = time()+60*60*24*30; // 30 days
+
+      return setcookie('token', $token);
     }
   }
 ?>

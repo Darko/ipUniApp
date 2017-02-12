@@ -1,5 +1,5 @@
 export default class LoginController {
-  constructor($state, $http, $rootScope, Auth) {
+  constructor($state, $http, $rootScope, Auth, $cookies, $window) {
     'ngInject';
 
     const vm = this;
@@ -9,15 +9,8 @@ export default class LoginController {
 
     vm.login = function(provider) {
       Auth.authenticate(provider)
-      .then(data => {
-        return $http.get(`/api/users.php?endpoint=authenticate&provider=facebook`)
-      })
-      .then(response => {
-        const user = response.data;
-        localStorage.setItem('user', JSON.stringify(user));
-
+      .then(() => {
         if (returnState) {
-          $rootScope.$emit('user:login', response.data);
           $state.go(returnState);
         }
       })

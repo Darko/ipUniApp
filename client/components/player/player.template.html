@@ -6,7 +6,10 @@
         <img ng-src="{{ ::vm.playlist.thumbnail }}">
       </div>
       <div class="layout-row layout-align-start-center">
-        <p class="md-body-1">{{ vm.currentSong.snippet.title }}</p>
+        <p class="md-body-1">
+          {{ vm.currentSong.snippet.title }}
+          <md-tooltip md-direction="top">{{ vm.currentSong.snippet.title }}</md-tooltip>
+        </p>
       </div>
     </div>
     <div class="layout-row play-widget-actions">

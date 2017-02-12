@@ -5,7 +5,8 @@ const app = angular.module('MusicApp', [
   'md.data.table',
   'ngMessages',
   'ngSanitize',
-  'youtube-embed'
+  'youtube-embed',
+  'ngCookies'
 ]);
 
 // Run
@@ -36,6 +37,9 @@ import YourListsController from '../../views/playlists/your-lists/yourlists.cont
 // Auth Controllers
 import LoginController from '../../views/auth/login/login.controller';
 
+// Error Controllers
+import NotFoundController from '../../views/error/404/404.controller';
+
 // Components
 import navbar from '../../components/navbar/navbar.component';
 import player from '../../components/player/player.component';
@@ -51,9 +55,9 @@ import TimeFilter from '../../components/filters/time.filter';
 app
 .run(appRun)
 
-.config(routes)
 .config(authConfig)
 .config(themeConfig)
+.config(routes)
 
 // Services
 .service('Auth', AuthService)
@@ -72,8 +76,13 @@ app
 .controller('PlaylistsController', PlaylistsController)
 .controller('YourListsController', YourListsController)
 
+// Auth Controllerrs
 .controller('LoginController', LoginController)
 
+// Error Controllers
+.controller('NotFoundController', NotFoundController)
+
+// Components
 .component('navbar', navbar)
 .component('playlistCard', playlistCard)
 .component('playlistSongs', playlistSongs)
@@ -81,5 +90,6 @@ app
 .component('player', player)
 .component('songsAutocomplete', songsAutocomplete)
 
+// Filters
 .filter('trust', TrustFilter)
 .filter('timeFilter', TimeFilter)

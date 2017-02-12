@@ -1,11 +1,13 @@
+import _ from 'lodash';
+
 export default class AuthService {
-  constructor($auth, $rootScope) {
+  constructor($auth, $rootScope, $cookies, $http, $log) {
     const _this = this;
 
-    this.userData = $auth.getPayload();
+    this.userData = null;
     
     this.isAuthenticated = function () {
-      return $auth.isAuthenticated();
+      return _this.userData ? true : false;
     };
 
     this.isAdmin = function () {
@@ -16,20 +18,33 @@ export default class AuthService {
     };
 
     this.authenticate = function (provider) {
+      $log.info('Authenticating...');
       return $auth.authenticate(provider)
+      .then(() => {
+        return $http.get(`/api/users.php?endpoint=authenticate&provider=${provider}`);
+      })
+      .then(response => {
+        $cookies.put('token', response.data.token);
+        delete response.data.token;
+
+        $rootScope.$emit('user:login', response.data.user);
+
+        $log.info('Authenticated!');
+        return response.data.user;
+      })
     };
 
     this.logout = function () {
       return $auth.logout()
       .then(function() {
         $rootScope.user = _this.userData = undefined;
+        $cookies.remove('token');
         $rootScope.$emit('user:logout');
       })
     };
 
     this.setUser = function(data) {
-      this.userData = data;
-      $rootScope.user = data;
+      _this.userData = data;
     }
 
     this.getCurrentUser = function () {
