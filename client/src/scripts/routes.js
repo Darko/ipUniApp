@@ -98,5 +98,17 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
     }
   })
 
-  $urlRouterProvider.otherwise('/');
+  // Error
+  .state('error', {
+    url: '/error',
+    abstract: true,
+    templateUrl: './client/views/error/error.html'
+  })
+  .state('error.404', {
+    url: '/404',
+    templateUrl: './client/views/error/404/404.html',
+    controller: 'NotFoundController as vm'
+  })
+
+  $urlRouterProvider.otherwise('/error/404');
 }

@@ -1,5 +1,7 @@
-export default class NotFoundController{
-  constructor($state) {
+export default class NotFoundController {
+  constructor() {
+    'ngInject';
+
     const vm = this;
   }
 }
