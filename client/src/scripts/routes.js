@@ -8,16 +8,6 @@ export default function($stateProvider, $locationProvider, $urlRouterProvider, $
     controller: 'HomePageController as vm',
     templateUrl: './client/views/main/home/home.html',
     resolve: {
-      Your: function($http, Auth) {
-        if (Auth.isAuthenticated()) {
-          const id = Auth.getCurrentUser().id;
-          return $http.get(`/api/playlists.php?endpoint=index&userId=${id}`);
-        } else {
-          return {
-            data: []
-          }
-        }
-      },
       Popular: function($http, Auth) {
         return $http.get(`/api/playlists.php?endpoint=popular`);
       },

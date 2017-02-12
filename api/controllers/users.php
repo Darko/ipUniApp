@@ -1,14 +1,15 @@
 <?php
+  include_once 'components/functions.php';
+  enableErrors();
 
   include_once 'config/config.php';
   include_once 'components/connect.php';
   include_once 'components/errors.php';
   include_once 'components/loginApis.php';
-  include_once 'components/functions.php';
+
   include_once 'vendor/firebase/php-jwt/src/JWT.php';
   use \Firebase\JWT\JWT;
 
-  enableErrors();
 
   $headers = getallheaders();
 
@@ -26,6 +27,7 @@
         return;
       } else if (!$provider) {
         echo badRequest('Missing auth parameter: provider');
+        return;
       }
 
       global $conn;
@@ -52,10 +54,13 @@
         $userData->id = $conn->insert_id;
       }
 
-      $token = $this->createToken($userData);
-      $this->setAuthorizationHeader($token);
+      $res = new stdClass();
 
-      echo json_encode($token);
+      $res->token = $this->createToken($userData);
+      $res->user = $userData;
+
+      $this->setAuthorizationHeader($res->token);
+      echo json_encode($res);
       return;
     }
 
@@ -107,29 +112,33 @@
       return;
     }
 
-    function isAuthenticated() {
-      global $headers;
+    function isAuthenticated($token = null) {
+      $token = $_COOKIE['token'] ? $_COOKIE['token'] : $token; 
 
-      if (!$headers['Authorization']) {
+      // If there's no token, it's unauthorized
+      if (!$token) {
         echo unauthorized();
         return;
       }
 
-      $mode = explode(" ", $headers['Authorization'])[0];
-      $token = explode(" ", $headers['Authorization'])[1];
+      // Decode token and get user data
       $key = Config::getSecret();
+      $user = JWT::decode($token, $key, array('HS256'));
 
-      $jwt = JWT::decode($token, $key, array('HS256'));
+      $res = new stdClass();
+      $res->user = $user;
 
-      echo json_encode($jwt);
+      $this->setAuthorizationHeader($token);
+      echo json_encode($res);
       return;
     }
 
     function setAuthorizationHeader($jwt) {
       $mode = Config::getMode();
-      $token = $mode . ' ' . $jwt;
-      // return $token;
-      return header('Authorization: '. $token);
+      $token = $jwt;
+      $dayzz = time()+60*60*24*30; // 30 days
+
+      return setcookie('token', $token);
     }
   }
 ?>

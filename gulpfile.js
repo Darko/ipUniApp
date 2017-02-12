@@ -66,7 +66,7 @@ gulp.task('watch', function() {
 gulp.task('browser-sync', function() {
   browserSync.init(['client/src/scripts/*.js', 'client/**/*.html'], {
     proxy: 'http://localhost:8888',
-    // notify: false
+    notify: false
   });
 });
 

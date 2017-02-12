@@ -5,7 +5,8 @@ const app = angular.module('MusicApp', [
   'md.data.table',
   'ngMessages',
   'ngSanitize',
-  'youtube-embed'
+  'youtube-embed',
+  'ngCookies'
 ]);
 
 // Run
@@ -51,9 +52,9 @@ import TimeFilter from '../../components/filters/time.filter';
 app
 .run(appRun)
 
-.config(routes)
 .config(authConfig)
 .config(themeConfig)
+.config(routes)
 
 // Services
 .service('Auth', AuthService)

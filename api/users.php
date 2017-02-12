@@ -15,7 +15,7 @@
     case 'authenticate':
       $user -> authenticate();
       break;
-    case 'xd':
+    case 'isAuthenticated':
       $user -> isAuthenticated();
       break;
     default:
