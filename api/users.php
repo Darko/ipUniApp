@@ -15,6 +15,9 @@
     case 'authenticate':
       $user -> authenticate();
       break;
+    case 'xd':
+      $user -> isAuthenticated();
+      break;
     default:
       echo notFound();
       break;

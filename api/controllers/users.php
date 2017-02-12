@@ -1,7 +1,14 @@
 <?php
+
+  include_once 'config/config.php';
   include_once 'components/connect.php';
   include_once 'components/errors.php';
   include_once 'components/loginApis.php';
+  include_once 'components/functions.php';
+  include_once 'vendor/firebase/php-jwt/src/JWT.php';
+  use \Firebase\JWT\JWT;
+
+  enableErrors();
 
   $headers = getallheaders();
 
@@ -37,28 +44,33 @@
       // if user with email exists, return to client, else create and return
       if ($user['email']) {
         $userData->id = $user['id'];
-
-        echo json_encode($userData);
-        return;
       }
       else {
         $query = "INSERT INTO users (username, email, avatar, role) VALUES ('$userData->username', '$userData->email', '$userData->avatar' , 'user')";
         $conn->query($query);
 
         $userData->id = $conn->insert_id;
-
-        echo json_encode($userData);
-        return;
       }
+
+      $token = $this->createToken($userData);
+      $this->setAuthorizationHeader($token);
+
+      echo json_encode($token);
+      return;
+    }
+
+    function createToken($data) {
+      $token = JWT::encode($data, Config::getSecret());
+      return $token;
     }
 
     function createUserData($data, $provider) {
       $user = new stdClass();
 
       if ($provider === 'facebook') {
-        $user -> email = $data->email;
+        $user -> email    = $data->email;
         $user -> username = $data->name;
-        $user -> avatar = $data->picture->data->url;
+        $user -> avatar   = $data->picture->data->url;
       } else if ($provider === 'google') {
         // do google
       }
@@ -93,6 +105,31 @@
 
       echo json_encode($row);
       return;
+    }
+
+    function isAuthenticated() {
+      global $headers;
+
+      if (!$headers['Authorization']) {
+        echo unauthorized();
+        return;
+      }
+
+      $mode = explode(" ", $headers['Authorization'])[0];
+      $token = explode(" ", $headers['Authorization'])[1];
+      $key = Config::getSecret();
+
+      $jwt = JWT::decode($token, $key, array('HS256'));
+
+      echo json_encode($jwt);
+      return;
+    }
+
+    function setAuthorizationHeader($jwt) {
+      $mode = Config::getMode();
+      $token = $mode . ' ' . $jwt;
+      // return $token;
+      return header('Authorization: '. $token);
     }
   }
 ?>
