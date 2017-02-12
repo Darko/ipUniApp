@@ -41,13 +41,11 @@ export default class AuthService {
     };
 
     this.logout = function () {
-      $log.info('Logging out...');
       return $auth.logout()
       .then(function() {
         $rootScope.user = _this.userData = undefined;
         $cookies.remove('token');
         $rootScope.$emit('user:logout');
-        $log.info('User logged out!');
       })
     };
 
