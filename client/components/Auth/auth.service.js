@@ -4,16 +4,10 @@ export default class AuthService {
   constructor($auth, $rootScope, $cookies, $http, $log) {
     const _this = this;
 
-    this.userData = $auth.getPayload();
+    this.userData = null;
     
     this.isAuthenticated = function () {
-      return $http.get('api/users.php?endpoint=isAuthenticated')
-      .then(res => {
-        if (res.data.user) {
-          _this.setUser(res.data.user);
-        }
-        return res.data.user ? true : false;
-      })
+      return _this.userData ? true : false;
     };
 
     this.isAdmin = function () {

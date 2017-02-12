@@ -10,13 +10,13 @@
   // Router
   switch($endpoint) {
     case 'showOne':
-      $user -> showOne();
+      User::showOne();
       break;
     case 'authenticate':
-      $user -> authenticate();
+      User::authenticate();
       break;
     case 'isAuthenticated':
-      $user -> isAuthenticated();
+      User::isAuthenticated();
       break;
     default:
       echo notFound();

@@ -4,16 +4,12 @@
   <div class="hero-text layout-column layout-align-end-center">
     <h2>Donger Предлог</h2>
     <h1>{{ vm.new[0].title }}</h1>
-    <div class="actions layout-row layout-align-center-center">
-      <md-button class="md-raised md-accent md-hue-1" ui-sref="playlists.playlist({ playlistId: vm.new[0].id })">
-        <md-icon>play_arrow</md-icon> Пушти веднаш
-      </md-button>
-      <md-button>
-        <md-icon>share</md-icon> Сподели
-      </md-button>
-    </div>
+    <md-button class="md-raised md-accent md-hue-1" ui-sref="playlists.playlist({ playlistId: vm.new[0].id })">
+      <md-icon>play_arrow</md-icon> Пушти веднаш
+    </md-button>
     <div class="recommended-stats layout-row layout-align-center-center">
       <p>1280 лајкови</p>
+      <p>Креирано од: {{ 'Darko Efremov' }}</p>
     </div>
   </div>
 </section>

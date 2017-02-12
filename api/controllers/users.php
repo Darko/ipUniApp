@@ -14,7 +14,7 @@
   $headers = getallheaders();
 
   class User {
-    function authenticate() {
+    public static function authenticate() {
       global $headers;
 
       $access_token = null;
@@ -37,7 +37,7 @@
 
       $res = json_decode(file_get_contents($uri, false));
 
-      $userData = $this->createUserData($res, $provider);
+      $userData = self::createUserData($res, $provider);
 
       $query = "SELECT email, id FROM users WHERE email = '$userData->email'";
       $user = $conn->query($query);
@@ -56,20 +56,20 @@
 
       $res = new stdClass();
 
-      $res->token = $this->createToken($userData);
+      $res->token = self::createToken($userData);
       $res->user = $userData;
 
-      $this->setAuthorizationHeader($res->token);
+      self::setAuthorizationHeader($res->token);
       echo json_encode($res);
       return;
     }
 
-    function createToken($data) {
+    static function createToken($data) {
       $token = JWT::encode($data, Config::getSecret());
       return $token;
     }
 
-    function createUserData($data, $provider) {
+    static function createUserData($data, $provider) {
       $user = new stdClass();
 
       if ($provider === 'facebook') {
@@ -83,7 +83,7 @@
       return $user;
     }
 
-    function showOne() {
+    public static function showOne() {
       global $headers;
 
       $access_token = explode(" ", $headers['authorization'])[1];
@@ -112,7 +112,7 @@
       return;
     }
 
-    function isAuthenticated($token = null) {
+    public static function isAuthenticated($token = null) {
       $token = $_COOKIE['token'] ? $_COOKIE['token'] : $token; 
 
       // If there's no token, it's unauthorized
@@ -128,12 +128,12 @@
       $res = new stdClass();
       $res->user = $user;
 
-      $this->setAuthorizationHeader($token);
+      self::setAuthorizationHeader($token);
       echo json_encode($res);
       return;
     }
 
-    function setAuthorizationHeader($jwt) {
+    public static function setAuthorizationHeader($jwt) {
       $mode = Config::getMode();
       $token = $jwt;
       $dayzz = time()+60*60*24*30; // 30 days

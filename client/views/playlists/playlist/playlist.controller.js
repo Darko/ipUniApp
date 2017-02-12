@@ -3,7 +3,7 @@ export default class PlayListController {
     'ngInject';
 
     const vm = this;
-    vm.list = List.data || {};
+    vm.list = List.data;
     vm.user = Auth.getCurrentUser();
     vm.loggedIn = Auth.isAuthenticated();
     vm.isFollwing = false;
