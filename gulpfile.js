@@ -8,6 +8,7 @@ var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
 var babelify = require('babelify');
+var autoprefixer = require('gulp-autoprefixer');
  
 gulp.task('start', function(cb){
   mamp({}, 'start', cb);
@@ -25,10 +26,13 @@ gulp.task('php', function() {
 
 gulp.task('sass', function () {
   gulp.src('sass/**/*.sass')
+  .pipe(sourcemaps.init())
   // .pipe(sass({includePaths: ['sass'], outputStyle: 'compressed'}))
   .pipe(sass())
+  .pipe(autoprefixer())
+  .pipe(sourcemaps.write())
   .pipe(gulp.dest('dist/css'))
-  .pipe(browserSync.reload({stream: true}));
+  .pipe(browserSync.reload({stream: true}))
 });
 
 gulp.task('build', function () {
@@ -62,7 +66,7 @@ gulp.task('watch', function() {
 gulp.task('browser-sync', function() {
   browserSync.init(['client/src/scripts/*.js', 'client/**/*.html'], {
     proxy: 'http://localhost:8888',
-    // notify: false
+    notify: false
   });
 });
 
