@@ -1,6 +1,6 @@
 <?php
   include_once 'components/functions.php';
-  enableErrors();
+  // enableErrors();
 
   include_once 'config/config.php';
   include_once 'components/connect.php';
@@ -112,13 +112,13 @@
       return;
     }
 
-    public static function isAuthenticated($token = null) {
+    public static function isAuthenticated($token = null, $internal = false) {
       $token = $_COOKIE['token'] ? $_COOKIE['token'] : $token; 
 
       // If there's no token, it's unauthorized
       if (!$token) {
         echo unauthorized();
-        return;
+        return false;
       }
 
       // Decode token and get user data
@@ -129,8 +129,12 @@
       $res->user = $user;
 
       self::setAuthorizationHeader($token);
-      echo json_encode($res);
-      return;
+
+      if (!$internal) {
+        echo json_encode($res);
+      }
+
+      return true;
     }
 
     public static function setAuthorizationHeader($jwt) {
