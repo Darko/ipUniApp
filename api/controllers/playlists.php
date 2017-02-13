@@ -165,7 +165,7 @@
           "role" => $row['role'],
           "avatar" => $row['avatar']
         );
-        $res = (object) $obj;
+        $res[] = (object) $obj;
       }
 
       echo json_encode($res);
@@ -300,7 +300,7 @@
           "role" => $row['role'],
           "avatar" => $row['avatar']
           );
-        $res = (object) $obj;
+        $res[] = (object) $obj;
       }
 
       echo json_encode($res);
@@ -340,7 +340,7 @@
           "role" => $row['role'],
           "avatar" => $row['avatar']
           );
-        $res = (object) $obj;
+        $res[] = (object) $obj;
       }
 
       echo json_encode($res);
