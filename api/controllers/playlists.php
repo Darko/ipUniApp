@@ -19,7 +19,7 @@
       global $conn;
 
       $data->private = ( isset($data->private) && $data->private ) ? 1 : 0;
-      $data->thumbnail = $data->items[0]['snippet']['thumbnail'];
+      $data->thumbnail = ($data->items[0]['snippet']['thumbnail'] != "") ? $data->items[0]['snippet']['thumbnail'] : "https://www.beatgasm.com/assets/icons/mini-play-29d59f0ddbba5c2fa2373efc6133da7e.png";
       $createdAt = date("Y-m-d", time());
 
       $query = "INSERT INTO playlists (title, createdAt, thumbnail, private, songsCount, likes, dislikes)
@@ -302,7 +302,7 @@
 
       global $conn;
       array_walk($data, 'array_sanitaze');
-      
+
       $userData = (object) $data;
       $following = $this->isFollowing($userData, true)->following;
 
