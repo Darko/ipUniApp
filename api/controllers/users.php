@@ -38,6 +38,7 @@
       $res = json_decode(file_get_contents($uri, false));
 
       $userData = self::createUserData($res, $provider);
+      $userData->username = preg_replace('/[^a-zA-Z0-9 ]/', '', $userData->username);
 
       $query = "SELECT email, id FROM users WHERE email = '$userData->email'";
       $user = $conn->query($query);
@@ -50,7 +51,6 @@
       else {
         $query = "INSERT INTO users (username, email, avatar, role) VALUES ('$userData->username', '$userData->email', '$userData->avatar' , 'user')";
         $conn->query($query);
-
         $userData->id = $conn->insert_id;
       }
 
@@ -102,7 +102,7 @@
       $query = "SELECT * FROM users WHERE id = " . $userId;
       $result = $conn->query($query);
       $row = $result->fetch_assoc();
-      
+
       if (!$row) {
         echo notFound();
         return;
@@ -113,7 +113,7 @@
     }
 
     public static function isAuthenticated($token = null) {
-      $token = $_COOKIE['token'] ? $_COOKIE['token'] : $token; 
+      $token = $_COOKIE['token'] ? $_COOKIE['token'] : $token;
 
       // If there's no token, it's unauthorized
       if (!$token) {
