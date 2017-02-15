@@ -45,6 +45,9 @@
     case 'isfollowing':
       $playlist->isFollowing();
       break;
+    case 'featured':
+      $playlist->featuredList();
+      break;
     default:
       echo notFound();
       break;

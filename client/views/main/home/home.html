@@ -1,15 +1,14 @@
 <navbar></navbar>
 <section class="hero">
-  <div class="background-image"><img src="{{ vm.new[0].thumbnail }}"></div>
+  <div class="background-image"><img src="{{ vm.featured.thumbnail }}"></div>
   <div class="hero-text layout-column layout-align-end-center">
     <h2>Donger Предлог</h2>
-    <h1>{{ vm.new[0].title }}</h1>
-    <md-button class="md-raised md-accent md-hue-1" ui-sref="playlists.playlist({ playlistId: vm.new[0].id })">
+    <h1>{{ vm.featured.title }}</h1>
+    <md-button class="md-raised md-accent md-hue-1" ui-sref="playlists.playlist({ playlistId: vm.featured.id })">
       <md-icon>play_arrow</md-icon> Пушти веднаш
     </md-button>
     <div class="recommended-stats layout-row layout-align-center-center">
-      <p>1280 лајкови</p>
-      <p>Креирано од: {{ 'Darko Efremov' }}</p>
+      <p>Креирано од: {{ vm.featured.username }}</p>
     </div>
   </div>
 </section>
@@ -17,7 +16,7 @@
 <section id="newPlaylists" class="popular-playlists layout-row layout-align-start-start layout-wrap">
   <div class="container">
     <h1 class="front-section-title md-title">Нови</h1>
-    <playlist-card playlist="playlist" ng-repeat="playlist in vm.new | limitTo: 4"></playlist-card>
+    <playlist-card playlist="playlist" ng-repeat="playlist in vm.new | limitTo: 4 | orderBy: '-createdAt'"></playlist-card>
   </div>
 </section>
 

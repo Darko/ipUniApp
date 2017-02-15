@@ -2,6 +2,8 @@
   include_once 'components/errors.php';
   include_once 'components/functions.php';
 
+  enableErrors();
+
   class Playlist {
     function create() {
       $data = (object) getContents();
@@ -19,7 +21,7 @@
       global $conn;
 
       $data->private = ( isset($data->private) && $data->private ) ? 1 : 0;
-      $data->thumbnail = $data->items[0]['snippet']['thumbnail'];
+      $data->thumbnail = ($data->items[0]['snippet']['thumbnail'] != "") ? $data->items[0]['snippet']['thumbnail'] : "/dist/assets/images/defaultlistimage.png";
       $createdAt = date("Y-m-d", time());
 
       $query = "INSERT INTO playlists (title, createdAt, thumbnail, private, songsCount, likes, dislikes)
@@ -302,7 +304,7 @@
 
       global $conn;
       array_walk($data, 'array_sanitaze');
-      
+
       $userData = (object) $data;
       $following = $this->isFollowing($userData, true)->following;
 
@@ -409,6 +411,26 @@
         echo json_encode($res);
       }
       return $res;
+    }
+
+    function featuredList() {
+      global $conn;
+
+      $query = "SELECT COUNT(*) FROM playlists";
+      $result = $conn->query($query);
+      $count = intval($result->fetch_assoc()["COUNT(*)"]);
+
+      $random = rand(1, $count);
+
+      $query = "SELECT * FROM playlists INNER JOIN playlist_identity ON playlist_identity.playlistId = playlists.id INNER JOIN users ON users.id = playlist_identity.userId WHERE playlists.id = " . intval($random);
+
+      $result = $conn->query($query);
+
+      $res = new stdClass();
+      $res->playlist = $result->fetch_assoc();
+
+      echo json_encode($res);
+      return;
     }
 
   }
