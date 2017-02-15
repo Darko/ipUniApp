@@ -35,7 +35,6 @@
       }
       else {
         $DEVELOPER_KEY = 'AIzaSyCoXR0IQnJf_29KC62K_hl5C00CFUofcDw';
-        // $DEVELOPER_KEY = 'AIzaSyBv_P2KGXgnz1S14bgfrIiNHT4tQC8DQbg'; // kluc
         $url='https://www.googleapis.com/youtube/v3/search?q='.$q.'&maxResults='.$maxResults.
               '&part=snippet&type=video&key='.$DEVELOPER_KEY;
 
