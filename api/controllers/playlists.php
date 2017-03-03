@@ -211,7 +211,68 @@
       return;
     }
 
+    function isLiking($data = null, $internalReq = false) {
+      if (!$internalReq) {
+        if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+          echo notFound();
+          return;
+        };
+      }
+
+      // $userObj->isAuthenticated();
+      global $conn;
+      $userData = null;
+
+      if (!$data) {
+        $userData = new stdClass();
+        $userData->userId = $_GET['userId'] ?  intval(htmlentities(strip_tags($conn->real_escape_string($_GET['userId'])))): null;
+        $userData->playlistId = $_GET['playlistId'] ? intval(htmlentities(strip_tags($conn->real_escape_string($_GET['playlistId'])))) : null;
+      } else {
+        $userData = (object) $data;
+      }
+
+      if (!$userData->userId) {
+        echo badRequest('Missing parameter userId');
+        return;
+      } else if (!$userData->playlistId) {
+        echo badRequest('Missing parameter playlistId');
+        return;
+      }
+
+      $query = "SELECT liked FROM playlist_likers
+                WHERE userId = $userData->userId
+                AND playlistId = $userData->playlistId";
+
+      $result = $conn->query($query);
+
+      $res = new stdClass();
+
+      if ($result->num_rows) {
+        while ($row = $result->fetch_assoc()) {
+          if ($row["liked"] == 1) {
+            $res->liking = "like";
+          }
+          else {
+            $res->liking = "dislike";
+          }
+        }
+      }
+      else {
+        $res->liking = "none";
+      }
+
+      if(!$internalReq) {
+        echo json_encode($res);
+      }
+      return $res;
+    }
+
     function like() {
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        echo notFound();
+        return;
+      };
+
       $data = getContents();
       if (!$data) {
         echo badRequest();
@@ -220,21 +281,97 @@
 
       global $conn;
       array_walk($data, 'array_sanitaze');
-      $data = (object) $data;
-      $playlistId = $data->playlistId;
+      $userData = (object) $data;
+      $liking = $this->isLiking($userData, true)->liking;
+      $res = new stdClass();
 
-      if (isset($data->like)) {
-        $query = "UPDATE playlists SET likes = likes + 1 WHERE playlists.id = $playlistId";
+      switch ($liking) {
+        case 'like':
+          $query = "DELETE FROM playlist_likers WHERE playlistId = $userData->playlistId AND userId = $userData->userId";
+          $update = "likes = likes - 1";
+          $res->like = false;
+          $res->dislike = false;
+          break;
+        case 'dislike':
+          $query = "UPDATE playlist_likers SET liked = 1, disliked = 0
+                    WHERE playlistId = $userData->playlistId AND userId = $userData->userId";
+          $update = "likes = likes + 1, dislikes = dislikes - 1";
+          $res->like = true;
+          $res->dislike = false;
+          break;
+        default:
+          $query = "INSERT INTO playlist_likers (playlistId, userId, liked, disliked)
+                    VALUES ('$userData->playlistId', '$userData->userId', 1, 0)";
+          $update = "likes = likes + 1";
+          $res->like = true;
+          $res->dislike = false;
+          break;
       }
-      else if (isset($data->dislike)) {
-        $query = "UPDATE playlists SET dislikes = dislikes + 1 WHERE playlists.id = $playlistId";
-      }
+
       $result = $conn->query($query);
       if ($result) {
-        echo success("Dis/Liked playlist");
+        $query = "UPDATE playlists SET $update WHERE id = $userData->playlistId ";
+          $result = $conn->query($query);
+          if ($result){
+            echo json_encode($res);
+            return;
+          }
+      }
+      echo notFound();
+      return;
+    }
+
+    function dislike() {
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        echo notFound();
+        return;
+      };
+
+      $data = getContents();
+      if (!$data) {
+        echo badRequest();
         return;
       }
-      echo notFound('Playlist with such id was not found');
+
+      global $conn;
+      array_walk($data, 'array_sanitaze');
+      $userData = (object) $data;
+      $liking = $this->isLiking($userData, true)->liking;
+      $res = new stdClass();
+
+      switch ($liking) {
+        case 'like':
+          $query = "UPDATE playlist_likers SET liked = 0, disliked = 1
+                    WHERE playlistId = $userData->playlistId AND userId = $userData->userId";
+          $update = "likes = likes - 1, dislikes = dislikes + 1";
+          $res->like = false;
+          $res->dislike = true;
+          break;
+        case 'dislike': 
+          $query = "DELETE FROM playlist_likers WHERE playlistId = $userData->playlistId AND userId = $userData->userId";
+          $update = "dislikes = dislikes - 1";
+          $res->like = false;
+          $res->dislike = false;
+          break;
+        default:
+          $query = "INSERT INTO playlist_likers (playlistId, userId, liked, disliked)
+                    VALUES ('$userData->playlistId', '$userData->userId', 0, 1)";
+          $update = "dislikes = dislikes + 1";
+          $res->like = false;
+          $res->dislike = true;
+          break;
+      }
+
+      $result = $conn->query($query);
+      if ($result) {
+        $query = "UPDATE playlists SET $update WHERE id = $userData->playlistId ";
+          $result = $conn->query($query);
+          if ($result){
+            echo json_encode($res);
+            return;
+          }
+      }
+      echo notFound();
       return;
     }
 
