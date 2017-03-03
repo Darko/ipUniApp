@@ -63,16 +63,31 @@
       $res = (object) array();
 
       // prvo da se izvlecat podatoci za playlistata
-      $query = "SELECT * FROM playlists
-                INNER JOIN playlist_identity
-                ON playlist_identity.playlistId = playlists.id
-                WHERE playlists.id = $playlistId";
+      $query = "SELECT * FROM users INNER JOIN playlists
+                INNER JOIN playlist_identity ON playlist_identity.playlistId = playlists.id
+				        AND users.id = playlist_identity.userId AND playlists.id = $playlistId";
 
       $result = $conn->query($query);
 
       if ($result->num_rows != 0) {
         while ($row = $result->fetch_assoc()) {
-          $res = (object) $row;
+    		  $obj["playlistId"] = $row['playlistId'];
+    		  $obj["createdAt"] = $row['createdAt'];
+    		  $obj["title"] = $row['title'];
+    		  $obj["createdAt"] = $row['createdAt'];
+    		  $obj["private"] = $row['private'];
+    		  $obj["songsCount"] = $row['songsCount'];
+    		  $obj["likes"] = $row['likes'];
+    		  $obj["dislikes"] = $row['dislikes'];
+    		  $obj["thumbnail"] = $row['thumbnail'];
+    		  $obj["user"] = array (
+    				"id" => $row['id'],
+    				"username" => $row['username'],
+    				"email" => $row['email'],
+    				"role" => $row['role'],
+    				"avatar" => $row['avatar']
+    		  );
+    		  $res = (object) $obj;
         }
         $result->close();
       }
@@ -128,14 +143,31 @@
       }
       $res = array();
 
-      $query = "SELECT * FROM playlists
+      $query = "SELECT * FROM playlists INNER JOIN users
                 INNER JOIN playlist_identity
                 ON playlist_identity.playlistId = playlists.id
-                WHERE playlist_identity.userId = $userId";
+                AND playlist_identity.userId = $userId
+                AND users.id = playlist_identity.userId";
       $result = $conn->query($query);
 
       while ($row = $result->fetch_assoc()) {
-        $res[] = (object) $row;
+        $obj["playlistId"] = $row['playlistId'];
+        $obj["createdAt"] = $row['createdAt'];
+        $obj["title"] = $row['title'];
+        $obj["createdAt"] = $row['createdAt'];
+        $obj["private"] = $row['private'];
+        $obj["songsCount"] = $row['songsCount'];
+        $obj["likes"] = $row['likes'];
+        $obj["dislikes"] = $row['dislikes'];
+        $obj["thumbnail"] = $row['thumbnail'];
+        $obj["user"] = array (
+          "id" => $row['id'],
+          "username" => $row['username'],
+          "email" => $row['email'],
+          "role" => $row['role'],
+          "avatar" => $row['avatar']
+        );
+        $res[] = (object) $obj;
       }
 
       echo json_encode($res);
@@ -246,21 +278,36 @@
 
       global $conn;
 
-      $query = "SELECT *
-                FROM playlists
-                ORDER BY likes
-                DESC LIMIT 20";
+      $query = "SELECT * FROM playlists INNER JOIN users INNER JOIN playlist_identity
+                ON playlist_identity.userId = users.id AND playlist_identity.playlistId = playlists.id
+                WHERE private = 0 ORDER BY likes DESC LIMIT 20";
 
       $result = $conn->query($query);
       $res = array();
 
       while ($row = $result->fetch_assoc()) {
-        $row['playlistId'] = $row['id'];
-        $res[] = (object) $row;
+        $row["playlistId"] = $row['playlistId'];
+        $obj["createdAt"] = $row['createdAt'];
+        $obj["title"] = $row['title'];
+        $obj["createdAt"] = $row['createdAt'];
+        $obj["private"] = $row['private'];
+        $obj["songsCount"] = $row['songsCount'];
+        $obj["likes"] = $row['likes'];
+        $obj["dislikes"] = $row['dislikes'];
+        $obj["thumbnail"] = $row['thumbnail'];
+        $obj["user"] = array (
+          "id" => $row['id'],
+          "username" => $row['username'],
+          "email" => $row['email'],
+          "role" => $row['role'],
+          "avatar" => $row['avatar']
+          );
+        $res[] = (object) $obj;
       }
 
       echo json_encode($res);
       $result->close();
+      return;
     }
 
     function newLists() {
@@ -271,17 +318,31 @@
 
       global $conn;
 
-      $query = "SELECT *
-                FROM playlists
-                ORDER BY createdAt
-                DESC LIMIT 10";
+      $query = "SELECT * FROM playlists INNER JOIN users INNER JOIN playlist_identity
+                ON playlist_identity.userId = users.id AND playlist_identity.playlistId = playlists.id
+                WHERE private = 0 ORDER BY createdAt DESC LIMIT 20";
 
       $result = $conn->query($query);
       $res = array();
 
       while ($row = $result->fetch_assoc()) {
-        $row['playlistId'] = $row['id'];
-        $res[] = (object) $row;
+        $row["playlistId"] = $row['playlistId'];
+        $obj["createdAt"] = $row['createdAt'];
+        $obj["title"] = $row['title'];
+        $obj["createdAt"] = $row['createdAt'];
+        $obj["private"] = $row['private'];
+        $obj["songsCount"] = $row['songsCount'];
+        $obj["likes"] = $row['likes'];
+        $obj["dislikes"] = $row['dislikes'];
+        $obj["thumbnail"] = $row['thumbnail'];
+        $obj["user"] = array (
+          "id" => $row['id'],
+          "username" => $row['username'],
+          "email" => $row['email'],
+          "role" => $row['role'],
+          "avatar" => $row['avatar']
+          );
+        $res[] = (object) $obj;
       }
 
       echo json_encode($res);
